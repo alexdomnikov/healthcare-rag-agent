@@ -40,7 +40,8 @@ class IngestionPipeline:
         )
         self.chunker = HybridChunker(tokenizer=self.tokenizer, merge_peers=True)
 
-        # Variable for parsed document & stored chunks
+        # Variable for file path, parsed document, and stored chunks
+        self.file_path = None
         self.doc = None
         self.chunks = None
 
@@ -54,16 +55,19 @@ class IngestionPipeline:
         self.engine = create_engine(db_url)
 
     def parse_document(self, file_path: str, debugging=False):
+        # Need this for chunk(), written so I can reuse this with any document (i.e., multiple documents)
+        self.file_path = file_path
+        
         print('Parsing document. First run downloads layout models (~5-15 min); subsequent runs are faster.')
         self.doc = self.converter.convert(file_path).document
         print('Parsing completed.')
-
-        # Export structured representation for debugging
+        
+        # Save structured representation to visually inspect
         if debugging:
             print('Saving to a .json file.')
             self.doc.save_as_json("../data/parsed.json")
             print('File saved as ../data/parsed.json')
-
+        
         return self.doc
 
     def chunk(self):
@@ -93,7 +97,7 @@ class IngestionPipeline:
                 "text": chunk.text,
                 "page_number": page_num,
                 "section_path": section_path,
-                "document_source": "cms_final_rule.pdf",
+                "document_source": os.path.basename(self.file_path),
                 "chunk_strategy": "hybrid_chunker"
             })
 
@@ -156,6 +160,6 @@ class IngestionPipeline:
 
 if __name__ == '__main__':
     pipeline = IngestionPipeline()
-    pipeline.parse_document("../data/cms_final_rule.pdf")
+    pipeline.parse_document(file_path="../data/cms_final_rule.pdf", debugging=True)
     pipeline.chunk()
     pipeline.embed_and_store()
