@@ -1,167 +1,158 @@
+# Document ingestion pipeline. Parses a PDF with Docling, chunks it with 
+#   HybridChunker, embeds each chunk with BGE-small, and bulk-inserts 
+#   into Neon Postgres via SQLAlchemy. All heavy objects (model, engine, 
+#   chunker) come from core.py so they're shared with retrieval.py and the 
+#   agent tools without re-loading.
+
 import os
 from dotenv import load_dotenv
-
-from docling.document_converter import DocumentConverter
-from docling.chunking import HybridChunker
-from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
-from transformers import AutoTokenizer
-from sentence_transformers import SentenceTransformer
-from sqlalchemy import create_engine, Column, Integer, Text, delete
-from sqlalchemy.orm import declarative_base, Session
+from sqlalchemy import Column, Integer, Text, delete
+from sqlalchemy.orm import DeclarativeBase, Session
 from pgvector.sqlalchemy import Vector
 
-load_dotenv()
-Base = declarative_base()
+# All shared resources live here
+from healthcare_rag.core import (
+    EMBED_DIM,
+    get_chunker,
+    get_converter,
+    get_embed_model,
+    get_engine,
+)
 
-# This tells SQLAlchemy what the Postgres table looks like
+load_dotenv()
+
+# ORM model.
+class Base(DeclarativeBase):
+    pass
+
+# Tells SQLAlchemy what the db layout is.
 class ChunkModel(Base):
     __tablename__ = "chunks"
     id = Column(Integer, primary_key=True)
     text = Column(Text, nullable=False)
-    # 384 matches BGE-small's output
-    embedding = Column(Vector(384))
+    embedding = Column(Vector(EMBED_DIM))   # pulled from core so it stays in sync
     page_number = Column(Integer)
     section_path = Column(Text)
     document_source = Column(Text, nullable=False)
     chunk_strategy = Column(Text, nullable=False)
 
+
+# Pipeline, thin orchestrator: parse -> chunk -> embed -> store. Heavy objects are
+#   fetched from core.py on first use (lazy, cached).
 class IngestionPipeline:
+    
     def __init__(self):
-        # Initializing models once
-        print('Initializing models. This may take a few moments.')
-        self.converter = DocumentConverter()
-        self.embed_model = SentenceTransformer('BAAI/bge-small-en-v1.5')
-
-        # Initialize the chunker with the BGE tokenizer
-        print('Initializing tokenizer & chunker.')
-        self.tokenizer = HuggingFaceTokenizer(
-            tokenizer=AutoTokenizer.from_pretrained('BAAI/bge-small-en-v1.5'),
-            # When I had max_tokens=500, top 5 chunks were 600-700 tokens. Decreased
-            #   to mitigate truncation.
-            max_tokens=400,
-        )
-        self.chunker = HybridChunker(tokenizer=self.tokenizer, merge_peers=True)
-
-        # Variable for file path, parsed document, and stored chunks
         self.file_path = None
         self.doc = None
-        self.chunks = None
+        self.chunks = list[dict]
 
-        db_url = os.environ.get('DATABASE_URL')
-        if not db_url:
-            raise ValueError('DATABASE_URL environment variable is not set.')
-        # Neon hands out 'postgresql://' URLs; SQLAlchemy maps that to psycopg2 by default.
-        # I installed psycopg v3, so I'm rewriting the scheme to point SQLAlchemy at the right driver.
-        if db_url.startswith('postgresql://'):
-            db_url = db_url.replace('postgresql://', 'postgresql+psycopg://', 1)
-        self.engine = create_engine(db_url)
+    # Parse
+    def parse_document(self, file_path, debugging = False):
+        # Convert a PDF to a Docling Document object.
 
-    def parse_document(self, file_path: str, debugging=False):
-        # Need this for chunk(), written so I can reuse this with any document (i.e., multiple documents)
         self.file_path = file_path
-        
-        print('Parsing document. First run downloads layout models (~5-15 min); subsequent runs are faster.')
-        self.doc = self.converter.convert(file_path).document
-        print('Parsing completed.')
-        
-        # Save structured representation to visually inspect
+
+        print("Parsing document.")
+        self.doc = get_converter().convert(file_path).document
+        print("Parsing completed.")
+
         if debugging:
-            print('Saving to a .json file.')
-            self.doc.save_as_json('../data/parsed.json')
-            print('File saved as ../data/parsed.json')
-        
+            print("Saving structured representation to ../data/parsed.json")
+            self.doc.save_as_json("../data/parsed.json")
+            print("Saved.")
+
         return self.doc
 
+    # Chunk
     def chunk(self):
+        # Produce DB-ready chunk dicts from the parsed document.
         if self.doc is None:
-            print('Error: no document saved for chunking.')
+            print("Error: call parse_document() before chunk().")
             return []
 
-        # Generate the raw Chunk objects
-        print('Generating Chunk objects')
-        raw_chunks = self.chunker.chunk(dl_doc=self.doc)
+        print("Generating chunks.")
+        raw_chunks = list(get_chunker().chunk(dl_doc=self.doc))
 
-        # Map Docling's objects to the Postgres schema
-        print('Mapping chunks to Postgres schema')
+        print(f"Mapping {len(raw_chunks)} chunks to DB schema.")
         chunks_for_db = []
         for chunk in raw_chunks:
-            # Extract headings (docling provides them as a list of strings)
-            headings = chunk.meta.headings
-            section_path = ' / '.join(headings) if headings else 'Unknown'
+            headings = chunk.meta.headings or []
+            section_path = " / ".join(headings) if headings else "Unknown"
 
-            # Extract page numbers (we pull from the first document item in the chunk)
             page_num = None
-            if chunk.meta.doc_items and hasattr(chunk.meta.doc_items[0], 'prov') and chunk.meta.doc_items[0].prov:
+            if (chunk.meta.doc_items
+                    and hasattr(chunk.meta.doc_items[0], "prov")
+                    and chunk.meta.doc_items[0].prov):
                 page_num = chunk.meta.doc_items[0].prov[0].page_no
 
-            # Package it for SQLAlchemy
             chunks_for_db.append({
-                'text': chunk.text,
-                'page_number': page_num,
-                'section_path': section_path,
-                'document_source': os.path.basename(self.file_path),
-                'chunk_strategy': 'hybrid_chunker'
+                "text": chunk.text,
+                "page_number": page_num,
+                "section_path": section_path,
+                "document_source": os.path.basename(self.file_path),
+                "chunk_strategy": "hybrid_chunker",
             })
 
         self.chunks = chunks_for_db
-        print(f'Generated {len(chunks_for_db)} chunks.')
+        print(f"Generated {len(chunks_for_db)} chunks.")
         return chunks_for_db
 
+    # Embed + store
     def embed_and_store(self):
+        # Embed all chunks and insert into Postgres.
+        #   NOTE: this is re-run safe. Deletes any existing rows for this
+        #   (document_source, chunk_strategy) pair before inserting
+        
         if not self.chunks:
-            print('Error: No chunks available to embed.')
-            return []
+            print("Error: no chunks to embed. Run chunk() first.")
+            return
 
-        print(f'Embedding {len(self.chunks)} chunks.')
+        print(f"Embedding {len(self.chunks)} chunks.")
+        texts = [c["text"] for c in self.chunks]
 
-        # Extract texts and generate vectors
-        texts = [chunk['text'] for chunk in self.chunks]
-
-        # NOTE: normalize_embeddings=True is required for pgvector cosine similarity
-        embeddings = self.embed_model.encode(
+        # Document embeddings do not use the query prefix, that's for query time.
+        # NOTE: normalize_embeddings=True is required for pgvector cosine similarity.
+        embeddings = get_embed_model().encode(
             texts,
             batch_size=32,
             show_progress_bar=True,
-            normalize_embeddings=True
+            normalize_embeddings=True,
         )
 
-        # Combine the dictionaries and embeddings into SQLAlchemy ORM objects
-        print('Formatting ORM objects.')
-        db_objects = []
-        for chunk_data, emb in zip(self.chunks, embeddings):
-            db_objects.append(
-                ChunkModel(
-                    text=chunk_data['text'],
-                    embedding=emb,
-                    page_number=chunk_data['page_number'],
-                    section_path=chunk_data['section_path'],
-                    document_source=chunk_data['document_source'],
-                    chunk_strategy=chunk_data['chunk_strategy']
-                )
+        print("Building ORM objects.")
+        db_objects = [
+            ChunkModel(
+                text=chunk_data["text"],
+                embedding=emb,
+                page_number=chunk_data["page_number"],
+                section_path=chunk_data["section_path"],
+                document_source=chunk_data["document_source"],
+                chunk_strategy=chunk_data["chunk_strategy"],
             )
+            for chunk_data, emb in zip(self.chunks, embeddings)
+        ]
 
-        # Re-run safety: delete existing rows for this (document_source, chunk_strategy)
-        #   combination before inserting, in the same transaction. Lets me re-run ingestion
-        #   without duplicates.
-        document_source = self.chunks[0]['document_source']
-        chunk_strategy = self.chunks[0]['chunk_strategy']
-        print(f"Clearing existing rows where document_source='{document_source}' and chunk_strategy='{chunk_strategy}'.")
-        with Session(self.engine) as session:
+        document_source = self.chunks[0]["document_source"]
+        chunk_strategy = self.chunks[0]["chunk_strategy"]
+
+        with Session(get_engine()) as session:
             deleted = session.execute(
                 delete(ChunkModel).where(
                     ChunkModel.document_source == document_source,
                     ChunkModel.chunk_strategy == chunk_strategy,
                 )
             )
-            print(f'Deleted {deleted.rowcount} existing rows.')
-            print('Executing bulk save to Neon Postgres.')
+            print(f"Deleted {deleted.rowcount} existing rows for "
+                  f"'{document_source}' / '{chunk_strategy}'.")
+
             session.bulk_save_objects(db_objects)
             session.commit()
 
-        print('Successfully embedded and stored all chunks.')
+        print("Successfully embedded and stored all chunks.")
 
-if __name__ == '__main__':
+# Entry point
+if __name__ == "__main__":
     pipeline = IngestionPipeline()
-    pipeline.parse_document(file_path='../data/cms_final_rule.pdf', debugging=True)
+    pipeline.parse_document(file_path="../data/cms_final_rule.pdf", debugging=True)
     pipeline.chunk()
     pipeline.embed_and_store()
