@@ -8,10 +8,10 @@ from dataclasses import dataclass
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from healthcare_rag.core import get_embed_model, get_engine
+from healthcare_rag.core import get_embed_model, get_engine, get_reranker
 
 # Important constants
-DEFAULT_STRATEGY = "structure" # swap to "fixed" for ablation studies
+DEFAULT_STRATEGY = "hybrid_chunker" # swap to "fixed" for ablation studies
 RRF_K = 60 # canonical value from Cormack et al. (2009), tends to perform best
 FIRST_PASS_K = 100 # candidates fed into RRF before final top-k cut
 
@@ -51,10 +51,10 @@ def retrieve_dense(
             text,
             page_number,
             section_path,
-            1 - (embedding <=> :qv::vector) AS score
+            1 - (embedding <=> CAST(:qv AS Vector)) AS score
         FROM chunks
         WHERE chunk_strategy = :strategy
-        ORDER BY embedding <=> :qv::vector
+        ORDER BY embedding <=> CAST(:qv AS Vector)
         LIMIT :k
     """)
 
@@ -147,7 +147,7 @@ def retrieve_hybrid(
         WITH dense AS (
             SELECT
                 id,
-                ROW_NUMBER() OVER (ORDER BY embedding <=> :qv::vector) AS rank
+                ROW_NUMBER() OVER (ORDER BY embedding <=> CAST(:qv AS Vector)) AS rank
             FROM chunks
             WHERE chunk_strategy = :strategy
             LIMIT :first_pass
@@ -190,12 +190,12 @@ def retrieve_hybrid(
         rows = session.execute(
             sql,
             {
-                "qv":         str(query_vec),
-                "q":          query,
-                "strategy":   strategy,
+                "qv": str(query_vec),
+                "q": query,
+                "strategy": strategy,
                 "first_pass": FIRST_PASS_K,
-                "k":          k,
-                "top_k":      top_k,
+                "k": k,
+                "top_k": top_k,
             },
         ).all()
 
@@ -209,3 +209,69 @@ def retrieve_hybrid(
         )
         for r in rows
     ]
+
+def rerank(
+    query: str,
+    candidates: list[RetrievedChunk],
+    top_k = 5,
+) -> list[RetrievedChunk]:
+    # Cross-encoder reranking with BAAI/bge-reranker-v2-m3. Retrieve 50-100
+    #   candidates with hybrid search (cheap, scalable), then rerank with a 
+    #   cross-encoder to get a final top-5. Typically produces a big Recall@5 
+    #   improvement over hybrid-alone on standard benchmarks.
+    # NOTE: reranking only the top-50 hybrid results keeps latency as ~1-3s
+    #   instead of scanning the entire corpus.
+    
+    # Two-stage retrieval pattern:
+    #   1. Fast first pass (hybrid) fetches FIRST_PASS_K candidates from the index.
+    #   2. The cross-encoder rescores every (query, candidate) pair and keeps top_k.
+    
+    if not candidates:
+        return []
+
+    model = get_reranker()
+    pairs = [(query, chunk.text) for chunk in candidates]
+
+    # predict() returns a numpy array; .tolist() gives plain Python floats.
+    scores: list[float] = model.predict(pairs, show_progress_bar=False).tolist()
+
+    ranked = sorted(zip(candidates, scores), key=lambda x: x[1], reverse=True)
+
+    return [
+        RetrievedChunk(
+            id=chunk.id,
+            text=chunk.text,
+            page_number=chunk.page_number,
+            section_path=chunk.section_path,
+            score=score,   # replaced with cross-encoder score
+        )
+        for chunk, score in ranked[:top_k]
+    ]
+
+def retrieve(
+    query: str,
+    top_k = 5,
+    do_rerank = True,
+    mode = "hybrid",
+    strategy = DEFAULT_STRATEGY,
+) -> list[RetrievedChunk]:
+    # Single entry point for the full retrieval pipeline.
+
+    first_pass_k = FIRST_PASS_K if do_rerank else top_k
+
+    if mode == "hybrid":
+        candidates = retrieve_hybrid(query, top_k=first_pass_k, strategy=strategy)
+    elif mode == "vector":
+        candidates = retrieve_dense(query, top_k=first_pass_k, strategy=strategy)
+    elif mode == "lexical":
+        candidates = retrieve_lexical(query, top_k=first_pass_k, strategy=strategy)
+    else:
+        raise ValueError(f"Unknown mode {mode!r}. Use 'hybrid', 'vector', or 'lexical'.")
+
+    if not candidates:
+        return []
+
+    if do_rerank:
+        return rerank(query, candidates, top_k=top_k)
+
+    return candidates[:top_k]

@@ -4,15 +4,17 @@
 import os
 from functools import lru_cache
 
+import torch
 from docling.document_converter import DocumentConverter
 from docling.chunking import HybridChunker
 from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
 from transformers import AutoTokenizer
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, CrossEncoder
 from sqlalchemy import create_engine, Column, Integer, Text
 from sqlalchemy.orm import DeclarativeBase
 from pgvector.sqlalchemy import Vector
 
+RERANKER_MODEL_NAME = "BAAI/bge-reranker-v2-m3"
 EMBED_MODEL_NAME = "BAAI/bge-small-en-v1.5"
 EMBED_DIM = 384 # 384 matches BGE-small's output
 CHUNK_MAX_TOKENS = 400 # 500 had many chunks w/ 600-700 tokens, truncation starts at 512
@@ -40,6 +42,31 @@ def get_embed_model():
     print(f"Loading embedding model: {EMBED_MODEL_NAME}")
     # NOTE: normalize_embeddings isn't applied here; callers pass at encode() time.
     return SentenceTransformer(EMBED_MODEL_NAME)
+
+@lru_cache(maxsize=1)
+def get_reranker():
+    # Return the shared BGE cross-encoder reranker. 
+    # NOTE: I chose BGE over a managed API (Cohere, etc.) mostly to avoid rate limits.
+
+    # Check if GPU is available, would be ~4-10x faster. Negligible in this context
+    #   since we're talking maybe 3 seconds vs. 300 milliseconds, but this would be
+    #   critical in a production context (with the assumption that an API like
+    #   Cohere is still not chosen as an alternative).
+    if torch.cuda.is_available():
+        device = 'cuda' 
+    elif torch.backends.mps.is_available():
+        device = 'mps'
+    else:
+        device = 'cpu'
+    print(f"Using device: {device}")
+    
+    # A cross-encoder takes (query, passage) as a single concatenated input and
+    #   outputs one relevance score. More accurate than cosine similarity between
+    #   bi-encoder embeddings because the model attends to both texts simultaneously
+    #   at the cost of not being precomputable.
+    # max_length=512 matches BGE-small's context window; longer inputs truncated.
+    print(f"Loading reranker: {RERANKER_MODEL_NAME}")
+    return CrossEncoder(RERANKER_MODEL_NAME, max_length=512, device=device)
 
 @lru_cache(maxsize=1)
 def get_engine():
