@@ -6,13 +6,12 @@
 
 import os
 from dotenv import load_dotenv
-from sqlalchemy import Column, Integer, Text, delete
-from sqlalchemy.orm import DeclarativeBase, Session
-from pgvector.sqlalchemy import Vector
+from sqlalchemy import delete
+from sqlalchemy.orm import Session
 
 # All shared resources live here
 from healthcare_rag.core import (
-    EMBED_DIM,
+    ChunkModel,
     get_chunker,
     get_converter,
     get_embed_model,
@@ -20,22 +19,6 @@ from healthcare_rag.core import (
 )
 
 load_dotenv()
-
-# ORM model.
-class Base(DeclarativeBase):
-    pass
-
-# Tells SQLAlchemy what the db layout is.
-class ChunkModel(Base):
-    __tablename__ = "chunks"
-    id = Column(Integer, primary_key=True)
-    text = Column(Text, nullable=False)
-    embedding = Column(Vector(EMBED_DIM))   # pulled from core so it stays in sync
-    page_number = Column(Integer)
-    section_path = Column(Text)
-    document_source = Column(Text, nullable=False)
-    chunk_strategy = Column(Text, nullable=False)
-
 
 # Pipeline, thin orchestrator: parse -> chunk -> embed -> store. Heavy objects are
 #   fetched from core.py on first use (lazy, cached).
@@ -46,12 +29,10 @@ class IngestionPipeline:
         self.doc = None
         self.chunks = list[dict]
 
-    # Parse
     def parse_document(self, file_path, debugging = False):
         # Convert a PDF to a Docling Document object.
 
         self.file_path = file_path
-
         print("Parsing document.")
         self.doc = get_converter().convert(file_path).document
         print("Parsing completed.")
@@ -63,9 +44,9 @@ class IngestionPipeline:
 
         return self.doc
 
-    # Chunk
     def chunk(self):
         # Produce DB-ready chunk dicts from the parsed document.
+        
         if self.doc is None:
             print("Error: call parse_document() before chunk().")
             return []
@@ -97,10 +78,9 @@ class IngestionPipeline:
         print(f"Generated {len(chunks_for_db)} chunks.")
         return chunks_for_db
 
-    # Embed + store
     def embed_and_store(self):
         # Embed all chunks and insert into Postgres.
-        #   NOTE: this is re-run safe. Deletes any existing rows for this
+        # NOTE: this is re-run safe. Deletes any existing rows for this
         #   (document_source, chunk_strategy) pair before inserting
         
         if not self.chunks:
@@ -110,7 +90,6 @@ class IngestionPipeline:
         print(f"Embedding {len(self.chunks)} chunks.")
         texts = [c["text"] for c in self.chunks]
 
-        # Document embeddings do not use the query prefix, that's for query time.
         # NOTE: normalize_embeddings=True is required for pgvector cosine similarity.
         embeddings = get_embed_model().encode(
             texts,
