@@ -23,7 +23,7 @@ class RetrievedChunk:
     section_path: str | None
     score: float  # rrf_score, cosine similarity, or ts_rank depending on method
 
-def embed_query(query:str):
+def embed_query(query:str) -> list[float]:
     # Embed a user query with BGE's query-instruction prefix, normalized.
 
     return get_embed_model().encode(
@@ -34,9 +34,9 @@ def embed_query(query:str):
 
 def retrieve_dense(
     query:str,
-    top_k=50,
-    strategy=DEFAULT_STRATEGY,
-):
+    top_k:int = 50,
+    strategy:str = DEFAULT_STRATEGY,
+) -> list[RetrievedChunk]:
     # Dense retrieval: embed the query, find chunks with similar embeddings. 
     #   Captures semantic similarity rather than exact matches.
     
@@ -77,9 +77,9 @@ def retrieve_dense(
 
 def retrieve_lexical(
     query:str,
-    top_k=50,
-    strategy=DEFAULT_STRATEGY,
-):
+    top_k:int = 50,
+    strategy:str = DEFAULT_STRATEGY,
+) -> list[RetrievedChunk]:
     # Score documents by how many query terms they contain, weighted by term 
     #   rarity (accounts for term frequency & inverse document frquency) and
     #   document length. Fast, interpretable, use for exact-match.
@@ -122,10 +122,10 @@ def retrieve_lexical(
 
 def retrieve_hybrid(
     query:str,
-    top_k=50,
-    strategy=DEFAULT_STRATEGY,
-    k=RRF_K,
-):
+    top_k:int = 50,
+    strategy:str = DEFAULT_STRATEGY,
+    k:int = RRF_K,
+) -> list[RetrievedChunk]:
     # Fuse dense and lexical ranked lists with Reciprocal Rank Fusion (RRF).
 
     query_vec = embed_query(query)
@@ -211,9 +211,9 @@ def retrieve_hybrid(
     ]
 
 def rerank(
-    query: str,
-    candidates: list[RetrievedChunk],
-    top_k = 5,
+    query:str,
+    candidates:list[RetrievedChunk],
+    top_k:int = 5,
 ) -> list[RetrievedChunk]:
     # Cross-encoder reranking with BAAI/bge-reranker-v2-m3. Retrieve 50-100
     #   candidates with hybrid search (cheap, scalable), then rerank with a 
@@ -249,11 +249,11 @@ def rerank(
     ]
 
 def retrieve(
-    query: str,
-    top_k = 5,
-    do_rerank = True,
-    mode = "hybrid",
-    strategy = DEFAULT_STRATEGY,
+    query:str,
+    top_k:int = 5,
+    do_rerank:bool = True,
+    mode:str = "hybrid",
+    strategy:str = DEFAULT_STRATEGY,
 ) -> list[RetrievedChunk]:
     # Single entry point for the full retrieval pipeline.
 

@@ -10,6 +10,7 @@ from functools import lru_cache
 
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.language_models.chat_models import BaseChatModel
 
 from healthcare_rag.retrieval import RetrievedChunk
 
@@ -24,7 +25,7 @@ If multiple passages support a claim, list all relevant pages: [p. 42, p. 67].
 
 If the answer is not in the context, say exactly:
     "I don't have that information."
-Do not speculate, do not use outside knowledge, and do not invent citations.\
+Do not speculate, use outside knowledge, or invent citations.\
 """
 
 CONTEXT_TEMPLATE = """\
@@ -37,11 +38,11 @@ Question: {question}\
 
 # LLM singleton
 @lru_cache(maxsize=1)
-def get_llm():
+def get_llm() -> BaseChatModel:
     # Return the shared Groq LLM.
     
-    # reasoning_effort="none" disables Qwen3's thinking mode, which adds latency and 
-    #   has known tool-call parsing issues when streaming.
+    # reasoning_effort="none" disables Qwen3's thinking mode. This mode adds 
+    #   latency and has known tool-call parsing issues when streaming.
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
         raise ValueError("GROQ_API_KEY environment variable is not set.")
@@ -68,7 +69,7 @@ def answer(
 
     context_parts = []
     for chunk in chunks:
-        page_label   = f"p. {chunk.page_number}" if chunk.page_number else "p. ?"
+        page_label = f"p. {chunk.page_number}" if chunk.page_number else "p. ?"
         section_part = f" | {chunk.section_path}" if chunk.section_path else ""
         context_parts.append(f"[{page_label}{section_part}]\n{chunk.text}")
 
@@ -92,8 +93,8 @@ def answer_with_metadata(
     # Like answer(), but also returns chunk-level data for eval scripts.
     answer_text = answer(question, chunks, **kwargs)
     return {
-        "answer":           answer_text,
+        "answer": answer_text,
         "retrieved_chunks": [c.text for c in chunks],
-        "chunk_pages":      [c.page_number for c in chunks],
-        "reranker_scores":  [c.score for c in chunks],
+        "chunk_pages": [c.page_number for c in chunks],
+        "reranker_scores": [c.score for c in chunks],
     }

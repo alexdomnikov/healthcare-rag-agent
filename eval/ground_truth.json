@@ -1,0 +1,209 @@
+[
+  {
+    "id": "q001",
+    "question": "What is the annual out-of-pocket (OOP) threshold for Medicare Part D in Contract Year 2026?",
+    "expected_answer": "$2,100. This was determined by multiplying the CY 2025 OOP threshold of $2,000 by the 2026 annual percentage increase and rounding to the nearest multiple of $50.",
+    "expected_page": 4,
+    "expected_section": "1. Background",
+    "expected_tool": "vector_search",
+    "is_in_corpus": true
+  },
+  {
+    "id": "q002",
+    "question": "What are the effective date and applicability date for this final rule?",
+    "expected_answer": "Effective date: June 1, 2026. Applicability date: January 1, 2027 (regulations applicable to coverage beginning January 1, 2027).",
+    "expected_page": 1,
+    "expected_section": "DATES:",
+    "expected_tool": "vector_search",
+    "is_in_corpus": true
+  },
+  {
+    "id": "q003",
+    "question": "What are the three phases of the redesigned Medicare Part D benefit beginning in CY 2025?",
+    "expected_answer": "The deductible phase, the initial coverage phase, and the catastrophic phase. The coverage gap phase was eliminated beginning CY 2025 by the IRA.",
+    "expected_page": 5,
+    "expected_section": "b. Initial Coverage Limit (§§ 423.104(d)(2) and 423.104(d)(3))",
+    "expected_tool": "vector_search",
+    "is_in_corpus": true
+  },
+  {
+    "id": "q004",
+    "question": "What cost sharing does a Medicare Part D enrollee pay once they enter the catastrophic phase?",
+    "expected_answer": "$0. There is no cost sharing for Part D drugs once an enrollee enters the catastrophic phase.",
+    "expected_page": 4,
+    "expected_section": "1. Background",
+    "expected_tool": "vector_search",
+    "is_in_corpus": true
+  },
+  {
+    "id": "q005",
+    "question": "What is the maximum monthly cost-sharing amount for a covered insulin product under Medicare Part D for CY 2026 and subsequent years?",
+    "expected_answer": "The lesser of: (1) $35, (2) an amount equal to 25 percent of the maximum fair price (MFP) established for the insulin product, or (3) an amount equal to 25 percent of the negotiated price under the plan.",
+    "expected_page": [5, 47],
+    "expected_section": ["§ 423.120(h)(1) / Insulin Cost Sharing", "1. Definition of Inflation Reduction Act Subsidy Amount (IRASA)"],
+    "expected_tool": "vector_search",
+    "is_in_corpus": true
+  },
+  {
+    "id": "q006",
+    "question": "Does the Medicare Part D deductible apply to ACIP-recommended adult vaccines?",
+    "expected_answer": "No. Effective for plan years beginning on or after January 1, 2023, the Medicare Part D deductible does not apply to ACIP-recommended adult vaccines, and there is no coinsurance or cost sharing for those vaccines.",
+    "expected_page": [5, 8],
+    "expected_section": ["a. Deductible (§ 423.104(d)(1))", "d. Annual Out-of-Pocket Threshold (§ 423.104(d)(5))"],
+    "expected_tool": "vector_search",
+    "is_in_corpus": true
+  },
+  {
+    "id": "q007",
+    "question": "How many timely pieces of public correspondence did CMS receive in response to the Contract Year 2027 proposed rule?",
+    "expected_answer": "Approximately 42,632 timely pieces of correspondence.",
+    "expected_page": [4, 194],
+    "expected_section": ["BILLING CODE ????-??-C", "E. Regulatory Review Costs"],
+    "expected_tool": "vector_search",
+    "is_in_corpus": true
+  },
+  {
+    "id": "q008",
+    "question": "What did CMS finalize regarding the 48-hour advance requirement for a Scope of Appointment (SOA)?",
+    "expected_answer": "CMS finalized the elimination of the 48-hour waiting period required between SOA completion and a personal marketing appointment. An SOA is still required for all personal marketing appointments, but plans and agents/brokers no longer need to wait 48 hours after obtaining it before speaking with the beneficiary.",
+    "expected_page": [71, 72],
+    "expected_section": ["D. Updating Third-Party Marketing Organizations (TPMO) Disclaimer Requirements (§§ 422.2267 and 423.2267)", "D. Updating Third-Party Marketing Organizations (TPMO) Disclaimer Requirements (§§ 422.2267 and 423.2267)"],
+    "expected_tool": "vector_search",
+    "is_in_corpus": true
+  },
+  {
+    "id": "q009",
+    "question": "After the removal of the 48-hour SOA rule, is a Scope of Appointment (SOA) still required for walk-ins and unscheduled calls?",
+    "expected_answer": "Yes. An SOA is required for all appointments that meet the definition of personal marketing appointments, regardless of how the contact is initiated. This includes walk-ins, unscheduled calls, web-based chats, and web-based forms, as long as the contact is tailored to an individual or small group for purposes of discussing marketing topics.",
+    "expected_page": [71, 72, 73, 74, 75, 76],
+    "expected_section": ["D. Updating Third-Party Marketing Organizations (TPMO) Disclaimer Requirements (§§ 422.2267 and 423.2267)", "D. Updating Third-Party Marketing Organizations (TPMO) Disclaimer Requirements (§§ 422.2267 and 423.2267)"],
+    "expected_tool": "vector_search",
+    "is_in_corpus": true
+  },
+  {
+    "id": "q010",
+    "question": "When did the Coverage Gap Discount Program sunset, and what program replaced it?",
+    "expected_answer": "The Coverage Gap Discount Program sunsetted on January 1, 2025. It was replaced by the Manufacturer Discount Program, established in section 1860D-14C of the Act (as added by section 11201 of the IRA).",
+    "expected_page": 1,
+    "expected_section": "A. Purpose",
+    "expected_tool": "vector_search",
+    "is_in_corpus": true
+  },
+  {
+    "id": "q011",
+    "question": "What is CMS's decision regarding the Health Equity Index (HEI) reward in the Star Ratings program?",
+    "expected_answer": "CMS is not moving forward with the implementation of the Health Equity Index reward at §§ 422.166(f)(3) and 423.186(f)(3). CMS will continue to include the historical reward factor in the Star Ratings methodology at §§ 422.166(f)(1) and 423.186(f)(1).",
+    "expected_page": [1, 113, 115, 132, 133, 134, 135, 136],
+    "expected_section": ["4. Updates to Star Ratings", "A. Introduction", "1. Removing Measures"],
+    "expected_tool": "vector_search",
+    "is_in_corpus": true
+  },
+  {
+    "id": "q012",
+    "question": "What is CMS's final requirement regarding SSBCI eligibility criteria and public availability?",
+    "expected_answer": "MA plans are required to make plan-developed Special Supplemental Benefits for the Chronically Ill (SSBCI) eligibility criteria publicly available. CMS declined to finalize any exemptions to this public posting requirement, including for C-SNPs.",
+    "expected_page": [2, 97, 100],
+    "expected_section": ["4. Updates to Star Ratings", "2. Requirements"],
+    "expected_tool": "vector_search",
+    "is_in_corpus": true
+  },
+  {
+    "id": "q013",
+    "question": "What is the average overall Star Rating for Medicare Advantage contracts in California?",
+    "expected_answer": "This requires querying the CMS MA Star Ratings structured data (not in the regulatory PDF).",
+    "expected_page": null,
+    "expected_section": null,
+    "expected_tool": "sql",
+    "is_in_corpus": false
+  },
+  {
+    "id": "q014",
+    "question": "How many Medicare Advantage contracts have an overall Star Rating of 4 stars or higher in 2024?",
+    "expected_answer": "This requires querying the CMS MA Star Ratings structured data (not in the regulatory PDF).",
+    "expected_page": null,
+    "expected_section": null,
+    "expected_tool": "sql",
+    "is_in_corpus": false
+  },
+  {
+    "id": "q015",
+    "question": "What are the top 5 states by total Medicare Advantage enrollment in the most recent available year?",
+    "expected_answer": "This requires querying the CMS plan enrollment structured data (not in the regulatory PDF).",
+    "expected_page": null,
+    "expected_section": null,
+    "expected_tool": "sql",
+    "is_in_corpus": false
+  },
+  {
+    "id": "q016",
+    "question": "What is the average monthly plan premium for Medicare Advantage plans with a 5-star rating?",
+    "expected_answer": "This requires querying the CMS plan benefit structured data (not in the regulatory PDF).",
+    "expected_page": null,
+    "expected_section": null,
+    "expected_tool": "sql",
+    "is_in_corpus": false
+  },
+  {
+    "id": "q017",
+    "question": "Which Medicare Advantage organization has the highest number of contracts with a 4-star rating or above in Texas?",
+    "expected_answer": "This requires querying the CMS MA Star Ratings structured data filtered by state (not in the regulatory PDF).",
+    "expected_page": null,
+    "expected_section": null,
+    "expected_tool": "sql",
+    "is_in_corpus": false
+  },
+  {
+    "id": "q018",
+    "question": "What are the contraindications listed for Eliquis (apixaban) on its FDA label?",
+    "expected_answer": "This requires a live query to the openFDA drug label API for apixaban/Eliquis.",
+    "expected_page": null,
+    "expected_section": null,
+    "expected_tool": "openfda",
+    "is_in_corpus": false
+  },
+  {
+    "id": "q019",
+    "question": "Have there been any FDA recalls for metformin hydrochloride, and if so, what was the reason?",
+    "expected_answer": "This requires a live query to the openFDA drug enforcement API for metformin.",
+    "expected_page": null,
+    "expected_section": null,
+    "expected_tool": "openfda",
+    "is_in_corpus": false
+  },
+  {
+    "id": "q020",
+    "question": "What serious adverse events have been reported to the FDA for rivaroxaban (Xarelto)?",
+    "expected_answer": "This requires a live query to the openFDA drug adverse events API for rivaroxaban.",
+    "expected_page": null,
+    "expected_section": null,
+    "expected_tool": "openfda",
+    "is_in_corpus": false
+  },
+  {
+    "id": "q021",
+    "question": "What is the average length of inpatient hospital stay for Medicare fee-for-service beneficiaries in 2025?",
+    "expected_answer": "I don't have that information.",
+    "expected_page": null,
+    "expected_section": null,
+    "expected_tool": "none",
+    "is_in_corpus": false
+  },
+  {
+    "id": "q022",
+    "question": "What is the total CEO compensation for the top Medicare Advantage insurers in 2025?",
+    "expected_answer": "I don't have that information.",
+    "expected_page": null,
+    "expected_section": null,
+    "expected_tool": "none",
+    "is_in_corpus": false
+  },
+  {
+    "id": "q023",
+    "question": "What are the current Medicaid expansion enrollment totals broken down by state for 2025?",
+    "expected_answer": "I don't have that information.",
+    "expected_page": null,
+    "expected_section": null,
+    "expected_tool": "none",
+    "is_in_corpus": false
+  }
+]

@@ -13,7 +13,7 @@ from dataclasses import dataclass
 import pytest
 
 # RRF score math
-def rrf_score(ranks: list[int], k = 60):
+def rrf_score(ranks:list[int], k:int = 60) -> float:
     # Reference implementation of RRF for a single document.
     return sum(1.0 / (k + r) for r in ranks)
 
@@ -23,7 +23,7 @@ class TestRRFMath:
         assert rrf_score([1]) == pytest.approx(1 / 61)
 
     def test_two_lists_both_rank1(self):
-        # appears at rank 1 in both lists → doubles the score
+        # appears at rank 1 in both lists -> doubles the score
         assert rrf_score([1, 1]) == pytest.approx(2 / 61)
 
     def test_high_rank_beats_low_rank(self):
@@ -44,7 +44,7 @@ class FakeChunk:
     id: int
     score: float
 
-def sort_by_rrf(chunks: list[FakeChunk]):
+def sort_by_rrf(chunks: list[FakeChunk]) -> list[FakeChunk]:
     return sorted(chunks, key=lambda c: c.score, reverse=True)
 
 class TestSorting:
@@ -61,7 +61,7 @@ class TestSorting:
         assert sort_by_rrf([]) == []
 
 
-# embed_query smoke (requires model download; marked as slow)
+# embed_query smoke test (requires model download; marked as slow)
 @pytest.mark.slow
 def test_embed_query_dimension():
     # BGE-small-en-v1.5 produces 384-dim normalized vectors.
@@ -74,7 +74,7 @@ def test_embed_query_dimension():
     assert isinstance(vec, list)
     assert len(vec) == 384
 
-    # normalized -> L2 norm ≈ 1.0
+    # normalized -> L2 norm ~1.0
     import math
     norm = math.sqrt(sum(x ** 2 for x in vec))
     assert norm == pytest.approx(1.0, abs=1e-4)

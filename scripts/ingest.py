@@ -6,6 +6,7 @@
 
 import os
 from dotenv import load_dotenv
+
 from sqlalchemy import delete
 from sqlalchemy.orm import Session
 
@@ -20,16 +21,18 @@ from healthcare_rag.core import (
 
 load_dotenv()
 
-# Pipeline, thin orchestrator: parse -> chunk -> embed -> store. Heavy objects are
-#   fetched from core.py on first use (lazy, cached).
 class IngestionPipeline:
-    
-    def __init__(self):
-        self.file_path = None
-        self.doc = None
-        self.chunks = list[dict]
+    # Pipeline,  parse -> chunk -> embed -> store. Heavy objects are fetched from
+    #   core.py on first use (lazy, cached).
 
-    def parse_document(self, file_path, debugging = False):
+    def __init__(self):
+        self.file_path:str
+        self.doc = None
+        self.chunks: list[dict]
+
+    def parse_document(self, 
+                       file_path:str, 
+                       debugging:bool = False):
         # Convert a PDF to a Docling Document object.
 
         self.file_path = file_path

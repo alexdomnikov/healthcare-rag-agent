@@ -1,12 +1,11 @@
 # Test for retrieve() + rerank() + answer() pipeline
 
-# Usage:
-#   uv run python scripts/test_thursday.py
-
-# Verify that:
+# Tests are successful if:
 #   Each doc question produces a cited answer containing [p. X]
 #   The out-of-corpus question returns "I don't have that information."
 #   Reranker scores print (proves the cross-encoder is running)
+
+# Run with uv run python tests/test_question_pipeline.py
 
 import os
 import sys
