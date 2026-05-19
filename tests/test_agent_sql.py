@@ -1,0 +1,20 @@
+import json
+from dotenv import load_dotenv
+from healthcare_rag.core import get_agent
+
+load_dotenv()
+
+with open("../eval/ground_truth.json") as f:
+    ground_truth = json.load(f)
+
+sql_questions = [
+    q for q in ground_truth
+    if q["expected_tool"] == "sql_query_tool"
+]
+
+agent = get_agent()
+
+for q in sql_questions:
+    print(f"\nQ: {q['question']}")
+    result = agent.invoke({"messages": [{"role": "user", "content": q["question"]}]})
+    print(f"A: {result['messages'][-1].content}")

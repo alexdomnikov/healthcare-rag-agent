@@ -163,11 +163,11 @@
   },
   {
     "id": "q019",
-    "question": "What is the average overall Star Rating for Medicare Advantage contracts in California?",
-    "expected_answer": "This requires querying the CMS MA Star Ratings structured data (not in the regulatory PDF).",
+    "question": "What is the average overall Star Rating across all Medicare Advantage contracts?",
+    "expected_answer": "This requires querying cms_summary_ratings.",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "sql",
+    "expected_tool": "sql_query_tool",
     "is_in_corpus": false
   },
   {
@@ -176,34 +176,34 @@
     "expected_answer": "This requires querying the CMS MA Star Ratings structured data (not in the regulatory PDF).",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "sql",
+    "expected_tool": "sql_query_tool",
     "is_in_corpus": false
   },
   {
     "id": "q021",
-    "question": "What are the top 5 states by total Medicare Advantage enrollment in the most recent available year?",
-    "expected_answer": "This requires querying the CMS plan enrollment structured data (not in the regulatory PDF).",
+    "question": "Which parent organization has the most Medicare Advantage contracts?",
+    "expected_answer": "This requires querying cms_summary_ratings grouped by parent_organization.",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "sql",
+    "expected_tool": "sql_query_tool",
     "is_in_corpus": false
   },
   {
     "id": "q022",
-    "question": "What is the average monthly plan premium for Medicare Advantage plans with a 5-star rating?",
-    "expected_answer": "This requires querying the CMS plan benefit structured data (not in the regulatory PDF).",
+    "question": "Which parent organization has the most contracts rated 4 stars or above?",
+    "expected_answer": "UnitedHealth Group, Inc. with 25 contracts.",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "sql",
+    "expected_tool": "sql_query_tool",
     "is_in_corpus": false
   },
   {
     "id": "q023",
-    "question": "Which Medicare Advantage organization has the highest number of contracts with a 4-star rating or above in Texas?",
-    "expected_answer": "This requires querying the CMS MA Star Ratings structured data filtered by state (not in the regulatory PDF).",
+    "question": "How many contracts have a Part D summary star rating of 4 or higher?",
+    "expected_answer": "Requires querying cms_summary_ratings on part_d_summary_2026.",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "sql",
+    "expected_tool": "sql_query_tool",
     "is_in_corpus": false
   },
   {
