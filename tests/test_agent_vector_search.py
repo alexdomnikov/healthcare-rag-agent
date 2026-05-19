@@ -5,7 +5,10 @@ from healthcare_rag.core import get_agent
 from healthcare_rag.retrieval import retrieve
 
 load_dotenv()
-# Warm up: forces model loading before any questions run, as 
+
+# Test the agent's vector db search tool. Run: uv run tests/test_agent_vector_search.py
+
+# Warm up: forces model loading before any questions run
 retrieve("Medicare Part D", top_k=1)
 
 with open("../eval/ground_truth.json") as f:

@@ -4,6 +4,9 @@ from healthcare_rag.core import get_agent
 
 load_dotenv()
 
+# Tests agent's SQL search tool for CMS Star Ratings csv data.
+# Run: uv run tests/test_agent_sql.py
+
 with open("../eval/ground_truth.json") as f:
     ground_truth = json.load(f)
 

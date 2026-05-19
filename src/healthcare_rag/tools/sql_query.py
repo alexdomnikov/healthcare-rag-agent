@@ -5,25 +5,24 @@ from pydantic import BaseModel, Field
 
 from healthcare_rag.core import get_llm, get_readonly_engine
 
-# SQL generation prompt
-
+# SQL generation prompt. This tool is used to search CMS Star Ratings csv data.
 SQL_SYSTEM_PROMPT = """
 You generate SQL SELECT queries for the CMS Medicare Advantage 2026 Star Ratings database.
 
 Available tables:
 
   cms_summary_ratings(
-      contract_number,             -- e.g. 'H0028', 'E3014'
-      organization_type,           -- e.g. 'Local CCP', 'PFFS', 'Employer/Union Only Direct Contract PDP'
+      contract_number, -- e.g. 'H0028', 'E3014'
+      organization_type, -- e.g. 'Local CCP', 'PFFS', 'Employer/Union Only Direct Contract PDP'
       contract_name,
       organization_marketing_name,
       parent_organization,
-      snp,                         -- 'Yes' or 'No'
-      disaster_2023,               -- numeric % of disaster-affected enrollees
+      snp, -- 'Yes' or 'No'
+      disaster_2023, -- numeric % of disaster-affected enrollees
       disaster_2024,
-      part_c_summary_2026,         -- NUMERIC 1.0-5.0, NULL if not applicable
-      part_d_summary_2026,         -- NUMERIC 1.0-5.0, NULL if not applicable
-      overall_2026                 -- NUMERIC 1.0-5.0, NULL if not applicable
+      part_c_summary_2026, -- NUMERIC 1.0-5.0, NULL if not applicable
+      part_d_summary_2026, -- NUMERIC 1.0-5.0, NULL if not applicable
+      overall_2026 -- NUMERIC 1.0-5.0, NULL if not applicable
   )
 
   cms_domain_stars(
@@ -32,15 +31,15 @@ Available tables:
       contract_name,
       organization_marketing_name,
       parent_organization,
-      hd1_staying_healthy_screenings_tests_and_vaccines,       -- NUMERIC 1-5 or NULL
-      hd2_managing_chronic_long_term_conditions,               -- NUMERIC 1-5 or NULL
-      hd3_member_experience_with_health_plan,                  -- NUMERIC 1-5 or NULL
-      hd4_member_complaints_and_changes_in_the_health_plan_s_performance,  -- NUMERIC 1-5 or NULL
-      hd5_health_plan_customer_service,                        -- NUMERIC 1-5 or NULL
-      dd1_drug_plan_customer_service,                          -- NUMERIC 1-5 or NULL
-      dd2_member_complaints_and_changes_in_the_drug_plan_s_performance,    -- NUMERIC 1-5 or NULL
-      dd3_member_experience_with_the_drug_plan,                -- NUMERIC 1-5 or NULL
-      dd4_drug_safety_and_accuracy_of_drug_pricing             -- NUMERIC 1-5 or NULL
+      hd1_staying_healthy_screenings_tests_and_vaccines, -- NUMERIC 1-5 or NULL
+      hd2_managing_chronic_long_term_conditions, -- NUMERIC 1-5 or NULL
+      hd3_member_experience_with_health_plan, -- NUMERIC 1-5 or NULL
+      hd4_member_complaints_and_changes_in_the_health_plan_s_performance, -- NUMERIC 1-5 or NULL
+      hd5_health_plan_customer_service, -- NUMERIC 1-5 or NULL
+      dd1_drug_plan_customer_service, -- NUMERIC 1-5 or NULL
+      dd2_member_complaints_and_changes_in_the_drug_plan_s_performance, -- NUMERIC 1-5 or NULL
+      dd3_member_experience_with_the_drug_plan, -- NUMERIC 1-5 or NULL
+      dd4_drug_safety_and_accuracy_of_drug_pricing -- NUMERIC 1-5 or NULL
   )
 
 Rules:
@@ -61,14 +60,12 @@ _FORBIDDEN = [
     "alter", "create", "truncate", "grant", "revoke",
 ]
 
-# ── Structured output schema ──────────────────────────────────────────────────
-
+# Structured output schema
 class SQLQuery(BaseModel):
     sql: str = Field(description="A read-only SELECT query. No DDL. No DML. Must include LIMIT.")
     explanation: str = Field(description="One sentence explaining what the query computes.")
 
-# ── Safety guard ──────────────────────────────────────────────────────────────
-
+# Safety guard
 def _validate(sql: str) -> str | None:
     # Returns an error string if unsafe, None if clean.
     lowered = sql.strip().lower()
@@ -79,8 +76,7 @@ def _validate(sql: str) -> str | None:
             return f"Query contains forbidden keyword: '{kw}'."
     return None
 
-# ── Tool ──────────────────────────────────────────────────────────────────────
-
+# Tool
 class SQLQueryInput(BaseModel):
     question: str = Field(
         description="A natural-language question about CMS Medicare Advantage star ratings or plan performance."
@@ -102,7 +98,7 @@ def sql_query_tool(question: str) -> str:
     - Questions about regulatory rules or requirements (use vector_search instead)
     - Questions about specific drug labels, adverse events, or recalls (use openfda_search instead)
     """
-    # Step 1: Generate SQL via structured output
+    # Generate SQL via structured output
     structured_llm = get_llm().with_structured_output(SQLQuery)
     try:
         query_obj: SQLQuery = structured_llm.invoke([
@@ -112,12 +108,12 @@ def sql_query_tool(question: str) -> str:
     except Exception as e:
         return f"Failed to generate SQL: {e}"
 
-    # Step 2: Validate
+    # Validate
     error = _validate(query_obj.sql)
     if error:
         return f"Query rejected: {error}\nGenerated SQL was:\n{query_obj.sql}"
 
-    # Step 3: Execute as read-only
+    # Execute as read-only
     try:
         with get_readonly_engine().connect() as conn:
             result = conn.execute(text(query_obj.sql))
@@ -137,7 +133,7 @@ def sql_query_tool(question: str) -> str:
             f"Explanation: {query_obj.explanation}"
         )
 
-    # Step 4: Format as a readable table
+    # Format as a readable table
     header = " | ".join(col_names)
     divider = "-" * len(header)
     body = "\n".join(" | ".join(str(v) for v in row) for row in rows)
