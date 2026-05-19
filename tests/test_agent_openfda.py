@@ -5,7 +5,7 @@ import httpx
 from dotenv import load_dotenv
 from unittest.mock import MagicMock, patch
 
-from healthcare_rag.tools.openfda_search import fetch_openfda, openfda_search_tool
+from healthcare_rag.tools.openfda_search import fetch_openfda, openfda_search
 
 load_dotenv()
 
@@ -178,17 +178,17 @@ class TestFetchOpenFDA:
 
 class TestOpenFDALangChainTool:
     def test_tool_name(self):
-        assert openfda_search_tool.name == "openfda_search"
+        assert openfda_search.name == "openfda_search"
 
     def test_tool_description_contains_positive_examples(self):
-        desc = openfda_search_tool.description
+        desc = openfda_search.description
         assert "label" in desc.lower()
         assert "adverse" in desc.lower() or "event" in desc.lower()
         assert "recall" in desc.lower() or "enforcement" in desc.lower()
 
     def test_tool_description_contains_negative_examples(self):
         # NOTE: Agent relies on 'Do NOT use' to avoid misrouting.
-        desc = openfda_search_tool.description
+        desc = openfda_search.description
         assert "do not" in desc.lower() or "don't" in desc.lower()
 
     def test_tool_invoke_returns_string(self):
@@ -196,7 +196,7 @@ class TestOpenFDALangChainTool:
             MockClient.return_value.__enter__.return_value.get.return_value = (
                 _mock_response(LABEL_RESPONSE)
             )
-            result = openfda_search_tool.invoke({"drug_name": "Eliquis"})
+            result = openfda_search.invoke({"drug_name": "Eliquis"})
 
         assert isinstance(result, str)
         assert len(result) > 0
@@ -207,7 +207,7 @@ class TestOpenFDALangChainTool:
             MockClient.return_value.__enter__.return_value.get.return_value = (
                 _mock_response(LABEL_RESPONSE)
             )
-            result = openfda_search_tool.invoke({"drug_name": "Eliquis"})
+            result = openfda_search.invoke({"drug_name": "Eliquis"})
 
         assert isinstance(result, str)
 

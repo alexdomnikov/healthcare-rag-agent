@@ -60,7 +60,6 @@ class TestSorting:
     def test_empty_list(self):
         assert sort_by_rrf([]) == []
 
-
 # embed_query smoke test (requires model download; marked as slow)
 @pytest.mark.slow
 def test_embed_query_dimension():

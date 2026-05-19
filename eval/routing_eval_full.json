@@ -1,0 +1,292 @@
+[
+  {
+    "id": "q001",
+    "question": "How much will Medicare Part D enrollees have to spend out of pocket before hitting the catastrophic phase in 2026?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 7421,
+    "is_in_corpus": true,
+    "final_answer_preview": "The out-of-pocket threshold for Medicare Part D enrollees in 2026 is $2,100. Once this amount is reached, enrollees ente"
+  },
+  {
+    "id": "q002",
+    "question": "When do the new Medicare rules kick in?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 51298,
+    "is_in_corpus": true,
+    "final_answer_preview": "The new Medicare rules are effective as of June 1, 2026, and apply to coverage beginning January 1, 2027 [p. 1]."
+  },
+  {
+    "id": "q003",
+    "question": "What happened to the coverage gap in Medicare Part D?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 56933,
+    "is_in_corpus": true,
+    "final_answer_preview": "The coverage gap in Medicare Part D was eliminated beginning in Calendar Year (CY) 2025 as part of the Inflation Reducti"
+  },
+  {
+    "id": "q004",
+    "question": "Do Medicare Part D enrollees pay anything for drugs once their spending gets really high?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 47021,
+    "is_in_corpus": true,
+    "final_answer_preview": "Yes, Medicare Part D enrollees have an annual out-of-pocket cap. Starting in 2025, this cap was set at $2,000 per enroll"
+  },
+  {
+    "id": "q005",
+    "question": "Is there a limit on how much I pay for insulin?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 27719,
+    "is_in_corpus": true,
+    "final_answer_preview": "Yes, there is a limit on how much you can pay for insulin under the Medicare Part D program. For CY 2026 and subsequent "
+  },
+  {
+    "id": "q006",
+    "question": "Do Medicare Part D members have to pay the deductible for vaccines?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 60541,
+    "is_in_corpus": true,
+    "final_answer_preview": "Medicare Part D members do not have to pay the deductible for ACIP-recommended adult vaccines. The Inflation Reduction A"
+  },
+  {
+    "id": "q007",
+    "question": "How much public feedback did CMS get on the proposed rule?",
+    "expected_tool": "vector_search",
+    "called_tool": "error",
+    "correct": false,
+    "latency_ms": 58231,
+    "is_in_corpus": true,
+    "final_answer_preview": "Exception: Error code: 429 - {'error': {'message': 'Rate limit reached for model `qwen/qwen3-32b` in organization `org_0"
+  },
+  {
+    "id": "q008",
+    "question": "Does a Medicare insurance agent still need to wait 48 hours after getting a scope of appointment before meeting with a beneficiary?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 17974,
+    "is_in_corpus": true,
+    "final_answer_preview": "No, a Medicare insurance agent does not need to wait 48 hours after obtaining a Scope of Appointment (SOA) before meetin"
+  },
+  {
+    "id": "q009",
+    "question": "If a Medicare beneficiary just walks into an insurance office without an appointment, does the agent still need a scope of appointment?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 58262,
+    "is_in_corpus": true,
+    "final_answer_preview": "Yes, according to the CMS Medicare Advantage and Part D Final Rule, agents and brokers must appropriately complete Scope"
+  },
+  {
+    "id": "q010",
+    "question": "What replaced the gap discount program?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 55179,
+    "is_in_corpus": true,
+    "final_answer_preview": "The Medicare Part D Manufacturer Discount Program replaced the Coverage Gap Discount Program (CGDP) beginning January 1,"
+  },
+  {
+    "id": "q011",
+    "question": "Is CMS moving forward with the Health Equity Index bonus in Star Ratings?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 61003,
+    "is_in_corpus": true,
+    "final_answer_preview": "No, CMS is not moving forward with the Health Equity Index (HEI) bonus in Star Ratings. In the final rule, CMS finalized"
+  },
+  {
+    "id": "q012",
+    "question": "Do Medicare Advantage plans have to publicly post their criteria for who qualifies for extra supplemental benefits for the chronically ill?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 61959,
+    "is_in_corpus": true,
+    "final_answer_preview": "Yes, Medicare Advantage plans are required to publicly post their objective criteria for determining eligibility for the"
+  },
+  {
+    "id": "q013",
+    "question": "Is Medicare cutting back on how many things it uses to grade health plans?",
+    "expected_tool": "vector_search",
+    "called_tool": "sql_query",
+    "correct": false,
+    "latency_ms": 52550,
+    "is_in_corpus": true,
+    "final_answer_preview": "Medicare is not cutting back on the number of things it uses to grade health plans. The 2026 Star Ratings system continu"
+  },
+  {
+    "id": "q014",
+    "question": "How often do Medicare insurance brokers actually show beneficiaries all the plan options available to them?",
+    "expected_tool": "vector_search",
+    "called_tool": "none",
+    "correct": false,
+    "latency_ms": 20310,
+    "is_in_corpus": true,
+    "final_answer_preview": "I don't have that information."
+  },
+  {
+    "id": "q015",
+    "question": "Do drug company discounts count toward what Medicare pays back to insurance plans?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 54261,
+    "is_in_corpus": true,
+    "final_answer_preview": "Drug company discounts under the Medicare Coverage Gap Discount Program (Manufacturer Discount Program) do not count tow"
+  },
+  {
+    "id": "q016",
+    "question": "How good does my retiree drug plan have to be to count under Medicare rules?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 45442,
+    "is_in_corpus": true,
+    "final_answer_preview": "To qualify as a \"creditable\" retiree drug plan under Medicare rules, your plan must meet the following requirements:\n\n1."
+  },
+  {
+    "id": "q017",
+    "question": "How much did Medicare used to cover for catastrophic drug costs before the IRA changes?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 60432,
+    "is_in_corpus": true,
+    "final_answer_preview": "Before the Inflation Reduction Act (IRA) changes, Medicare Part D covered catastrophic drug costs with nominal cost shar"
+  },
+  {
+    "id": "q018",
+    "question": "Did the IRA change how much Medicare reimburses plans for high-cost drug spending, and does it differ by drug type?",
+    "expected_tool": "vector_search",
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 61519,
+    "is_in_corpus": true,
+    "final_answer_preview": "Yes, the Inflation Reduction Act (IRA) changed how Medicare reimburses plans for high-cost drug spending, and these chan"
+  },
+  {
+    "id": "q019",
+    "question": "What is the average overall Star Rating across all Medicare Advantage contracts?",
+    "expected_tool": "sql_query",
+    "called_tool": "sql_query",
+    "correct": true,
+    "latency_ms": 55297,
+    "is_in_corpus": false,
+    "final_answer_preview": "The average overall Star Rating across all Medicare Advantage contracts is approximately 3.65."
+  },
+  {
+    "id": "q020",
+    "question": "How many Medicare Advantage contracts have an overall Star Rating of 4 stars or higher in 2024?",
+    "expected_tool": "sql_query",
+    "called_tool": "sql_query",
+    "correct": true,
+    "latency_ms": 50587,
+    "is_in_corpus": false,
+    "final_answer_preview": "The data provided is for 2026, and there is no available information for 2024. According to the 2026 data, there are 207"
+  },
+  {
+    "id": "q021",
+    "question": "Which parent organization has the most Medicare Advantage contracts?",
+    "expected_tool": "sql_query",
+    "called_tool": "sql_query",
+    "correct": true,
+    "latency_ms": 27205,
+    "is_in_corpus": false,
+    "final_answer_preview": "I encountered a rate limit issue and was unable to process your request. Please try again later."
+  },
+  {
+    "id": "q022",
+    "question": "Which parent organization has the most contracts rated 4 stars or above?",
+    "expected_tool": "sql_query",
+    "called_tool": "sql_query",
+    "correct": true,
+    "latency_ms": 49424,
+    "is_in_corpus": false,
+    "final_answer_preview": "The parent organization with the most contracts rated 4 stars or above is UnitedHealth Group, Inc., with 25 high-rated c"
+  },
+  {
+    "id": "q023",
+    "question": "How many contracts have a Part D summary star rating of 4 or higher?",
+    "expected_tool": "sql_query",
+    "called_tool": "sql_query",
+    "correct": true,
+    "latency_ms": 36118,
+    "is_in_corpus": false,
+    "final_answer_preview": "There are 232 contracts with a Part D summary star rating of 4 or higher."
+  },
+  {
+    "id": "q024",
+    "question": "What are the contraindications listed for Eliquis (apixaban) on its FDA label?",
+    "expected_tool": "openfda_search",
+    "called_tool": "openfda_search",
+    "correct": true,
+    "latency_ms": 48332,
+    "is_in_corpus": false,
+    "final_answer_preview": "The contraindications listed for Eliquis (apixaban) on its FDA label include:\n\n- Active pathological bleeding\n- Severe h"
+  },
+  {
+    "id": "q025",
+    "question": "Have there been any FDA recalls for metformin hydrochloride, and if so, what was the reason?",
+    "expected_tool": "openfda_search",
+    "called_tool": "openfda_search",
+    "correct": true,
+    "latency_ms": 38598,
+    "is_in_corpus": false,
+    "final_answer_preview": "Yes, there have been FDA recalls for metformin hydrochloride. Here are the details of some notable recalls:\n\n1. **Class "
+  },
+  {
+    "id": "q026",
+    "question": "What serious adverse events have been reported to the FDA for rivaroxaban (Xarelto)?",
+    "expected_tool": "openfda_search",
+    "called_tool": "openfda_search",
+    "correct": true,
+    "latency_ms": 43753,
+    "is_in_corpus": false,
+    "final_answer_preview": "No adverse events were found for rivaroxaban in the FDA database. You may want to try checking the FDA's MedWatch websit"
+  },
+  {
+    "id": "q027",
+    "question": "What is the average length of inpatient hospital stay for Medicare fee-for-service beneficiaries in 2025?",
+    "expected_tool": "none",
+    "called_tool": "none",
+    "correct": true,
+    "latency_ms": 18538,
+    "is_in_corpus": false,
+    "final_answer_preview": "I don't have that information."
+  },
+  {
+    "id": "q028",
+    "question": "What is the total CEO compensation for the top Medicare Advantage insurers in 2025?",
+    "expected_tool": "none",
+    "called_tool": "none",
+    "correct": true,
+    "latency_ms": 14359,
+    "is_in_corpus": false,
+    "final_answer_preview": "I don't have that information."
+  },
+  {
+    "id": "q029",
+    "question": "What are the current Medicaid expansion enrollment totals broken down by state for 2025?",
+    "expected_tool": "none",
+    "called_tool": "none",
+    "correct": true,
+    "latency_ms": 20521,
+    "is_in_corpus": false,
+    "final_answer_preview": "I don't have that information."
+  }
+]

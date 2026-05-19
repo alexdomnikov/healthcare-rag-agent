@@ -110,7 +110,7 @@ def fetch_openfda(drug_name: str, query_type: str) -> str:
             and not resp.json().get("results")
         ):
             if query_type == "event":
-                params["search"] = f'{drug_name}+AND+drugcharacterization:"1"'
+                params["search"] = f'{drug_name} AND drugcharacterization:"1"'
             else:
                 params["search"] = drug_name
             with httpx.Client(timeout=TIMEOUT) as client:
@@ -149,8 +149,8 @@ def fetch_openfda(drug_name: str, query_type: str) -> str:
     return header + SUMMARIZERS[query_type](results)
 
 # Agent's tool
-@tool("openfda_search")
-def openfda_search_tool(drug_name: str, query_type: str = "label") -> str:
+@tool()
+def openfda_search(drug_name: str, query_type: str = "label") -> str:
     """Search FDA drug data for information about specific medications.
 
     Use this tool for questions about:

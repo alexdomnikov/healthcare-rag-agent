@@ -167,7 +167,7 @@
     "expected_answer": "This requires querying cms_summary_ratings.",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "sql_query_tool",
+    "expected_tool": "sql_query",
     "is_in_corpus": false
   },
   {
@@ -176,7 +176,7 @@
     "expected_answer": "This requires querying the CMS MA Star Ratings structured data (not in the regulatory PDF).",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "sql_query_tool",
+    "expected_tool": "sql_query",
     "is_in_corpus": false
   },
   {
@@ -185,7 +185,7 @@
     "expected_answer": "This requires querying cms_summary_ratings grouped by parent_organization.",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "sql_query_tool",
+    "expected_tool": "sql_query",
     "is_in_corpus": false
   },
   {
@@ -194,7 +194,7 @@
     "expected_answer": "UnitedHealth Group, Inc. with 25 contracts.",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "sql_query_tool",
+    "expected_tool": "sql_query",
     "is_in_corpus": false
   },
   {
@@ -203,7 +203,7 @@
     "expected_answer": "Requires querying cms_summary_ratings on part_d_summary_2026.",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "sql_query_tool",
+    "expected_tool": "sql_query",
     "is_in_corpus": false
   },
   {
@@ -212,7 +212,7 @@
     "expected_answer": "This requires a live query to the openFDA drug label API for apixaban/Eliquis.",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "openfda",
+    "expected_tool": "openfda_search",
     "is_in_corpus": false
   },
   {
@@ -221,7 +221,7 @@
     "expected_answer": "This requires a live query to the openFDA drug enforcement API for metformin.",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "openfda",
+    "expected_tool": "openfda_search",
     "is_in_corpus": false
   },
   {
@@ -230,7 +230,7 @@
     "expected_answer": "This requires a live query to the openFDA drug adverse events API for rivaroxaban.",
     "expected_page": null,
     "expected_section": null,
-    "expected_tool": "openfda",
+    "expected_tool": "openfda_search",
     "is_in_corpus": false
   },
   {

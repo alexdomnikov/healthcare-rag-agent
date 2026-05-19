@@ -76,14 +76,8 @@ def _validate(sql: str) -> str | None:
             return f"Query contains forbidden keyword: '{kw}'."
     return None
 
-# Tool
-class SQLQueryInput(BaseModel):
-    question: str = Field(
-        description="A natural-language question about CMS Medicare Advantage star ratings or plan performance."
-    )
-
-@tool("sql_query", args_schema=SQLQueryInput)
-def sql_query_tool(question: str) -> str:
+@tool()
+def sql_query(question: str) -> str:
     """Query the CMS Medicare Advantage 2026 Star Ratings database for quantitative
     questions about plan performance and domain scores.
 
