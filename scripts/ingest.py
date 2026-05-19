@@ -26,13 +26,13 @@ class IngestionPipeline:
     #   core.py on first use (lazy, cached).
 
     def __init__(self):
-        self.file_path:str
+        self.file_path: str
         self.doc = None
         self.chunks: list[dict]
 
     def parse_document(self, 
-                       file_path:str, 
-                       debugging:bool = False):
+                       file_path: str, 
+                       debugging: bool = False):
         # Convert a PDF to a Docling Document object.
 
         self.file_path = file_path

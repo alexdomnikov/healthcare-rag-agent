@@ -13,7 +13,7 @@ from dataclasses import dataclass
 import pytest
 
 # RRF score math
-def rrf_score(ranks:list[int], k:int = 60) -> float:
+def rrf_score(ranks: list[int], k: int = 60) -> float:
     # Reference implementation of RRF for a single document.
     return sum(1.0 / (k + r) for r in ranks)
 

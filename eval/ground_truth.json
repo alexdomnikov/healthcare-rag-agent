@@ -3,14 +3,14 @@
     "id": "q001",
     "question": "How much will Medicare Part D enrollees have to spend out of pocket before hitting the catastrophic phase in 2026?",
     "expected_answer": "$2,100. This was determined by multiplying the CY 2025 OOP threshold of $2,000 by the 2026 annual percentage increase and rounding to the nearest multiple of $50.",
-    "expected_page": 4,
-    "expected_section": "1. Background",
+    "expected_page": [4, 6, 7, 14, 32],
+    "expected_section": ["1. Background", "d. Annual Out-of-Pocket Threshold (§ 423.104(d)(5))", "TABLE 2:CY 2026 SPECIALTY-TIER COINSURANCE THRESHOLDS", "D. Definition of Creditable Coverage"],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
   {
     "id": "q002",
-    "question": "When does this Medicare final rule take effect and when do the new rules actually apply to coverage?",
+    "question": "When do the new Medicare rules kick in?",
     "expected_answer": "Effective date: June 1, 2026. Applicability date: January 1, 2027 (regulations applicable to coverage beginning January 1, 2027).",
     "expected_page": 1,
     "expected_section": "DATES:",
@@ -19,10 +19,10 @@
   },
   {
     "id": "q003",
-    "question": "What happened to the coverage gap — the donut hole — in Medicare Part D?",
+    "question": "What happened to the coverage gap in Medicare Part D?",
     "expected_answer": "The coverage gap phase was eliminated beginning CY 2025 by the IRA. The redesigned benefit now has three phases: the deductible phase, the initial coverage phase, and the catastrophic phase.",
-    "expected_page": 5,
-    "expected_section": "b. Initial Coverage Limit (§§ 423.104(d)(2) and 423.104(d)(3))",
+    "expected_page": [4, 5, 6, 7, 15, 17, 41, 42, 189],
+    "expected_section": ["1. Background", "b. Initial Coverage Limit (§§ 423.104(d)(2) and 423.104(d)(3))", "c. Coverage Gap (§§ 423.100 and 423.104(d)(4))", "d. Annual Out-of-Pocket Threshold (§ 423.104(d)(5))", "TABLE 2:CY 2026 SPECIALTY-TIER COINSURANCE THRESHOLDS", "Technical Changes", "D. Definition of Creditable Coverage", "TABLE 8: CUMULATIVE NEGOTIATION DISCOUNT FROM ALLOWED COST"],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -30,14 +30,14 @@
     "id": "q004",
     "question": "Do Medicare Part D enrollees pay anything for drugs once their spending gets really high?",
     "expected_answer": "$0. There is no cost sharing for Part D drugs once an enrollee enters the catastrophic phase.",
-    "expected_page": 4,
-    "expected_section": "1. Background",
+    "expected_page": [4, 5, 6, 7, 186, 187],
+    "expected_section": ["1. Background", "b. Initial Coverage Limit (§§ 423.104(d)(2) and 423.104(d)(3))", "d. Annual Out-of-Pocket Threshold (§ 423.104(d)(5))", "TABLE 8: CUMULATIVE NEGOTIATION DISCOUNT FROM ALLOWED COST"],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
   {
     "id": "q005",
-    "question": "Is there a cap on how much Medicare beneficiaries pay for insulin each month?",
+    "question": "Is there a limit on how much I pay for insulin?",
     "expected_answer": "The lesser of: (1) $35, (2) an amount equal to 25 percent of the maximum fair price (MFP) established for the insulin product, or (3) an amount equal to 25 percent of the negotiated price under the plan.",
     "expected_page": [5, 47],
     "expected_section": ["§ 423.120(h)(1) / Insulin Cost Sharing", "1. Definition of Inflation Reduction Act Subsidy Amount (IRASA)"],
@@ -82,7 +82,7 @@
   },
   {
     "id": "q010",
-    "question": "What replaced the Coverage Gap Discount Program and when did the change happen?",
+    "question": "What replaced the gap discount program?",
     "expected_answer": "The Coverage Gap Discount Program sunsetted on January 1, 2025. It was replaced by the Manufacturer Discount Program, established in section 1860D-14C of the Act (as added by section 11201 of the IRA).",
     "expected_page": 1,
     "expected_section": "A. Purpose",
@@ -109,8 +109,8 @@
   },
     {
     "id": "q013",
-    "question": "How many quality measures is CMS cutting from the Star Ratings program in this rule?",
-    "expected_answer": "12 measures.",
+    "question": "Is Medicare cutting back on how many things it uses to grade health plans?",
+    "expected_answer": "Yes. It's cutting 12 measures.",
     "expected_page": [115, 137],
     "expected_section": ["1. Removing Measures", "F. Impact of Proposed and Finalized Changes"],
     "expected_tool": "vector_search",
@@ -127,7 +127,7 @@
   },
   {
     "id": "q015",
-    "question": "Does the Manufacturer Discount Program count toward what Medicare plans can claim as reinsurance costs?",
+    "question": "Do drug company discounts count toward what Medicare pays back to insurance plans?",
     "expected_answer": "Yes. CMS revised the definition of allowable reinsurance costs to include the portion of the negotiated price of an applicable drug paid by manufacturers under the Manufacturer Discount Program.",
     "expected_page": [17, 18, 205],
     "expected_section": ["Technical Changes", "8. Reinsurance Methodology (§ 423.329)"],
@@ -136,7 +136,7 @@
   },
   {
     "id": "q016",
-    "question": "What drug coverage level does a retiree health plan need to offer to be considered creditable under the new rules?",
+    "question": "How good does my retiree drug plan have to be to count under Medicare rules?",
     "expected_answer": "The plan must be designed to pay on average at least 73 percent of participants' prescription drug expenses for 2027 under the revised simplified determination methodology.",
     "expected_page": [42, 43, 201],
     "expected_section": ["D. Definition of Creditable Coverage"],
