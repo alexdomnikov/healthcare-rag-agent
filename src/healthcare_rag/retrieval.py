@@ -13,7 +13,7 @@ from healthcare_rag.core import get_embed_model, get_engine, get_reranker
 # Important constants
 DEFAULT_STRATEGY = "hybrid_chunker" # swap to "fixed" for ablation studies
 RRF_K = 60 # canonical value from Cormack et al. (2009), tends to perform best
-FIRST_PASS_K = 100 # candidates fed into RRF before final top-k cut
+FIRST_PASS_K = 50 # candidates fed into RRF before final top-k cut
 
 @dataclass
 class RetrievedChunk:
