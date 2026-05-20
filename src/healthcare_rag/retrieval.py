@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 from sqlalchemy import text
 from sqlalchemy.orm import Session
+from langsmith import traceable
 
 from healthcare_rag.core import get_embed_model, get_engine, get_reranker
 
@@ -120,6 +121,7 @@ def retrieve_lexical(
         for r in rows
     ]
 
+@traceable
 def retrieve_hybrid(
     query: str,
     top_k: int = 50,
@@ -210,6 +212,7 @@ def retrieve_hybrid(
         for r in rows
     ]
 
+@traceable
 def rerank(
     query: str,
     candidates: list[RetrievedChunk],
@@ -248,6 +251,7 @@ def rerank(
         for chunk, score in ranked[:top_k]
     ]
 
+@traceable
 def retrieve(
     query: str,
     top_k: int = 5,
