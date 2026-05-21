@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-and-eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install dependencies
+        run: uv sync --extra eval
+
+      - name: Lint
+        run: uv run ruff check src/ eval/
+
+      - name: Tests
+        env:
+          DATABASE_URL: postgresql://fake/fake
+        run: uv run pytest -m "not slow"
+
+      - name: Eval (smoke subset)
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL_CI }}
+        run: uv run python eval/run_eval.py --subset smoke --threshold-recall5 0.7 --threshold-routing 0.8

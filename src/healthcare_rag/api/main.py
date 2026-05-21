@@ -9,14 +9,16 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 
 load_dotenv()
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
-from groq import RateLimitError
-from pydantic import BaseModel, Field
-from slowapi import Limiter
-from slowapi.errors import RateLimitExceeded
-from slowapi.util import get_remote_address
-from sqlalchemy import text
+# Imports below must run after load_dotenv() so modules that read env vars at
+# import time (groq, sqlalchemy URL, etc.) see the .env values.
+from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
+from fastapi.responses import StreamingResponse  # noqa: E402
+from groq import RateLimitError  # noqa: E402
+from pydantic import BaseModel, Field  # noqa: E402
+from slowapi import Limiter  # noqa: E402
+from slowapi.errors import RateLimitExceeded  # noqa: E402
+from slowapi.util import get_remote_address  # noqa: E402
+from sqlalchemy import text  # noqa: E402
 
 logger = logging.getLogger("healthcare_rag")
 logging.basicConfig(level=logging.INFO, format="%(message)s")

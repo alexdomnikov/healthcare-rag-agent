@@ -124,15 +124,19 @@ def routing_accuracy(responses: list[dict]) -> dict:
 
 def hallucination_rate(responses: list[dict]) -> float | None:
     oos = [r for r in responses if not r["is_in_corpus"] and r["expected_tool"] == "none"]
-    if not oos: return None
+    if not oos:
+        return None
     refusals = ["don't have", "do not have", "don't know", "cannot answer"]
     fabricated = [r for r in oos if not any(p in r["final_answer"].lower() for p in refusals)]
     return round(len(fabricated) / len(oos), 3)
 
 
 def build_markdown(summary: dict, per_q: list[dict], routing: dict) -> str:
-    f = lambda v: f"**{v:.3f}**" if v is not None else "—"
-    g = lambda v: f"{v:.3f}" if v is not None else "—"
+    def f(v):
+        return f"**{v:.3f}**" if v is not None else "—"
+
+    def g(v):
+        return f"{v:.3f}" if v is not None else "—"
     lines = [
         "# Baseline Evaluation",
         f"\n> Judge: `{JUDGE_MODEL}` via Groq (custom LLM-as-judge)\n",
