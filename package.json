@@ -1,0 +1,12 @@
+{
+  "name": "healthcare-rag-agent",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --names api,ui --prefix-colors blue,green \"uv run uvicorn src.healthcare_rag.api.main:app --reload --port 8000\" \"pnpm --filter healthcare-rag-frontend dev\"",
+    "dev:api": "uv run uvicorn src.healthcare_rag.api.main:app --reload --port 8000",
+    "dev:ui": "pnpm --filter healthcare-rag-frontend dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}
