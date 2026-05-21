@@ -4,6 +4,11 @@ on:
   push:
   pull_request:
 
+env:
+  # Force JS-based actions to run on Node 24 instead of the deprecated Node 20.
+  # Remove this once all pinned actions natively target Node 24.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   test-and-eval:
     runs-on: ubuntu-latest
