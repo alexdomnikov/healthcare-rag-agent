@@ -75,11 +75,13 @@ async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
         content={"type": "error", "message": "Too many requests. Please wait a moment and try again."},
     )
 
-
+# Traffic can only come through my vercel or personal domain
 _cors_env = os.environ.get("CORS_ORIGINS", "").strip()
 ALLOWED_ORIGINS = (
-    ["*"] if _cors_env in ("", "*")
-    else [o.strip() for o in _cors_env.split(",") if o.strip()]
+    "https://healthcare-rag.alexdomnikov.com",
+    "https://healthcare-rag-agent-frontend.vercel.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
 )
 
 app.add_middleware(
