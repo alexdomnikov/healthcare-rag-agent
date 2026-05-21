@@ -1,6 +1,3 @@
-# Calculates simplified metrics. Will add Ragas metrics soon.
-# Run with uv run eval/metrics.py
-
 import json
 from pathlib import Path
 import numpy as np
@@ -9,6 +6,9 @@ from dotenv import load_dotenv
 from healthcare_rag.retrieval import retrieve
 
 load_dotenv()
+
+# Calculates retrieval metrics.
+# Run with uv run eval/metrics.py
 
 def _to_page_set(expected_page) -> set[int]:
     # Normalize expected_page to a set whether it's an int, list, or None.
@@ -97,7 +97,7 @@ def main():
     for k, v in results.items():
         print(f"  {k:12s}: {v:.3f}")
 
-    Path("docs").mkdir(exist_ok=True)
+    Path("../docs").mkdir(exist_ok=True)
     md = f"""# Baseline Retrieval Metrics from Week 1:
         Recall@1: {results['recall@1']:.3f}
         Recall@3: {results['recall@3']:.3f}
@@ -105,9 +105,8 @@ def main():
         MRR: {results['mrr']:.3f}
 
         Scored on {len(doc_questions)} handwritten document questions.
-        Ragas generation metrics to be added soon.
     """
-    Path("docs/baseline.md").write_text(md)
+    Path("../docs/baseline.md").write_text(md)
     print("\nSaved to docs/baseline.md")
 
 if __name__ == "__main__":

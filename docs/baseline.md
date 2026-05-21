@@ -5,5 +5,4 @@
         MRR: 0.657
 
         Scored on 18 handwritten document questions.
-        Ragas generation metrics to be added soon.
     

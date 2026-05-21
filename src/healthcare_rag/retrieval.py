@@ -121,7 +121,6 @@ def retrieve_lexical(
         for r in rows
     ]
 
-@traceable
 def retrieve_hybrid(
     query: str,
     top_k: int = 50,
@@ -212,7 +211,6 @@ def retrieve_hybrid(
         for r in rows
     ]
 
-@traceable
 def rerank(
     query: str,
     candidates: list[RetrievedChunk],
