@@ -10,6 +10,21 @@ const TOOL_LABELS: Record<string, string> = {
   openfda_search: "openFDA",
 };
 
+const TOOL_SOURCE: Record<string, { label: string; href: string }> = {
+  vector_search: {
+    label: "CMS Medicare Advantage & Part D Final Rule, Contract Year 2027 (Federal Register)",
+    href: "https://www.federalregister.gov/documents/2026/04/06/2026-06600/medicare-program-contract-year-2027-and-certain-contract-year-2026-policy-and-technical-changes-to",
+  },
+  sql_query: {
+    label: "CMS 2026 Star Ratings Data Tables",
+    href: "https://www.cms.gov/medicare/health-drug-plans/part-c-d-performance-data",
+  },
+  openfda_search: {
+    label: "openFDA (FDA drug labels, adverse events & recalls)",
+    href: "https://open.fda.gov",
+  },
+};
+
 const TOOL_COLORS: Record<string, string> = {
   vector_search: "bg-blue-100 text-blue-800 border-blue-200",
   sql_query: "bg-emerald-100 text-emerald-800 border-emerald-200",
@@ -90,6 +105,19 @@ export function MessageBubble({ message }: { message: Message }) {
             </div>
           )}
         </div>
+        {!message.isStreaming && message.tool && TOOL_SOURCE[message.tool] && (
+          <p className="text-xs text-neutral-400 px-1">
+            Source:{" "}
+            <a
+              href={TOOL_SOURCE[message.tool].href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-neutral-600"
+            >
+              {TOOL_SOURCE[message.tool].label}
+            </a>
+          </p>
+        )}
       </div>
     </div>
   );

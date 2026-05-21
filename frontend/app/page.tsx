@@ -5,7 +5,7 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MessageBubble } from "@/components/message-bubble";
-import { EXPLAIN_TRIGGER, EXPLAIN_CONTENT } from "@/lib/explain";
+import { EXPLAIN_TRIGGER, EXPLAIN_CONTENT, CLEAR_TRIGGER } from "@/lib/explain";
 
 export type Message = {
   role: "user" | "assistant";
@@ -55,7 +55,7 @@ export default function ChatPage() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isSlow]);
 
   function clearSlowTimer() {
     if (slowTimerRef.current) {
@@ -77,6 +77,12 @@ export default function ChatPage() {
         { role: "user", content: question },
         { role: "assistant", content: EXPLAIN_CONTENT, isStreaming: false },
       ]);
+      return;
+    }
+
+    if (question.toUpperCase() === CLEAR_TRIGGER) {
+      setMessages([]);
+      setError(null);
       return;
     }
 
@@ -221,7 +227,7 @@ export default function ChatPage() {
           ))}
           {isSlow && isLoading && (
             <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-              Sorry, this is taking longer than expected.
+              Sorry, this is taking longer than expected. The free Groq API tier deprioritizes requests, so inference can sometimes exceed 60 seconds.
             </div>
           )}
           {error && (
@@ -254,6 +260,11 @@ export default function ChatPage() {
               <Send className="h-4 w-4" />
             </Button>
           </div>
+          {messages.length > 0 && (
+            <p className="text-xs text-neutral-400 text-center pt-1">
+              Type <span className="font-mono">CLEAR</span> to reset and see example prompts
+            </p>
+          )}
         </div>
       </footer>
     </main>

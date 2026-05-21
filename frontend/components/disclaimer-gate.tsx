@@ -1,33 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-const STORAGE_KEY = "healthcare-rag-disclaimer-accepted-v1";
-
 export function DisclaimerGate({ children }: { children: React.ReactNode }) {
-  const [accepted, setAccepted] = useState<boolean | null>(null);
+  const [accepted, setAccepted] = useState(false);
   const [checked, setChecked] = useState(false);
 
-  useEffect(() => {
-    try {
-      setAccepted(window.localStorage.getItem(STORAGE_KEY) === "true");
-    } catch {
-      setAccepted(false);
-    }
-  }, []);
-
   function accept() {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, "true");
-    } catch {
-      // ignore: still allow entry for the session
-    }
     setAccepted(true);
-  }
-
-  if (accepted === null) {
-    return null;
   }
 
   if (accepted) {
