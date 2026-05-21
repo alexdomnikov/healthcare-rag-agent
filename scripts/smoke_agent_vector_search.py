@@ -11,8 +11,10 @@ load_dotenv()
 ROOT = Path(__file__).resolve().parents[1]
 EVAL_PATH = ROOT / 'eval'
 
-# Test the agent's vector db search tool. 
-# Run: uv run tests/test_agent_vector_search.py
+# Integration smoke script: invokes the live agent on a sample of doc questions
+# and prints each Q&A pair alongside the expected answer for manual inspection.
+# No assertions; rigorous scoring lives in eval/.
+# Run: uv run python scripts/smoke_agent_vector_search.py
 
 # Warm up: forces model loading before any questions run
 retrieve("Medicare Part D", top_k=1)
@@ -22,7 +24,7 @@ with open(EVAL_PATH / "ground_truth.json") as f:
 
 doc_questions = [
     q for q in ground_truth 
-    if q["expected_tool"] == "vector_search" and q["is_in_corpus"] == True
+    if q["expected_tool"] == "vector_search" and q["is_in_corpus"]
 ]
 
 agent = get_agent()

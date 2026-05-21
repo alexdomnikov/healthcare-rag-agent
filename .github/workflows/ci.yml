@@ -21,7 +21,7 @@ jobs:
         run: uv sync --extra eval
 
       - name: Lint
-        run: uv run ruff check src/ eval/
+        run: uv run ruff check src/ eval/ scripts/ tests/
 
       - name: Tests
         env:

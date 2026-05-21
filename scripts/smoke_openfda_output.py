@@ -1,8 +1,11 @@
-import httpx, json
+import json
+
+import httpx
 
 from healthcare_rag.tools.openfda_search import fetch_openfda
 
-# Making sure the openFDA data is useful for the agent. Run: uv run tests/test_openfda_output.py
+# Sanity check that the openFDA payload is useful for the agent.
+# Run: uv run python scripts/smoke_openfda_output.py
 
 if(__name__) == '__main__':
     print(fetch_openfda("Eliquis", "label"))
