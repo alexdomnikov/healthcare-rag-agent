@@ -15,7 +15,7 @@ GROUND_TRUTH = ROOT / "eval" / "ground_truth.json"
 
 # CI smoke subset. Each ID is verified in the saved baselines:
 #   - routed to its expected tool (see eval/routing_eval_full.json)
-#   - if vector_search, hits Recall@5 (see eval/ground_truth_responses_v1.json)
+#   - if vector_search, hits Recall@5 (see eval/ground_truth_responses.json)
 # Replace IDs only after confirming the same in the latest baseline run.
 SMOKE_IDS = ["q001", "q002", "q006", "q019", "q024"]
 

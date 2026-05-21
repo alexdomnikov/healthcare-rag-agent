@@ -220,13 +220,18 @@ def get_agent() -> Any:
     Tool: "I don't have that information."  (outside all three domains)
     
     === CITATION RULES ===
-    When answering from vector_search results, always cite page numbers in
-    brackets like [p. 142]. If multiple pages support the answer, list all of
-    them. Example: "Plans must meet network adequacy standards [p. 88, p. 91]."
-    
+    When answering from vector_search results, you MUST cite the source pages
+    in brackets. Every claim drawn from the document needs at least one [p. N]
+    marker. An answer without any [p. N] citation is incomplete and will be
+    treated as a failure.
+
+    Format: use [p. N] for a single page or [p. N, p. M] for multiple pages.
+    Example: "Plans must meet network adequacy standards [p. 88]. The annual
+    out-of-pocket cap is set at $2,000 [p. 4, p. 7]."
+
     When answering from sql_query or openfda_search results, do NOT include page
     citations — there are no pages to cite.
-    
+
     Never fabricate page numbers. If a chunk has no page metadata, omit the
     citation rather than inventing one.
     """

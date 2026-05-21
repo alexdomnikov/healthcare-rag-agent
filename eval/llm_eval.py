@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS_PATH = ROOT / "docs"
 
 JUDGE_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct"
-RESPONSES_PATH = ROOT / "eval" / "ground_truth_responses_v1.json"
+RESPONSES_PATH = ROOT / "eval" / "ground_truth_responses.json"
 PLACEHOLDER = "[No chunks retrieved — misrouted or tool error.]"
 
 # Conservative defaults for Groq's free tier on llama-4-scout. Bump on paid
@@ -101,14 +101,32 @@ async def run_judge(doc_qs: list[dict]) -> list[dict]:
     return await asyncio.gather(*(score_question(r) for r in doc_qs))
 
 
-def citation_f1(answer: str, expected_page) -> float | None:
-    cited = {int(p) for p in re.findall(r"\[p\.\s*(\d+)\]", answer)}
+# Matches a citation bracket beginning with "p." or "pp." and captures the
+# entire body so we can pull every page number out of multi-page brackets
+# like "[p. 88, p. 91]" or "[pp. 142-144]". The naive r"\[p\.\s*(\d+)\]"
+# silently dropped any bracket that didn't contain exactly one page number.
+_CITE_BLOCK = re.compile(r"\[(?:p\.?|pp\.?)\s*([^\]]+)\]", re.IGNORECASE)
+
+
+def _extract_cited_pages(answer: str) -> set[int]:
+    cited: set[int] = set()
+    for block in _CITE_BLOCK.finditer(answer):
+        cited.update(int(n) for n in re.findall(r"\d+", block.group(1)))
+    return cited
+
+
+def citation_precision(answer: str, expected_page) -> float | None:
+    # expected_page is an OR: any one of the listed pages is a valid source.
+    # We grade only whether the answer's citations land inside that set, not
+    # whether the answer reproduces every page in it. Returns None if there's
+    # nothing to grade against (e.g. SQL / openFDA / OOS questions).
+    cited = _extract_cited_pages(answer)
     expected = to_page_set(expected_page)
-    if not expected or not cited:
-        return 0.0 if expected else None
-    p = len(cited & expected) / len(cited)
-    r = len(cited & expected) / len(expected)
-    return round(2 * p * r / (p + r), 3) if (p + r) else 0.0
+    if not expected:
+        return None
+    if not cited:
+        return 0.0
+    return round(len(cited & expected) / len(cited), 3)
 
 
 def routing_accuracy(responses: list[dict]) -> dict:
@@ -144,7 +162,7 @@ def build_markdown(summary: dict, per_q: list[dict], routing: dict) -> str:
         "| Metric | Value |", "|--------|-------|",
         f"| Tool routing accuracy    | {f(summary['routing_accuracy'])} ({routing['correct']}/{routing['total']}) |",
         f"| Hallucination rate (OOS) | {f(summary['hallucination_rate'])} |",
-        f"| Citation F1 (avg)        | {f(summary['citation_f1_avg'])} |",
+        f"| Citation precision (avg) | {f(summary['citation_precision_avg'])} |",
         f"| Faithfulness             | {f(summary['faithfulness'])} |",
         f"| Context precision        | {f(summary['context_precision'])} |",
         f"| Context recall           | {f(summary['context_recall'])} |",
@@ -155,13 +173,13 @@ def build_markdown(summary: dict, per_q: list[dict], routing: dict) -> str:
             lines.append(f"| {m['id']} | {m['expected']} | {m['called']} |")
     lines += [
         "\n## Per-Question\n",
-        "| ID | Faith | Ctx.P | Ctx.R | CiteF1 | Routed |",
-        "|----|-------|-------|-------|--------|--------|",
+        "| ID | Faith | Ctx.P | Ctx.R | CitePrec | Routed |",
+        "|----|-------|-------|-------|----------|--------|",
     ]
     for q in per_q:
         ok = "+" if q["routing_correct"] else "x"
         lines.append(f"| {q['id']} | {g(q['faithfulness'])} | {g(q['context_precision'])} "
-                     f"| {g(q['context_recall'])} | {g(q['citation_f1'])} | {ok} |")
+                     f"| {g(q['context_recall'])} | {g(q['citation_precision'])} | {ok} |")
     return "\n".join(lines) + "\n"
 
 
@@ -172,15 +190,15 @@ def main():
     routing = routing_accuracy(responses)
     hall = hallucination_rate(responses)
     for r in doc_qs:
-        r["_cite_f1"] = citation_f1(r["final_answer"], r.get("expected_page"))
+        r["_cite_prec"] = citation_precision(r["final_answer"], r.get("expected_page"))
         r["_routing_correct"] = r["called_tool"] == r["expected_tool"]
 
     print(f"Routing accuracy : {routing['accuracy']:.3f} ({routing['correct']}/{routing['total']})")
     for m in routing["misrouted"]:
         print(f"x {m['id']} expected={m['expected']} called={m['called']}")
     print(f"Hallucination OOS: {hall}")
-    cite_vals = [r["_cite_f1"] for r in doc_qs if r["_cite_f1"] is not None]
-    print(f"Citation F1 avg : {round(float(np.mean(cite_vals)), 3)}")
+    cite_vals = [r["_cite_prec"] for r in doc_qs if r["_cite_prec"] is not None]
+    print(f"Citation precision avg : {round(float(np.mean(cite_vals)), 3)}")
 
     print(f"\nScoring {len(doc_qs)} questions (judge: {JUDGE_MODEL})\n")
     scores = asyncio.run(run_judge(doc_qs))
@@ -191,7 +209,7 @@ def main():
             "faithfulness": s["faithfulness"],
             "context_precision": s["context_precision"],
             "context_recall": s["context_recall"],
-            "citation_f1": r["_cite_f1"],
+            "citation_precision": r["_cite_prec"],
             "routing_correct": r["_routing_correct"],
         }
         for r, s in zip(doc_qs, scores)
@@ -204,7 +222,7 @@ def main():
     summary = {
         "routing_accuracy": routing["accuracy"],
         "hallucination_rate": hall,
-        "citation_f1_avg": avg("citation_f1"),
+        "citation_precision_avg": avg("citation_precision"),
         "faithfulness": avg("faithfulness"),
         "context_precision": avg("context_precision"),
         "context_recall": avg("context_recall"),

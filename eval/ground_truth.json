@@ -3,8 +3,19 @@
     "id": "q001",
     "question": "How much will Medicare Part D enrollees have to spend out of pocket before hitting the catastrophic phase in 2026?",
     "expected_answer": "$2,100. This was determined by multiplying the CY 2025 OOP threshold of $2,000 by the 2026 annual percentage increase and rounding to the nearest multiple of $50.",
-    "expected_page": [4, 6, 7, 14, 32],
-    "expected_section": ["1. Background", "d. Annual Out-of-Pocket Threshold (§ 423.104(d)(5))", "TABLE 2:CY 2026 SPECIALTY-TIER COINSURANCE THRESHOLDS", "D. Definition of Creditable Coverage"],
+    "expected_page": [
+      4,
+      6,
+      7,
+      14,
+      32
+    ],
+    "expected_section": [
+      "1. Background",
+      "d. Annual Out-of-Pocket Threshold (\u00a7 423.104(d)(5))",
+      "TABLE 2:CY 2026 SPECIALTY-TIER COINSURANCE THRESHOLDS",
+      "D. Definition of Creditable Coverage"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -21,8 +32,27 @@
     "id": "q003",
     "question": "What happened to the coverage gap in Medicare Part D?",
     "expected_answer": "The coverage gap phase was eliminated beginning CY 2025 by the IRA. The redesigned benefit now has three phases: the deductible phase, the initial coverage phase, and the catastrophic phase.",
-    "expected_page": [4, 5, 6, 7, 15, 17, 41, 42, 189],
-    "expected_section": ["1. Background", "b. Initial Coverage Limit (§§ 423.104(d)(2) and 423.104(d)(3))", "c. Coverage Gap (§§ 423.100 and 423.104(d)(4))", "d. Annual Out-of-Pocket Threshold (§ 423.104(d)(5))", "TABLE 2:CY 2026 SPECIALTY-TIER COINSURANCE THRESHOLDS", "Technical Changes", "D. Definition of Creditable Coverage", "TABLE 8: CUMULATIVE NEGOTIATION DISCOUNT FROM ALLOWED COST"],
+    "expected_page": [
+      4,
+      5,
+      6,
+      7,
+      15,
+      17,
+      41,
+      42,
+      189
+    ],
+    "expected_section": [
+      "1. Background",
+      "b. Initial Coverage Limit (\u00a7\u00a7 423.104(d)(2) and 423.104(d)(3))",
+      "c. Coverage Gap (\u00a7\u00a7 423.100 and 423.104(d)(4))",
+      "d. Annual Out-of-Pocket Threshold (\u00a7 423.104(d)(5))",
+      "TABLE 2:CY 2026 SPECIALTY-TIER COINSURANCE THRESHOLDS",
+      "Technical Changes",
+      "D. Definition of Creditable Coverage",
+      "TABLE 8: CUMULATIVE NEGOTIATION DISCOUNT FROM ALLOWED COST"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -30,8 +60,21 @@
     "id": "q004",
     "question": "Do Medicare Part D enrollees pay anything for drugs once their spending gets really high?",
     "expected_answer": "$0. There is no cost sharing for Part D drugs once an enrollee enters the catastrophic phase.",
-    "expected_page": [4, 5, 6, 7, 186, 187],
-    "expected_section": ["1. Background", "b. Initial Coverage Limit (§§ 423.104(d)(2) and 423.104(d)(3))", "d. Annual Out-of-Pocket Threshold (§ 423.104(d)(5))", "TABLE 8: CUMULATIVE NEGOTIATION DISCOUNT FROM ALLOWED COST"],
+    "expected_page": [
+      4,
+      5,
+      6,
+      7,
+      9,
+      186,
+      187
+    ],
+    "expected_section": [
+      "1. Background",
+      "b. Initial Coverage Limit (\u00a7\u00a7 423.104(d)(2) and 423.104(d)(3))",
+      "d. Annual Out-of-Pocket Threshold (\u00a7 423.104(d)(5))",
+      "TABLE 8: CUMULATIVE NEGOTIATION DISCOUNT FROM ALLOWED COST"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -39,8 +82,14 @@
     "id": "q005",
     "question": "Is there a limit on how much I pay for insulin?",
     "expected_answer": "The lesser of: (1) $35, (2) an amount equal to 25 percent of the maximum fair price (MFP) established for the insulin product, or (3) an amount equal to 25 percent of the negotiated price under the plan.",
-    "expected_page": [5, 47],
-    "expected_section": ["§ 423.120(h)(1) / Insulin Cost Sharing", "1. Definition of Inflation Reduction Act Subsidy Amount (IRASA)"],
+    "expected_page": [
+      5,
+      47
+    ],
+    "expected_section": [
+      "\u00a7 423.120(h)(1) / Insulin Cost Sharing",
+      "1. Definition of Inflation Reduction Act Subsidy Amount (IRASA)"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -48,8 +97,14 @@
     "id": "q006",
     "question": "Do Medicare Part D members have to pay the deductible for vaccines?",
     "expected_answer": "No. Effective for plan years beginning on or after January 1, 2023, the Medicare Part D deductible does not apply to ACIP-recommended adult vaccines, and there is no coinsurance or cost sharing for those vaccines.",
-    "expected_page": [5, 8],
-    "expected_section": ["a. Deductible (§ 423.104(d)(1))", "d. Annual Out-of-Pocket Threshold (§ 423.104(d)(5))"],
+    "expected_page": [
+      5,
+      8
+    ],
+    "expected_section": [
+      "a. Deductible (\u00a7 423.104(d)(1))",
+      "d. Annual Out-of-Pocket Threshold (\u00a7 423.104(d)(5))"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -57,8 +112,14 @@
     "id": "q007",
     "question": "How much public feedback did CMS get on the proposed rule?",
     "expected_answer": "Approximately 42,632 timely pieces of correspondence.",
-    "expected_page": [4, 194],
-    "expected_section": ["BILLING CODE ????-??-C", "E. Regulatory Review Costs"],
+    "expected_page": [
+      4,
+      194
+    ],
+    "expected_section": [
+      "BILLING CODE ????-??-C",
+      "E. Regulatory Review Costs"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -66,8 +127,14 @@
     "id": "q008",
     "question": "Does a Medicare insurance agent still need to wait 48 hours after getting a scope of appointment before meeting with a beneficiary?",
     "expected_answer": "No. CMS finalized the elimination of the 48-hour waiting period required between SOA completion and a personal marketing appointment. An SOA is still required for all personal marketing appointments, but plans and agents/brokers no longer need to wait 48 hours after obtaining it before speaking with the beneficiary.",
-    "expected_page": [71, 72],
-    "expected_section": ["D. Updating Third-Party Marketing Organizations (TPMO) Disclaimer Requirements (§§ 422.2267 and 423.2267)"],
+    "expected_page": [
+      71,
+      72,
+      75
+    ],
+    "expected_section": [
+      "D. Updating Third-Party Marketing Organizations (TPMO) Disclaimer Requirements (\u00a7\u00a7 422.2267 and 423.2267)"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -75,8 +142,17 @@
     "id": "q009",
     "question": "If a Medicare beneficiary just walks into an insurance office without an appointment, does the agent still need a scope of appointment?",
     "expected_answer": "Yes. An SOA is required for all appointments that meet the definition of personal marketing appointments, regardless of how the contact is initiated. This includes walk-ins, unscheduled calls, web-based chats, and web-based forms, as long as the contact is tailored to an individual or small group for purposes of discussing marketing topics.",
-    "expected_page": [71, 72, 73, 74, 75, 76],
-    "expected_section": ["D. Updating Third-Party Marketing Organizations (TPMO) Disclaimer Requirements (§§ 422.2267 and 423.2267)"],
+    "expected_page": [
+      71,
+      72,
+      73,
+      74,
+      75,
+      76
+    ],
+    "expected_section": [
+      "D. Updating Third-Party Marketing Organizations (TPMO) Disclaimer Requirements (\u00a7\u00a7 422.2267 and 423.2267)"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -93,8 +169,21 @@
     "id": "q011",
     "question": "Is CMS moving forward with the Health Equity Index bonus in Star Ratings?",
     "expected_answer": "No. CMS is not moving forward with the implementation of the Health Equity Index reward. CMS will continue to include the historical reward factor in the Star Ratings methodology.",
-    "expected_page": [1, 113, 115, 132, 133, 134, 135, 136],
-    "expected_section": ["4. Updates to Star Ratings", "A. Introduction", "1. Removing Measures"],
+    "expected_page": [
+      1,
+      113,
+      115,
+      132,
+      133,
+      134,
+      135,
+      136
+    ],
+    "expected_section": [
+      "4. Updates to Star Ratings",
+      "A. Introduction",
+      "1. Removing Measures"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -102,17 +191,30 @@
     "id": "q012",
     "question": "Do Medicare Advantage plans have to publicly post their criteria for who qualifies for extra supplemental benefits for the chronically ill?",
     "expected_answer": "Yes. MA plans are required to make plan-developed SSBCI eligibility criteria publicly available. CMS declined to finalize any exemptions to this public posting requirement, including for C-SNPs.",
-    "expected_page": [2, 97, 100],
-    "expected_section": ["4. Updates to Star Ratings", "2. Requirements"],
+    "expected_page": [
+      2,
+      97,
+      100
+    ],
+    "expected_section": [
+      "4. Updates to Star Ratings",
+      "2. Requirements"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
-    {
+  {
     "id": "q013",
     "question": "Is Medicare cutting back on how many things it uses to grade health plans?",
     "expected_answer": "Yes. It's cutting 12 measures.",
-    "expected_page": [115, 137],
-    "expected_section": ["1. Removing Measures", "F. Impact of Proposed and Finalized Changes"],
+    "expected_page": [
+      115,
+      137
+    ],
+    "expected_section": [
+      "1. Removing Measures",
+      "F. Impact of Proposed and Finalized Changes"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -121,7 +223,7 @@
     "question": "How often do Medicare insurance brokers actually show beneficiaries all the plan options available to them?",
     "expected_answer": "Rarely. In CMS's review of hundreds of sales, marketing, and enrollment audio calls, only one plan option from one MA organization was discussed in over 80 percent of the calls reviewed.",
     "expected_page": 65,
-    "expected_section": "D. Updating Third-Party Marketing Organizations (TPMO) Disclaimer Requirements (§§ 422.2267 and 423.2267)",
+    "expected_section": "D. Updating Third-Party Marketing Organizations (TPMO) Disclaimer Requirements (\u00a7\u00a7 422.2267 and 423.2267)",
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -129,8 +231,16 @@
     "id": "q015",
     "question": "Do drug company discounts count toward what Medicare pays back to insurance plans?",
     "expected_answer": "Yes. CMS revised the definition of allowable reinsurance costs to include the portion of the negotiated price of an applicable drug paid by manufacturers under the Manufacturer Discount Program.",
-    "expected_page": [17, 18, 205],
-    "expected_section": ["Technical Changes", "8. Reinsurance Methodology (§ 423.329)"],
+    "expected_page": [
+      17,
+      18,
+      205,
+      213
+    ],
+    "expected_section": [
+      "Technical Changes",
+      "8. Reinsurance Methodology (\u00a7 423.329)"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -138,8 +248,15 @@
     "id": "q016",
     "question": "How good does my retiree drug plan have to be to count under Medicare rules?",
     "expected_answer": "The plan must be designed to pay on average at least 73 percent of participants' prescription drug expenses for 2027 under the revised simplified determination methodology.",
-    "expected_page": [42, 43, 201],
-    "expected_section": ["D. Definition of Creditable Coverage"],
+    "expected_page": [
+      41,
+      42,
+      43,
+      201
+    ],
+    "expected_section": [
+      "D. Definition of Creditable Coverage"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -147,8 +264,13 @@
     "id": "q017",
     "question": "How much did Medicare used to cover for catastrophic drug costs before the IRA changes?",
     "expected_answer": "80 percent of allowable reinsurance costs attributable to gross covered prescription drug costs after the individual exceeded the annual out-of-pocket threshold. This applied for coverage years preceding 2025.",
-    "expected_page": [17, 206],
-    "expected_section": ["8. Reinsurance Methodology (§ 423.329)"],
+    "expected_page": [
+      17,
+      206
+    ],
+    "expected_section": [
+      "8. Reinsurance Methodology (\u00a7 423.329)"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },
@@ -156,8 +278,14 @@
     "id": "q018",
     "question": "Did the IRA change how much Medicare reimburses plans for high-cost drug spending, and does it differ by drug type?",
     "expected_answer": "Yes. For 2026 and subsequent years, CMS pays 20 percent for applicable drugs and 40 percent for drugs that are not applicable drugs, replacing the previous flat 80 percent rate.",
-    "expected_page": [17, 206],
-    "expected_section": ["8. Reinsurance Methodology (§ 423.329)"],
+    "expected_page": [
+      17,
+      187,
+      206
+    ],
+    "expected_section": [
+      "8. Reinsurance Methodology (\u00a7 423.329)"
+    ],
     "expected_tool": "vector_search",
     "is_in_corpus": true
   },

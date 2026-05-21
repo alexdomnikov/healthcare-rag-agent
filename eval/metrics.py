@@ -77,14 +77,17 @@ def main():
         print(f"  {k:12s}: {v:.3f}")
 
     DOCS_PATH.mkdir(exist_ok=True)
-    md = f"""# Baseline Retrieval Metrics from Week 1:
-        Recall@1: {results['recall@1']:.3f}
-        Recall@3: {results['recall@3']:.3f}
-        Recall@5: {results['recall@5']:.3f}
-        MRR: {results['mrr']:.3f}
-
-        Scored on {len(doc_questions)} handwritten document questions.
-    """
+    md = (
+        "# Retrieval Metrics\n\n"
+        f"Scored on {len(doc_questions)} hand-written in-corpus document "
+        "questions from `eval/ground_truth.json`.\n\n"
+        "| Metric    | Value |\n"
+        "|-----------|------:|\n"
+        f"| Recall@1  | {results['recall@1']:.3f} |\n"
+        f"| Recall@3  | {results['recall@3']:.3f} |\n"
+        f"| Recall@5  | {results['recall@5']:.3f} |\n"
+        f"| MRR       | {results['mrr']:.3f} |\n"
+    )
     (DOCS_PATH / "baseline.md").write_text(md)
     print("\nSaved to root/docs/baseline.md")
 

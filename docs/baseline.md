@@ -1,8 +1,10 @@
-# Baseline Retrieval Metrics from Week 1:
-        Recall@1: 0.500
-        Recall@3: 0.833
-        Recall@5: 0.833
-        MRR: 0.657
+# Retrieval Metrics
 
-        Scored on 18 handwritten document questions.
-    
+Scored on 18 hand-written in-corpus document questions from `eval/ground_truth.json`.
+
+| Metric    | Value |
+|-----------|------:|
+| Recall@1  | 0.611 |
+| Recall@3  | 1.000 |
+| Recall@5  | 1.000 |
+| MRR       | 0.787 |
