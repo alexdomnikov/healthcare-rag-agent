@@ -10,6 +10,8 @@ from langchain_core.messages import AIMessage, ToolMessage, HumanMessage
 
 load_dotenv()
 
+ROOT = Path(__file__).resolve().parents[1]
+
 # Runs every question in ground_truth.json through the three-tool agent,
 #   records which tool was called, and computes tool-selection accuracy.
 # NOTE: Misrouted questions are saved to eval/misrouted.json as the concrete
@@ -37,8 +39,8 @@ def extract_first_tool_called(messages: list[Any]) -> str:
     return "none"
 
 def run_routing_eval(
-    ground_truth_path: str = "ground_truth.json",
-    output_path: str = "misrouted.json",
+    ground_truth_path: str = str(ROOT / "eval" / "ground_truth.json"),
+    output_path: str = str(ROOT / "eval" / "misrouted.json"),
     verbose: bool = True,
 ) -> tuple[float, list[dict]]:
     from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -161,15 +163,15 @@ def _parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "--gt",
-        default="ground_truth.json",
+        default=str(ROOT / "eval" / "ground_truth.json"),
         metavar="PATH",
-        help="Path to ground_truth.json  (default: ground_truth.json)",
+        help="Path to ground_truth.json  (default: eval/ground_truth.json)",
     )
     p.add_argument(
         "--output",
-        default="misrouted.json",
+        default=str(ROOT / "eval" / "misrouted.json"),
         metavar="PATH",
-        help="Where to save misrouted.json  (default: misrouted.json)",
+        help="Where to save misrouted.json  (default: eval/misrouted.json)",
     )
     p.add_argument(
         "--threshold",

@@ -5,6 +5,7 @@
 import os, re
 import pandas as pd
 from dotenv import load_dotenv
+from pathlib import Path
 
 from sqlalchemy import text
 
@@ -12,8 +13,10 @@ from healthcare_rag.core import get_engine
 
 load_dotenv()
 
-SUMMARY_PATH = "../data/2026_Star_Ratings_Data_Table_Summary_Ratings_Oct_8_2025.csv"
-DOMAIN_PATH  = "../data/2026_Star_Ratings_Data_Table_Domain_Stars_Oct_8_2025.csv"
+ROOT = Path(__file__).resolve().parents[1]
+DATA_PATH = ROOT / 'data'
+SUMMARY_PATH = DATA_PATH / "2026_Star_Ratings_Data_Table_Summary_Ratings_Oct_8_2025.csv"
+DOMAIN_PATH  = DATA_PATH / "2026_Star_Ratings_Data_Table_Domain_Stars_Oct_8_2025.csv"
 
 # Helpers
 def normalize_col(name: str) -> str:

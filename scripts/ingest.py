@@ -1,11 +1,6 @@
-# Document ingestion pipeline. Parses a PDF with Docling, chunks it with 
-#   HybridChunker, embeds each chunk with BGE-small, and bulk-inserts 
-#   into Neon Postgres via SQLAlchemy. All heavy objects (model, engine, 
-#   chunker) come from core.py so they're shared with retrieval.py and the 
-#   agent tools without re-loading.
-
 import os
 from dotenv import load_dotenv
+from pathlib import Path
 
 from sqlalchemy import delete
 from sqlalchemy.orm import Session
@@ -20,6 +15,16 @@ from healthcare_rag.core import (
 )
 
 load_dotenv()
+
+# project root
+ROOT = Path(__file__).resolve().parents[1]
+DATA_PATH = ROOT / 'data'
+
+# Document ingestion pipeline. Parses a PDF with Docling, chunks it with 
+#   HybridChunker, embeds each chunk with BGE-small, and bulk-inserts 
+#   into Neon Postgres via SQLAlchemy. All heavy objects (model, engine, 
+#   chunker) come from core.py so they're shared with retrieval.py and the 
+#   agent tools without re-loading.
 
 class IngestionPipeline:
     # Pipeline,  parse -> chunk -> embed -> store. Heavy objects are fetched from
@@ -41,8 +46,8 @@ class IngestionPipeline:
         print("Parsing completed.")
 
         if debugging:
-            print("Saving structured representation to ../data/parsed.json")
-            self.doc.save_as_json("../data/parsed.json")
+            print("Saving structured representation to root/data/parsed.json")
+            self.doc.save_as_json(DATA_PATH / "parsed.json")
             print("Saved.")
 
         return self.doc
@@ -135,6 +140,6 @@ class IngestionPipeline:
 # Entry point
 if __name__ == "__main__":
     pipeline = IngestionPipeline()
-    pipeline.parse_document(file_path="../data/cms_final_rule.pdf", debugging=True)
+    pipeline.parse_document(file_path = DATA_PATH / "cms_final_rule.pdf", debugging=True)
     pipeline.chunk()
     pipeline.embed_and_store()

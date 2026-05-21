@@ -1,0 +1,1255 @@
+{
+  "hybrid": {
+    "rows": [
+      {
+        "id": "q001",
+        "question": "How much will Medicare Part D enrollees have to spend out of pocket before hitting the catastrophic phase in 2026?",
+        "expected_page": [
+          4,
+          6,
+          7,
+          14,
+          32
+        ],
+        "retrieved_pages": [
+          5,
+          185,
+          42,
+          189,
+          185,
+          188,
+          41,
+          17,
+          192,
+          9
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q002",
+        "question": "When do the new Medicare rules kick in?",
+        "expected_page": 1,
+        "retrieved_pages": [
+          77,
+          171,
+          1,
+          1,
+          86,
+          101,
+          146,
+          4,
+          113,
+          71
+        ],
+        "recall@1": 0,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 0.3333333333333333
+      },
+      {
+        "id": "q003",
+        "question": "What happened to the coverage gap in Medicare Part D?",
+        "expected_page": [
+          4,
+          5,
+          6,
+          7,
+          15,
+          17,
+          41,
+          42,
+          189
+        ],
+        "retrieved_pages": [
+          6,
+          189,
+          1,
+          19,
+          6,
+          209,
+          41,
+          185,
+          6,
+          189
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q004",
+        "question": "Do Medicare Part D enrollees pay anything for drugs once their spending gets really high?",
+        "expected_page": [
+          4,
+          5,
+          6,
+          7,
+          186,
+          187
+        ],
+        "retrieved_pages": [
+          187,
+          4,
+          195,
+          186,
+          185,
+          185,
+          12,
+          202,
+          1,
+          42
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q005",
+        "question": "Is there a limit on how much I pay for insulin?",
+        "expected_page": [
+          5,
+          47
+        ],
+        "retrieved_pages": [
+          47,
+          206,
+          23,
+          212,
+          18,
+          186,
+          5,
+          185,
+          206,
+          46
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q006",
+        "question": "Do Medicare Part D members have to pay the deductible for vaccines?",
+        "expected_page": [
+          5,
+          8
+        ],
+        "retrieved_pages": [
+          5,
+          5,
+          206,
+          211,
+          8,
+          47,
+          18,
+          202,
+          209,
+          202
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q007",
+        "question": "How much public feedback did CMS get on the proposed rule?",
+        "expected_page": [
+          4,
+          194
+        ],
+        "retrieved_pages": [
+          112,
+          119,
+          115,
+          136,
+          77,
+          91,
+          119,
+          117,
+          88,
+          116
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q008",
+        "question": "Does a Medicare insurance agent still need to wait 48 hours after getting a scope of appointment before meeting with a beneficiary?",
+        "expected_page": [
+          71,
+          72
+        ],
+        "retrieved_pages": [
+          75,
+          71,
+          72,
+          71,
+          75,
+          74,
+          72,
+          72,
+          74,
+          74
+        ],
+        "recall@1": 0,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 0.5
+      },
+      {
+        "id": "q009",
+        "question": "If a Medicare beneficiary just walks into an insurance office without an appointment, does the agent still need a scope of appointment?",
+        "expected_page": [
+          71,
+          72,
+          73,
+          74,
+          75,
+          76
+        ],
+        "retrieved_pages": [
+          200,
+          71,
+          75,
+          209,
+          73,
+          52,
+          73,
+          76,
+          70,
+          209
+        ],
+        "recall@1": 0,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 0.5
+      },
+      {
+        "id": "q010",
+        "question": "What replaced the gap discount program?",
+        "expected_page": 1,
+        "retrieved_pages": [
+          19,
+          1,
+          41,
+          7,
+          39,
+          210,
+          210,
+          210,
+          210,
+          19
+        ],
+        "recall@1": 0,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 0.5
+      },
+      {
+        "id": "q011",
+        "question": "Is CMS moving forward with the Health Equity Index bonus in Star Ratings?",
+        "expected_page": [
+          1,
+          113,
+          115,
+          132,
+          133,
+          134,
+          135,
+          136
+        ],
+        "retrieved_pages": [
+          133,
+          132,
+          135,
+          133,
+          122,
+          124,
+          119,
+          127,
+          134,
+          133
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q012",
+        "question": "Do Medicare Advantage plans have to publicly post their criteria for who qualifies for extra supplemental benefits for the chronically ill?",
+        "expected_page": [
+          2,
+          97,
+          100
+        ],
+        "retrieved_pages": [
+          96,
+          97,
+          102,
+          164,
+          100,
+          97,
+          102,
+          99,
+          103,
+          106
+        ],
+        "recall@1": 0,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 0.5
+      },
+      {
+        "id": "q013",
+        "question": "Is Medicare cutting back on how many things it uses to grade health plans?",
+        "expected_page": [
+          115,
+          137
+        ],
+        "retrieved_pages": [
+          138,
+          81,
+          190,
+          43,
+          116,
+          138,
+          43,
+          168,
+          76,
+          127
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q014",
+        "question": "How often do Medicare insurance brokers actually show beneficiaries all the plan options available to them?",
+        "expected_page": 65,
+        "retrieved_pages": [
+          65,
+          81,
+          69,
+          70,
+          83,
+          200,
+          52,
+          67,
+          83,
+          66
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q015",
+        "question": "Do drug company discounts count toward what Medicare pays back to insurance plans?",
+        "expected_page": [
+          17,
+          18,
+          205
+        ],
+        "retrieved_pages": [
+          24,
+          213,
+          33,
+          210,
+          210,
+          215,
+          30,
+          19,
+          202,
+          30
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q016",
+        "question": "How good does my retiree drug plan have to be to count under Medicare rules?",
+        "expected_page": [
+          42,
+          43,
+          201
+        ],
+        "retrieved_pages": [
+          18,
+          41,
+          208,
+          93,
+          185,
+          8,
+          164,
+          183,
+          164,
+          183
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q017",
+        "question": "How much did Medicare used to cover for catastrophic drug costs before the IRA changes?",
+        "expected_page": [
+          17,
+          206
+        ],
+        "retrieved_pages": [
+          185,
+          185,
+          5,
+          186,
+          42,
+          185,
+          18,
+          8,
+          186,
+          188
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q018",
+        "question": "Did the IRA change how much Medicare reimburses plans for high-cost drug spending, and does it differ by drug type?",
+        "expected_page": [
+          17,
+          206
+        ],
+        "retrieved_pages": [
+          185,
+          186,
+          187,
+          185,
+          186,
+          18,
+          42,
+          188,
+          185,
+          186
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      }
+    ],
+    "aggregates": {
+      "recall@1": 0.3333333333333333,
+      "recall@3": 0.6111111111111112,
+      "recall@5": 0.6111111111111112,
+      "recall@10": 0.6111111111111112,
+      "mrr": 0.4629629629629629,
+      "n_questions": 18,
+      "elapsed_s": 5.67
+    }
+  },
+  "vector": {
+    "rows": [
+      {
+        "id": "q001",
+        "question": "How much will Medicare Part D enrollees have to spend out of pocket before hitting the catastrophic phase in 2026?",
+        "expected_page": [
+          4,
+          6,
+          7,
+          14,
+          32
+        ],
+        "retrieved_pages": [
+          5,
+          185,
+          42,
+          189,
+          185,
+          188,
+          41,
+          17,
+          192,
+          9
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q002",
+        "question": "When do the new Medicare rules kick in?",
+        "expected_page": 1,
+        "retrieved_pages": [
+          77,
+          171,
+          1,
+          1,
+          86,
+          101,
+          146,
+          4,
+          113,
+          71
+        ],
+        "recall@1": 0,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 0.3333333333333333
+      },
+      {
+        "id": "q003",
+        "question": "What happened to the coverage gap in Medicare Part D?",
+        "expected_page": [
+          4,
+          5,
+          6,
+          7,
+          15,
+          17,
+          41,
+          42,
+          189
+        ],
+        "retrieved_pages": [
+          6,
+          189,
+          1,
+          19,
+          6,
+          209,
+          41,
+          185,
+          6,
+          189
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q004",
+        "question": "Do Medicare Part D enrollees pay anything for drugs once their spending gets really high?",
+        "expected_page": [
+          4,
+          5,
+          6,
+          7,
+          186,
+          187
+        ],
+        "retrieved_pages": [
+          187,
+          4,
+          195,
+          186,
+          185,
+          185,
+          12,
+          202,
+          1,
+          42
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q005",
+        "question": "Is there a limit on how much I pay for insulin?",
+        "expected_page": [
+          5,
+          47
+        ],
+        "retrieved_pages": [
+          47,
+          206,
+          23,
+          212,
+          18,
+          186,
+          5,
+          185,
+          206,
+          46
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q006",
+        "question": "Do Medicare Part D members have to pay the deductible for vaccines?",
+        "expected_page": [
+          5,
+          8
+        ],
+        "retrieved_pages": [
+          5,
+          5,
+          206,
+          211,
+          8,
+          47,
+          18,
+          202,
+          209,
+          202
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q007",
+        "question": "How much public feedback did CMS get on the proposed rule?",
+        "expected_page": [
+          4,
+          194
+        ],
+        "retrieved_pages": [
+          112,
+          119,
+          115,
+          136,
+          77,
+          91,
+          119,
+          117,
+          88,
+          116
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q008",
+        "question": "Does a Medicare insurance agent still need to wait 48 hours after getting a scope of appointment before meeting with a beneficiary?",
+        "expected_page": [
+          71,
+          72
+        ],
+        "retrieved_pages": [
+          75,
+          71,
+          72,
+          71,
+          75,
+          74,
+          72,
+          72,
+          74,
+          74
+        ],
+        "recall@1": 0,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 0.5
+      },
+      {
+        "id": "q009",
+        "question": "If a Medicare beneficiary just walks into an insurance office without an appointment, does the agent still need a scope of appointment?",
+        "expected_page": [
+          71,
+          72,
+          73,
+          74,
+          75,
+          76
+        ],
+        "retrieved_pages": [
+          200,
+          71,
+          75,
+          209,
+          73,
+          52,
+          73,
+          76,
+          70,
+          209
+        ],
+        "recall@1": 0,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 0.5
+      },
+      {
+        "id": "q010",
+        "question": "What replaced the gap discount program?",
+        "expected_page": 1,
+        "retrieved_pages": [
+          210,
+          210,
+          210,
+          210,
+          19,
+          19,
+          189,
+          19,
+          30,
+          210
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q011",
+        "question": "Is CMS moving forward with the Health Equity Index bonus in Star Ratings?",
+        "expected_page": [
+          1,
+          113,
+          115,
+          132,
+          133,
+          134,
+          135,
+          136
+        ],
+        "retrieved_pages": [
+          133,
+          132,
+          135,
+          133,
+          122,
+          124,
+          119,
+          127,
+          134,
+          133
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q012",
+        "question": "Do Medicare Advantage plans have to publicly post their criteria for who qualifies for extra supplemental benefits for the chronically ill?",
+        "expected_page": [
+          2,
+          97,
+          100
+        ],
+        "retrieved_pages": [
+          96,
+          97,
+          102,
+          164,
+          100,
+          97,
+          102,
+          99,
+          103,
+          106
+        ],
+        "recall@1": 0,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 0.5
+      },
+      {
+        "id": "q013",
+        "question": "Is Medicare cutting back on how many things it uses to grade health plans?",
+        "expected_page": [
+          115,
+          137
+        ],
+        "retrieved_pages": [
+          138,
+          81,
+          190,
+          43,
+          116,
+          138,
+          43,
+          168,
+          76,
+          127
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q014",
+        "question": "How often do Medicare insurance brokers actually show beneficiaries all the plan options available to them?",
+        "expected_page": 65,
+        "retrieved_pages": [
+          65,
+          81,
+          69,
+          70,
+          83,
+          200,
+          52,
+          67,
+          83,
+          66
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q015",
+        "question": "Do drug company discounts count toward what Medicare pays back to insurance plans?",
+        "expected_page": [
+          17,
+          18,
+          205
+        ],
+        "retrieved_pages": [
+          24,
+          213,
+          33,
+          210,
+          210,
+          215,
+          30,
+          19,
+          202,
+          30
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q016",
+        "question": "How good does my retiree drug plan have to be to count under Medicare rules?",
+        "expected_page": [
+          42,
+          43,
+          201
+        ],
+        "retrieved_pages": [
+          18,
+          41,
+          208,
+          93,
+          185,
+          8,
+          164,
+          183,
+          164,
+          183
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q017",
+        "question": "How much did Medicare used to cover for catastrophic drug costs before the IRA changes?",
+        "expected_page": [
+          17,
+          206
+        ],
+        "retrieved_pages": [
+          185,
+          185,
+          5,
+          186,
+          42,
+          185,
+          18,
+          8,
+          186,
+          188
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q018",
+        "question": "Did the IRA change how much Medicare reimburses plans for high-cost drug spending, and does it differ by drug type?",
+        "expected_page": [
+          17,
+          206
+        ],
+        "retrieved_pages": [
+          185,
+          186,
+          187,
+          185,
+          186,
+          18,
+          42,
+          188,
+          185,
+          186
+        ],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      }
+    ],
+    "aggregates": {
+      "recall@1": 0.3333333333333333,
+      "recall@3": 0.5555555555555556,
+      "recall@5": 0.5555555555555556,
+      "recall@10": 0.5555555555555556,
+      "mrr": 0.4351851851851852,
+      "n_questions": 18,
+      "elapsed_s": 2.37
+    }
+  },
+  "lexical": {
+    "rows": [
+      {
+        "id": "q001",
+        "question": "How much will Medicare Part D enrollees have to spend out of pocket before hitting the catastrophic phase in 2026?",
+        "expected_page": [
+          4,
+          6,
+          7,
+          14,
+          32
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q002",
+        "question": "When do the new Medicare rules kick in?",
+        "expected_page": 1,
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q003",
+        "question": "What happened to the coverage gap in Medicare Part D?",
+        "expected_page": [
+          4,
+          5,
+          6,
+          7,
+          15,
+          17,
+          41,
+          42,
+          189
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q004",
+        "question": "Do Medicare Part D enrollees pay anything for drugs once their spending gets really high?",
+        "expected_page": [
+          4,
+          5,
+          6,
+          7,
+          186,
+          187
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q005",
+        "question": "Is there a limit on how much I pay for insulin?",
+        "expected_page": [
+          5,
+          47
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q006",
+        "question": "Do Medicare Part D members have to pay the deductible for vaccines?",
+        "expected_page": [
+          5,
+          8
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q007",
+        "question": "How much public feedback did CMS get on the proposed rule?",
+        "expected_page": [
+          4,
+          194
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q008",
+        "question": "Does a Medicare insurance agent still need to wait 48 hours after getting a scope of appointment before meeting with a beneficiary?",
+        "expected_page": [
+          71,
+          72
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q009",
+        "question": "If a Medicare beneficiary just walks into an insurance office without an appointment, does the agent still need a scope of appointment?",
+        "expected_page": [
+          71,
+          72,
+          73,
+          74,
+          75,
+          76
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q010",
+        "question": "What replaced the gap discount program?",
+        "expected_page": 1,
+        "retrieved_pages": [
+          1,
+          19,
+          41,
+          7,
+          39,
+          208,
+          18
+        ],
+        "recall@1": 1,
+        "recall@3": 1,
+        "recall@5": 1,
+        "recall@10": 1,
+        "rr": 1.0
+      },
+      {
+        "id": "q011",
+        "question": "Is CMS moving forward with the Health Equity Index bonus in Star Ratings?",
+        "expected_page": [
+          1,
+          113,
+          115,
+          132,
+          133,
+          134,
+          135,
+          136
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q012",
+        "question": "Do Medicare Advantage plans have to publicly post their criteria for who qualifies for extra supplemental benefits for the chronically ill?",
+        "expected_page": [
+          2,
+          97,
+          100
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q013",
+        "question": "Is Medicare cutting back on how many things it uses to grade health plans?",
+        "expected_page": [
+          115,
+          137
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q014",
+        "question": "How often do Medicare insurance brokers actually show beneficiaries all the plan options available to them?",
+        "expected_page": 65,
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q015",
+        "question": "Do drug company discounts count toward what Medicare pays back to insurance plans?",
+        "expected_page": [
+          17,
+          18,
+          205
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q016",
+        "question": "How good does my retiree drug plan have to be to count under Medicare rules?",
+        "expected_page": [
+          42,
+          43,
+          201
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q017",
+        "question": "How much did Medicare used to cover for catastrophic drug costs before the IRA changes?",
+        "expected_page": [
+          17,
+          206
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      },
+      {
+        "id": "q018",
+        "question": "Did the IRA change how much Medicare reimburses plans for high-cost drug spending, and does it differ by drug type?",
+        "expected_page": [
+          17,
+          206
+        ],
+        "retrieved_pages": [],
+        "recall@1": 0,
+        "recall@3": 0,
+        "recall@5": 0,
+        "recall@10": 0,
+        "rr": 0.0
+      }
+    ],
+    "aggregates": {
+      "recall@1": 0.05555555555555555,
+      "recall@3": 0.05555555555555555,
+      "recall@5": 0.05555555555555555,
+      "recall@10": 0.05555555555555555,
+      "mrr": 0.05555555555555555,
+      "n_questions": 18,
+      "elapsed_s": 1.77
+    }
+  }
+}

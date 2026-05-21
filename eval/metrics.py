@@ -2,10 +2,15 @@ import json
 from pathlib import Path
 import numpy as np
 from dotenv import load_dotenv
+from pathlib import Path
 
 from healthcare_rag.retrieval import retrieve
 
 load_dotenv()
+
+# project root
+ROOT = Path(__file__).resolve().parents[1]
+DOCS_PATH = ROOT / 'docs'
 
 # Calculates retrieval metrics.
 # Run with uv run eval/metrics.py
@@ -36,7 +41,7 @@ def reciprocal_rank(retrieved_pages: list[int], expected_page) -> float:
     return 0.0
 
 def main():
-    gt_path = Path("ground_truth.json")
+    gt_path = ROOT / "eval" / "ground_truth.json"
     with open(gt_path) as f:
         ground_truth = json.load(f)
 
@@ -97,7 +102,7 @@ def main():
     for k, v in results.items():
         print(f"  {k:12s}: {v:.3f}")
 
-    Path("../docs").mkdir(exist_ok=True)
+    DOCS_PATH.mkdir(exist_ok=True)
     md = f"""# Baseline Retrieval Metrics from Week 1:
         Recall@1: {results['recall@1']:.3f}
         Recall@3: {results['recall@3']:.3f}
@@ -106,8 +111,8 @@ def main():
 
         Scored on {len(doc_questions)} handwritten document questions.
     """
-    Path("../docs/baseline.md").write_text(md)
-    print("\nSaved to docs/baseline.md")
+    (DOCS_PATH / "baseline.md").write_text(md)
+    print("\nSaved to root/docs/baseline.md")
 
 if __name__ == "__main__":
     main()

@@ -1,17 +1,23 @@
 import json
 from dotenv import load_dotenv
+from pathlib import Path
 
 from healthcare_rag.core import get_agent
 from healthcare_rag.retrieval import retrieve
 
 load_dotenv()
 
-# Test the agent's vector db search tool. Run: uv run tests/test_agent_vector_search.py
+# project root
+ROOT = Path(__file__).resolve().parents[1]
+EVAL_PATH = ROOT / 'eval'
+
+# Test the agent's vector db search tool. 
+# Run: uv run tests/test_agent_vector_search.py
 
 # Warm up: forces model loading before any questions run
 retrieve("Medicare Part D", top_k=1)
 
-with open("../eval/ground_truth.json") as f:
+with open(EVAL_PATH / "eval/ground_truth.json") as f:
     ground_truth = json.load(f)
 
 doc_questions = [

@@ -9,8 +9,12 @@ from groq import AsyncGroq
 
 load_dotenv()
 
+# project root
+ROOT = Path(__file__).resolve().parents[1]
+DOCS_PATH = ROOT / "docs"
+
 JUDGE_MODEL = "llama-3.3-70b-versatile"
-RESPONSES_PATH = Path("ground_truth_responses_v1.json")
+RESPONSES_PATH = ROOT / 'eval' / "ground_truth_responses_v1.json"
 PLACEHOLDER = "[No chunks retrieved — misrouted or tool error.]"
 
 client = AsyncGroq()
@@ -189,10 +193,11 @@ def main():
             print(f"{k:<28} {v}")
 
     model_slug = JUDGE_MODEL.replace("/", "-")
-    Path("../docs").mkdir(exist_ok=True)
-    Path(f"eval_baseline_{model_slug}.json").write_text(json.dumps(summary, indent=2))
-    Path(f"../docs/eval_baseline_{model_slug}.md").write_text(build_markdown(summary, per_q, routing))
-    print("\nSaved -> eval/eval_baseline.json docs/eval_baseline.md")
+    
+    DOCS_PATH.mkdir(exist_ok=True)
+    (ROOT / "eval" / f"eval_baseline_{model_slug}.json").write_text(json.dumps(summary, indent=2))
+    (DOCS_PATH / f"eval_baseline_{model_slug}.md").write_text(build_markdown(summary, per_q, routing))
+    print("\nSaved -> root/eval/eval_baseline.json root/docs/eval_baseline.md")
 
 if __name__ == "__main__":
     main()
