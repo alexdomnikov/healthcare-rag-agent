@@ -17,7 +17,7 @@ EVAL_PATH = ROOT / 'eval'
 # Warm up: forces model loading before any questions run
 retrieve("Medicare Part D", top_k=1)
 
-with open(EVAL_PATH / "eval/ground_truth.json") as f:
+with open(EVAL_PATH / "ground_truth.json") as f:
     ground_truth = json.load(f)
 
 doc_questions = [

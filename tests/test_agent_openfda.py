@@ -45,10 +45,9 @@ EVENT_RESPONSE = {
             "serious": "1",
             "patient": {
                 "reaction": [
-                    {"reactionmeddrapt": "HAEMORRHAGE"},
-                    {"reactionmeddrapt": "DIZZINESS"},
+                    {"reactionmeddrapt": "HAEMORRHAGE", "reactionoutcome": "5"},  # fatal
+                    {"reactionmeddrapt": "DIZZINESS", "reactionoutcome": "1"},    # recovered
                 ],
-                "patientoutcome": ["5"],  # fatal
             },
         }
     ],

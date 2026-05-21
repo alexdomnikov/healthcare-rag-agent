@@ -1,44 +1,18 @@
 import json
 from pathlib import Path
+
 import numpy as np
 from dotenv import load_dotenv
-from pathlib import Path
 
+from healthcare_rag.eval_metrics import recall_at_k, reciprocal_rank
 from healthcare_rag.retrieval import retrieve
 
 load_dotenv()
 
-# project root
 ROOT = Path(__file__).resolve().parents[1]
-DOCS_PATH = ROOT / 'docs'
+DOCS_PATH = ROOT / "docs"
 
-# Calculates retrieval metrics.
 # Run with uv run eval/metrics.py
-
-def _to_page_set(expected_page) -> set[int]:
-    # Normalize expected_page to a set whether it's an int, list, or None.
-    if expected_page is None:
-        return set()
-    if isinstance(expected_page, list):
-        return set(expected_page)
-    return {expected_page}
-
-def recall_at_k(retrieved_pages: list[int], expected_page, k: int) -> int:
-    # Returns 1 if document page matches expected page, 0 if not.
-    pages = _to_page_set(expected_page)
-    if not pages:
-        return 0
-    return int(bool(pages & set(retrieved_pages[:k])))
-
-def reciprocal_rank(retrieved_pages: list[int], expected_page) -> float:
-    # Returns 1/(rank+1) of the first chunk that matches expected_page, or 0.0
-    pages = _to_page_set(expected_page)
-    if not pages:
-        return 0.0
-    for i, page in enumerate(retrieved_pages):
-        if page in pages:
-            return 1.0 / (i + 1)
-    return 0.0
 
 def main():
     gt_path = ROOT / "eval" / "ground_truth.json"

@@ -2,9 +2,9 @@
   "routing_accuracy": 0.929,
   "hallucination_rate": 0.0,
   "citation_f1_avg": 0.245,
-  "faithfulness": 0.853,
+  "faithfulness": 0.912,
   "context_precision": 0.676,
-  "context_recall": 0.588,
+  "context_recall": 0.559,
   "routing_detail": {
     "accuracy": 0.929,
     "correct": 26,
@@ -65,7 +65,7 @@
     },
     {
       "id": "q011",
-      "faithfulness": 1.0,
+      "faithfulness": 0.5,
       "context_precision": 0.0,
       "context_recall": 1.0,
       "citation_f1": 0.4,
@@ -73,7 +73,7 @@
     },
     {
       "id": "q012",
-      "faithfulness": 0.0,
+      "faithfulness": 1.0,
       "context_precision": 1.0,
       "context_recall": 1.0,
       "citation_f1": 0.4,
@@ -115,7 +115,7 @@
       "id": "q005",
       "faithfulness": 1.0,
       "context_precision": 1.0,
-      "context_recall": 1.0,
+      "context_recall": 0.5,
       "citation_f1": 0.667,
       "routing_correct": true
     },
@@ -137,7 +137,7 @@
     },
     {
       "id": "q018",
-      "faithfulness": 0.5,
+      "faithfulness": 1.0,
       "context_precision": 0.5,
       "context_recall": 0.0,
       "citation_f1": 0.0,

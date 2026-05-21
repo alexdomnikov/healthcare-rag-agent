@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from sqlalchemy import text
 
 from healthcare_rag.core import get_engine
+from healthcare_rag.eval_metrics import recall_at_k, reciprocal_rank
 from healthcare_rag.retrieval import retrieve
 
 load_dotenv()
@@ -15,17 +16,9 @@ load_dotenv()
 ROOT = Path(__file__).resolve().parents[2]
 CONDITIONS = [("structure", "hybrid_chunker"), ("fixed", "fixed")]
 
-# Ablation 3: Does structure-aware chunking outperform fixed-size 512-token chunking?
-
-# Pre-requisite: uv run root/scripts/ingest_fixed_chunks.py
-# Run: root/eval/ablations/run_all.py to build docs/ablations.md.
-
-def _page_set(expected_page) -> set[int]:
-    if expected_page is None:
-        return set()
-    if isinstance(expected_page, list):
-        return {int(p) for p in expected_page if p is not None}
-    return {int(expected_page)}
+# Ablation 3: does structure-aware chunking beat fixed-size 512-token chunking?
+# Prereq: uv run scripts/ingest.py --strategy fixed
+# Run eval/ablations/run_all.py to build docs/ablations.md.
 
 
 def _fixed_chunk_count() -> int:
@@ -40,7 +33,7 @@ def run_ablation(ground_truth: list[dict]) -> dict:
     if count == 0:
         raise RuntimeError(
             "No fixed-size chunks in the database. "
-            "Run: uv run scripts/ingest_fixed_chunks.py"
+            "Run: uv run scripts/ingest.py --strategy fixed"
         )
     print(f"Found {count} fixed-size chunks in database.")
 
@@ -60,22 +53,20 @@ def run_ablation(ground_truth: list[dict]) -> dict:
         print(f"\nStrategy: {label} (chunk_strategy='{strategy}')")
         rows = []
         t0 = time.time()
-        # Reranker OFF to isolate the chunking effect (Ablation 2 handles reranker).
+        # Reranker off — Ablation 2 already covers the reranker delta; here we
+        # only want to see chunking's effect.
         for q in doc_qs:
-            expected = _page_set(q.get("expected_page"))
             chunks = retrieve(
                 q["question"], top_k=10, mode="hybrid",
                 do_rerank=False, strategy=strategy,
             )
             pages = [c.page_number for c in chunks]
+            expected = q.get("expected_page")
 
-            def hit(k: int) -> int:
-                return int(bool(expected & set(pages[:k])))
-
-            rr = next((1.0 / (i + 1) for i, p in enumerate(pages) if p in expected), 0.0)
-
-            rows.append({"id": q["id"], "hits": {k: hit(k) for k in (1, 3, 5, 10)}, "rr": rr})
-            print(f"{q['id']} hit@5={hit(5)} rr={rr:.3f}")
+            hits = {k: recall_at_k(pages, expected, k) for k in (1, 3, 5, 10)}
+            rr = reciprocal_rank(pages, expected)
+            rows.append({"id": q["id"], "hits": hits, "rr": rr})
+            print(f"{q['id']} hit@5={hits[5]} rr={rr:.3f}")
 
         elapsed = time.time() - t0
         agg = {
@@ -135,7 +126,6 @@ fixed-size 512-token chunking with 50-token overlap?
 **Interpretation:** {interp}
 """
 
-# Entry point — writes JSON only. Run run_all.py to build docs/ablations.md.
 def main() -> None:
     print("Error: run root/eval/ablations/run_all.py to build docs/ablations.md")
 

@@ -1,26 +1,63 @@
 import asyncio
 import json
 import re
+from collections import deque
 from pathlib import Path
 
 import numpy as np
 from dotenv import load_dotenv
 from groq import AsyncGroq
 
+from healthcare_rag.eval_metrics import to_page_set
+
 load_dotenv()
 
-# project root
 ROOT = Path(__file__).resolve().parents[1]
 DOCS_PATH = ROOT / "docs"
 
-JUDGE_MODEL = "llama-3.3-70b-versatile"
-RESPONSES_PATH = ROOT / 'eval' / "ground_truth_responses_v1.json"
+JUDGE_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct"
+RESPONSES_PATH = ROOT / "eval" / "ground_truth_responses_v1.json"
 PLACEHOLDER = "[No chunks retrieved — misrouted or tool error.]"
 
-client = AsyncGroq()
+# Conservative defaults for Groq's free tier on llama-4-scout. Bump on paid
+# tiers — the limiter is what keeps us from getting 429'd, not throughput.
+JUDGE_RPM = 30
 
-# LLM-as-judge
+# Custom llm-as-judge metric calculations. Ragas quickly burned through Groq's limits.
+# Usage: uv run eval/llm_eval.py
+
+class AsyncRateLimiter:
+    # Sliding-window RPM limiter. Holds the lock only for the timestamp-deque
+    # bookkeeping; the actual wait happens lock-free so callers don't serialize.
+
+    def __init__(self, max_calls: int, period_seconds: float = 60.0):
+        self.max_calls = max_calls
+        self.period = period_seconds
+        self._calls: deque[float] = deque()
+        self._lock = asyncio.Lock()
+
+    async def acquire(self) -> None:
+        while True:
+            async with self._lock:
+                now = asyncio.get_event_loop().time()
+                while self._calls and now - self._calls[0] > self.period:
+                    self._calls.popleft()
+                if len(self._calls) < self.max_calls:
+                    self._calls.append(now)
+                    return
+                wait = self.period - (now - self._calls[0]) + 0.05
+            await asyncio.sleep(wait)
+
+
+client = AsyncGroq()
+_limiter = AsyncRateLimiter(max_calls=JUDGE_RPM)
+
+
 async def _ask(prompt: str) -> float | None:
+    # TODO: explicit retry-on-429 with exponential backoff. Today we rely on the
+    # groq SDK's default max_retries=2, which is usually enough but swallows the
+    # signal — a sustained 429 burst returns None and corrupts the score.
+    await _limiter.acquire()
     try:
         r = await client.chat.completions.create(
             model=JUDGE_MODEL,
@@ -29,65 +66,50 @@ async def _ask(prompt: str) -> float | None:
             temperature=0,
         )
         text = r.choices[0].message.content.strip()
-
-        # This is for debugging to make sure models respond with 0, 0.5, or 1.
-        print(f"raw: {repr(text)}")
-
         match = re.search(r"[01](?:\.5)?", text)
         return float(match.group()) if match else None
     except Exception as e:
         print(f"judge failed: {e}")
         return None
 
+
 async def score_question(r: dict) -> dict:
     chunks = "\n".join((r.get("retrieved_chunks") or [PLACEHOLDER])[:3])
     q, a, ref = r["question"], r["final_answer"], r["expected_answer"]
-    # NOTE: using sleep w/ conservatively high number to ensure I don't 
-    #   hit TPM limits.
 
-    faith = await _ask(
-        f"Does the answer make only claims supported by the context? "
-        f"Answer with ONLY 0, 0.5, or 1. No other text.\n\nContext:\n{chunks}\n\nAnswer:\n{a}"
+    faith, ctx_p, ctx_r = await asyncio.gather(
+        _ask(
+            f"Does the answer make only claims supported by the context? "
+            f"Answer with ONLY 0, 0.5, or 1. No other text.\n\nContext:\n{chunks}\n\nAnswer:\n{a}"
+        ),
+        _ask(
+            f"Is the context relevant and sufficient to answer the question? "
+            f"Answer with ONLY 0, 0.5, or 1. No other text.\n\nQuestion:\n{q}\n\nContext:\n{chunks}"
+        ),
+        _ask(
+            f"Does the context contain the information needed to produce this reference answer? "
+            f"Answer with ONLY 0, 0.5, or 1. No other text.\n\nContext:\n{chunks}\n\nReference answer:\n{ref}"
+        ),
     )
-    await asyncio.sleep(15)
-
-    ctx_p = await _ask(
-        f"Is the context relevant and sufficient to answer the question? "
-        f"Answer with ONLY 0, 0.5, or 1. No other text.\n\nQuestion:\n{q}\n\nContext:\n{chunks}"
-    )
-    await asyncio.sleep(15)
-
-    ctx_r = await _ask(
-        f"Does the context contain the information needed to produce this reference answer? "
-        f"Answer with ONLY 0, 0.5, or 1. No other text.\n\nContext:\n{chunks}\n\nReference answer:\n{ref}"
-    )
-    await asyncio.sleep(15)
-
+    print(f"  {r['id']:<6} faith={faith} ctx_p={ctx_p} ctx_r={ctx_r}")
     return {"faithfulness": faith, "context_precision": ctx_p, "context_recall": ctx_r}
 
 
 async def run_judge(doc_qs: list[dict]) -> list[dict]:
-    results = []
-    for i, r in enumerate(doc_qs):
-        print(f"  [{i+1}/{len(doc_qs)}] {r['id']}")
-        results.append(await score_question(r))
-    return results
+    # Questions run concurrently; the rate limiter paces individual calls so we
+    # stay under the per-minute cap without burning wall-clock on sleeps.
+    return await asyncio.gather(*(score_question(r) for r in doc_qs))
 
-
-# Deterministic metrics
-def to_page_set(expected_page) -> set[int]:
-    if expected_page is None: return set()
-    if isinstance(expected_page, list): return set(expected_page)
-    return {expected_page}
 
 def citation_f1(answer: str, expected_page) -> float | None:
-    cited    = {int(p) for p in re.findall(r"\[p\.\s*(\d+)\]", answer)}
+    cited = {int(p) for p in re.findall(r"\[p\.\s*(\d+)\]", answer)}
     expected = to_page_set(expected_page)
     if not expected or not cited:
         return 0.0 if expected else None
     p = len(cited & expected) / len(cited)
     r = len(cited & expected) / len(expected)
     return round(2 * p * r / (p + r), 3) if (p + r) else 0.0
+
 
 def routing_accuracy(responses: list[dict]) -> dict:
     misrouted = [r for r in responses if r["called_tool"] != r["expected_tool"]]
@@ -99,15 +121,15 @@ def routing_accuracy(responses: list[dict]) -> dict:
                       for r in misrouted],
     }
 
+
 def hallucination_rate(responses: list[dict]) -> float | None:
     oos = [r for r in responses if not r["is_in_corpus"] and r["expected_tool"] == "none"]
     if not oos: return None
-    refusals   = ["don't have", "do not have", "don't know", "cannot answer"]
+    refusals = ["don't have", "do not have", "don't know", "cannot answer"]
     fabricated = [r for r in oos if not any(p in r["final_answer"].lower() for p in refusals)]
     return round(len(fabricated) / len(oos), 3)
 
 
-# Output
 def build_markdown(summary: dict, per_q: list[dict], routing: dict) -> str:
     f = lambda v: f"**{v:.3f}**" if v is not None else "—"
     g = lambda v: f"{v:.3f}" if v is not None else "—"
@@ -139,7 +161,6 @@ def build_markdown(summary: dict, per_q: list[dict], routing: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-# Main
 def main():
     responses = json.loads(RESPONSES_PATH.read_text())
     doc_qs = [r for r in responses if r["is_in_corpus"] and r["expected_tool"] == "vector_search"]

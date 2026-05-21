@@ -34,22 +34,34 @@ def _summarize_label(results: list[dict]) -> str:
     return "\n".join(lines).strip()
 
 def _summarize_event(results: list[dict]) -> str:
-    # Summarise adverse-event reports (show patient outcomes and top reactions)."""
+    # Outcomes live per-reaction at patient.reaction[i].reactionoutcome in the
+    # real openFDA schema; we also accept patient.patientoutcome for older
+    # fixtures and any record that aggregates outcomes at the patient level.
+    outcome_map = {
+        "1": "recovered", "2": "recovering", "3": "not recovered",
+        "4": "recovered with sequelae", "5": "fatal", "6": "unknown",
+    }
     lines = []
     for i, r in enumerate(results[:3], 1):
         patient = r.get("patient", {})
         reactions = patient.get("reaction", [])
-        outcomes = r.get("patientoutcome", [])
+
         reactions_text = ", ".join(
             rx.get("reactionmeddrapt", "unknown") for rx in reactions[:5]
         )
-        outcome_map = {
-            "1": "recovered", "2": "recovering", "3": "not recovered",
-            "4": "recovered with sequelae", "5": "fatal", "6": "unknown",
-        }
+
+        raw_outcomes: list = [
+            rx.get("reactionoutcome") for rx in reactions if rx.get("reactionoutcome")
+        ]
+        if not raw_outcomes:
+            raw_outcomes = list(patient.get("patientoutcome", []))
+        # Preserve order while deduping so "fatal, recovered" doesn't repeat.
+        seen: set[str] = set()
         outcomes_text = ", ".join(
-            outcome_map.get(str(o), "unknown") for o in outcomes
+            label for label in (outcome_map.get(str(o), "unknown") for o in raw_outcomes)
+            if not (label in seen or seen.add(label))
         )
+
         report_date = r.get("receiptdate", "unknown date")
         serious = r.get("serious", "unknown")
         lines.append(
@@ -89,9 +101,18 @@ def fetch_openfda(drug_name: str, query_type: str) -> str:
             "Choose from: 'label', 'event', or 'enforcement'."
         )
 
-    url    = f"{BASE_URL}/{query_type}.json"
+    url = f"{BASE_URL}/{query_type}.json"
     if query_type == "event":
-        search = f'openfda.brand_name:"{drug_name}"+AND+drugcharacterization:"1"'
+        # On /drug/event.json the drug record is nested under patient.drug[],
+        # so openfda.brand_name at the top level doesn't index. medicinalproduct
+        # is the field actually populated on event reports.
+        # Use literal " AND " with spaces — httpx encodes spaces to + (which
+        # openFDA reads as AND), but a literal + would get %2B-encoded and
+        # parsed as a plus character, returning 404.
+        search = (
+            f'patient.drug.medicinalproduct:"{drug_name}" '
+            f'AND patient.drug.drugcharacterization:"1"'
+        )
     else:
         search = f'openfda.brand_name:"{drug_name}"'
 
@@ -110,7 +131,9 @@ def fetch_openfda(drug_name: str, query_type: str) -> str:
             and not resp.json().get("results")
         ):
             if query_type == "event":
-                params["search"] = f'{drug_name} AND drugcharacterization:"1"'
+                params["search"] = (
+                    f'{drug_name} AND patient.drug.drugcharacterization:"1"'
+                )
             else:
                 params["search"] = drug_name
             with httpx.Client(timeout=TIMEOUT) as client:

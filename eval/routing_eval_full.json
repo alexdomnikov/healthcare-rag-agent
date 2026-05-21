@@ -5,7 +5,7 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 7421,
+    "latency_ms": 6469,
     "is_in_corpus": true,
     "final_answer_preview": "The out-of-pocket threshold for Medicare Part D enrollees in 2026 is $2,100. Once this amount is reached, enrollees ente"
   },
@@ -15,9 +15,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 51298,
+    "latency_ms": 53259,
     "is_in_corpus": true,
-    "final_answer_preview": "The new Medicare rules are effective as of June 1, 2026, and apply to coverage beginning January 1, 2027 [p. 1]."
+    "final_answer_preview": "The new Medicare rules are effective as of June 1, 2026, and applicable to coverage beginning January 1, 2027 [p. 1]."
   },
   {
     "id": "q003",
@@ -25,9 +25,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 56933,
+    "latency_ms": 55708,
     "is_in_corpus": true,
-    "final_answer_preview": "The coverage gap in Medicare Part D was eliminated beginning in Calendar Year (CY) 2025 as part of the Inflation Reducti"
+    "final_answer_preview": "The coverage gap in Medicare Part D was eliminated beginning in Calendar Year (CY) 2025 due to changes enacted under the"
   },
   {
     "id": "q004",
@@ -35,7 +35,7 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 47021,
+    "latency_ms": 60515,
     "is_in_corpus": true,
     "final_answer_preview": "Yes, Medicare Part D enrollees have an annual out-of-pocket cap. Starting in 2025, this cap was set at $2,000 per enroll"
   },
@@ -45,9 +45,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 27719,
+    "latency_ms": 60482,
     "is_in_corpus": true,
-    "final_answer_preview": "Yes, there is a limit on how much you can pay for insulin under the Medicare Part D program. For CY 2026 and subsequent "
+    "final_answer_preview": "Yes, there is a limit on how much you pay for insulin under Medicare Part D. For calendar years 2023, 2024, and 2025, th"
   },
   {
     "id": "q006",
@@ -55,7 +55,7 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 60541,
+    "latency_ms": 60175,
     "is_in_corpus": true,
     "final_answer_preview": "Medicare Part D members do not have to pay the deductible for ACIP-recommended adult vaccines. The Inflation Reduction A"
   },
@@ -63,11 +63,11 @@
     "id": "q007",
     "question": "How much public feedback did CMS get on the proposed rule?",
     "expected_tool": "vector_search",
-    "called_tool": "error",
-    "correct": false,
-    "latency_ms": 58231,
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 60282,
     "is_in_corpus": true,
-    "final_answer_preview": "Exception: Error code: 429 - {'error': {'message': 'Rate limit reached for model `qwen/qwen3-32b` in organization `org_0"
+    "final_answer_preview": "CMS received approximately 42,632 timely pieces of correspondence in response to the Contract Year 2027 proposed rule. T"
   },
   {
     "id": "q008",
@@ -75,7 +75,7 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 17974,
+    "latency_ms": 56833,
     "is_in_corpus": true,
     "final_answer_preview": "No, a Medicare insurance agent does not need to wait 48 hours after obtaining a Scope of Appointment (SOA) before meetin"
   },
@@ -85,9 +85,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 58262,
+    "latency_ms": 57262,
     "is_in_corpus": true,
-    "final_answer_preview": "Yes, according to the CMS Medicare Advantage and Part D Final Rule, agents and brokers must appropriately complete Scope"
+    "final_answer_preview": "Yes, even if a Medicare beneficiary walks into an insurance office without an appointment, the agent is still required t"
   },
   {
     "id": "q010",
@@ -95,9 +95,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 55179,
+    "latency_ms": 56535,
     "is_in_corpus": true,
-    "final_answer_preview": "The Medicare Part D Manufacturer Discount Program replaced the Coverage Gap Discount Program (CGDP) beginning January 1,"
+    "final_answer_preview": "The Coverage Gap Discount Program was replaced by the Medicare Part D Manufacturer Discount Program, effective January 1"
   },
   {
     "id": "q011",
@@ -105,9 +105,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 61003,
+    "latency_ms": 61307,
     "is_in_corpus": true,
-    "final_answer_preview": "No, CMS is not moving forward with the Health Equity Index (HEI) bonus in Star Ratings. In the final rule, CMS finalized"
+    "final_answer_preview": "No, CMS is not moving forward with the Health Equity Index (HEI) bonus in Star Ratings. In the final rule, CMS proposed "
   },
   {
     "id": "q012",
@@ -115,7 +115,7 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 61959,
+    "latency_ms": 60724,
     "is_in_corpus": true,
     "final_answer_preview": "Yes, Medicare Advantage plans are required to publicly post their objective criteria for determining eligibility for the"
   },
@@ -125,9 +125,9 @@
     "expected_tool": "vector_search",
     "called_tool": "sql_query",
     "correct": false,
-    "latency_ms": 52550,
+    "latency_ms": 55503,
     "is_in_corpus": true,
-    "final_answer_preview": "Medicare is not cutting back on the number of things it uses to grade health plans. The 2026 Star Ratings system continu"
+    "final_answer_preview": "Medicare has not cut back on the number of things it uses to grade health plans for the 2026 Star Ratings. The 2026 Star"
   },
   {
     "id": "q014",
@@ -135,7 +135,7 @@
     "expected_tool": "vector_search",
     "called_tool": "none",
     "correct": false,
-    "latency_ms": 20310,
+    "latency_ms": 23327,
     "is_in_corpus": true,
     "final_answer_preview": "I don't have that information."
   },
@@ -145,9 +145,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 54261,
+    "latency_ms": 56799,
     "is_in_corpus": true,
-    "final_answer_preview": "Drug company discounts under the Medicare Coverage Gap Discount Program (Manufacturer Discount Program) do not count tow"
+    "final_answer_preview": "Drug company discounts under the Medicare Part D Manufacturer Discount Program do not count toward what Medicare pays ba"
   },
   {
     "id": "q016",
@@ -155,9 +155,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 45442,
+    "latency_ms": 61905,
     "is_in_corpus": true,
-    "final_answer_preview": "To qualify as a \"creditable\" retiree drug plan under Medicare rules, your plan must meet the following requirements:\n\n1."
+    "final_answer_preview": "For a retiree drug plan to count under Medicare rules, it must meet the following requirements:\n\n1. **Reasonable Access "
   },
   {
     "id": "q017",
@@ -165,7 +165,7 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 60432,
+    "latency_ms": 60213,
     "is_in_corpus": true,
     "final_answer_preview": "Before the Inflation Reduction Act (IRA) changes, Medicare Part D covered catastrophic drug costs with nominal cost shar"
   },
@@ -175,9 +175,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 61519,
+    "latency_ms": 62791,
     "is_in_corpus": true,
-    "final_answer_preview": "Yes, the Inflation Reduction Act (IRA) changed how Medicare reimburses plans for high-cost drug spending, and these chan"
+    "final_answer_preview": "The Inflation Reduction Act (IRA) has indeed changed how Medicare reimburses plans for high-cost drug spending, and thes"
   },
   {
     "id": "q019",
@@ -185,7 +185,7 @@
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 55297,
+    "latency_ms": 50168,
     "is_in_corpus": false,
     "final_answer_preview": "The average overall Star Rating across all Medicare Advantage contracts is approximately 3.65."
   },
@@ -195,19 +195,19 @@
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 50587,
+    "latency_ms": 54571,
     "is_in_corpus": false,
-    "final_answer_preview": "The data provided is for 2026, and there is no available information for 2024. According to the 2026 data, there are 207"
+    "final_answer_preview": "The data provided is for 2026, not 2024. In 2026, there are 207 Medicare Advantage contracts with an overall Star Rating"
   },
   {
     "id": "q021",
     "question": "Which parent organization has the most Medicare Advantage contracts?",
     "expected_tool": "sql_query",
-    "called_tool": "sql_query",
-    "correct": true,
-    "latency_ms": 27205,
+    "called_tool": "error",
+    "correct": false,
+    "latency_ms": 49418,
     "is_in_corpus": false,
-    "final_answer_preview": "I encountered a rate limit issue and was unable to process your request. Please try again later."
+    "final_answer_preview": "Exception: Error code: 429 - {'error': {'message': 'Rate limit reached for model `qwen/qwen3-32b` in organization `org_0"
   },
   {
     "id": "q022",
@@ -215,9 +215,9 @@
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 49424,
+    "latency_ms": 32195,
     "is_in_corpus": false,
-    "final_answer_preview": "The parent organization with the most contracts rated 4 stars or above is UnitedHealth Group, Inc., with 25 high-rated c"
+    "final_answer_preview": "The parent organization with the most contracts rated 4 stars or above is UnitedHealth Group, Inc., with 25 such contrac"
   },
   {
     "id": "q023",
@@ -225,7 +225,7 @@
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 36118,
+    "latency_ms": 50361,
     "is_in_corpus": false,
     "final_answer_preview": "There are 232 contracts with a Part D summary star rating of 4 or higher."
   },
@@ -235,7 +235,7 @@
     "expected_tool": "openfda_search",
     "called_tool": "openfda_search",
     "correct": true,
-    "latency_ms": 48332,
+    "latency_ms": 44460,
     "is_in_corpus": false,
     "final_answer_preview": "The contraindications listed for Eliquis (apixaban) on its FDA label include:\n\n- Active pathological bleeding\n- Severe h"
   },
@@ -245,9 +245,9 @@
     "expected_tool": "openfda_search",
     "called_tool": "openfda_search",
     "correct": true,
-    "latency_ms": 38598,
+    "latency_ms": 46799,
     "is_in_corpus": false,
-    "final_answer_preview": "Yes, there have been FDA recalls for metformin hydrochloride. Here are the details of some notable recalls:\n\n1. **Class "
+    "final_answer_preview": "Yes, there have been FDA recalls for metformin hydrochloride. Here are three notable recalls:\n\n1. **Class III Recall** ("
   },
   {
     "id": "q026",
@@ -255,9 +255,9 @@
     "expected_tool": "openfda_search",
     "called_tool": "openfda_search",
     "correct": true,
-    "latency_ms": 43753,
+    "latency_ms": 38702,
     "is_in_corpus": false,
-    "final_answer_preview": "No adverse events were found for rivaroxaban in the FDA database. You may want to try checking the FDA's MedWatch websit"
+    "final_answer_preview": "Three examples of serious adverse events reported to the FDA for rivaroxaban (Xarelto) include:\n\n1. Cerebrovascular acci"
   },
   {
     "id": "q027",
@@ -265,7 +265,7 @@
     "expected_tool": "none",
     "called_tool": "none",
     "correct": true,
-    "latency_ms": 18538,
+    "latency_ms": 20355,
     "is_in_corpus": false,
     "final_answer_preview": "I don't have that information."
   },
@@ -275,7 +275,7 @@
     "expected_tool": "none",
     "called_tool": "none",
     "correct": true,
-    "latency_ms": 14359,
+    "latency_ms": 18349,
     "is_in_corpus": false,
     "final_answer_preview": "I don't have that information."
   },
@@ -285,7 +285,7 @@
     "expected_tool": "none",
     "called_tool": "none",
     "correct": true,
-    "latency_ms": 20521,
+    "latency_ms": 21325,
     "is_in_corpus": false,
     "final_answer_preview": "I don't have that information."
   }

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s 'https://api.fda.gov/drug/event.json?search=patient.drug.openfda.brand_name:%22Eliquis%22&limit=1')",
+      "Bash(curl -s 'https://api.fda.gov/drug/event.json?search=patient.drug.medicinalproduct:%22ELIQUIS%22&limit=1')",
+      "Bash(curl -s 'https://api.fda.gov/drug/event.json?search=patient.drug.medicinalproduct:%22Eliquis%22&limit=1')",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s 'https://api.fda.gov/drug/event.json?search=patient.drug.medicinalproduct:%22LIPITOR%22&limit=1')",
+      "Bash(uv run *)"
+    ]
+  }
+}

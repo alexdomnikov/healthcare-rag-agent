@@ -18,7 +18,7 @@ with open(EVAL_PATH / "ground_truth.json") as f:
 
 sql_questions = [
     q for q in ground_truth
-    if q["expected_tool"] == "sql_query_tool"
+    if q["expected_tool"] == "sql_query"
 ]
 
 agent = get_agent()

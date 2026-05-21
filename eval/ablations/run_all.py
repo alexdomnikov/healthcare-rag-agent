@@ -10,15 +10,16 @@ import chunking_strategy as abl3
 
 load_dotenv()
 
-# Runs all three ablations and writes docs/ablations.md
-# Prerequisite for ablation 3: uv run scripts/ingest_fixed_chunks.py
-# Run everything and rebuild docs: uv run eval/ablations/run_all.py
+# Runs all three ablations and rewrites docs/ablations.md.
+#   uv run eval/ablations/run_all.py
+# Prereq for ablation 3: uv run scripts/ingest.py --strategy fixed
 
 ROOT = Path(__file__).resolve().parents[2]
 GT_PATH = ROOT / "eval" / "ground_truth.json"
 ABL_DIR = ROOT / "eval" / "ablations"
 DOCS_DIR = ROOT / "docs"
 MD_PATH = DOCS_DIR / "ablations.md"
+
 
 def load_ground_truth() -> list[dict]:
     if not GT_PATH.exists():
@@ -28,18 +29,13 @@ def load_ground_truth() -> list[dict]:
         return json.load(f)
 
 def run_all(ground_truth: list[dict]) -> tuple[dict, dict, dict]:
-    print("ABLATION 1: retrieval mode")
-    print("*" * 60)
+    print("\n[Ablation 1] retrieval mode")
     r1 = abl1.run_ablation(ground_truth)
 
-    print()
-    print("ABLATION 2: reranker")
-    print("*" * 60)
+    print("\n[Ablation 2] reranker")
     r2 = abl2.run_ablation(ground_truth)
 
-    print()
-    print("ABLATION 3: chunking strategy")
-    print("*" * 60)
+    print("\n[Ablation 3] chunking strategy")
     r3 = abl3.run_ablation(ground_truth)
 
     return r1, r2, r3

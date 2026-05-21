@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 from dotenv import load_dotenv
 
+from healthcare_rag.eval_metrics import recall_at_k, reciprocal_rank
 from healthcare_rag.retrieval import retrieve
 
 load_dotenv()
@@ -13,16 +14,9 @@ ROOT = Path(__file__).resolve().parents[2]
 STRATEGY = "hybrid_chunker"
 CONDITIONS = [("off", False), ("on", True)]
 
-# Ablation 2: Does cross-encoder reranking improve Recall@5 over raw hybrid retrieval?
+# Ablation 2: does cross-encoder reranking improve Recall@5 over raw hybrid?
+# Run eval/ablations/run_all.py to build docs/ablations.md.
 
-# Run: root/eval/ablations/run_all.py to build docs/ablations.md.
-
-def _page_set(expected_page) -> set[int]:
-    if expected_page is None:
-        return set()
-    if isinstance(expected_page, list):
-        return {int(p) for p in expected_page if p is not None}
-    return {int(expected_page)}
 
 def run_ablation(ground_truth: list[dict]) -> dict:
     doc_qs = [
@@ -44,20 +38,17 @@ def run_ablation(ground_truth: list[dict]) -> dict:
         t0 = time.time()
 
         for q in doc_qs:
-            expected = _page_set(q.get("expected_page"))
             chunks = retrieve(
                 q["question"], top_k=5, mode="hybrid",
                 do_rerank=do_rerank, strategy=STRATEGY,
             )
             pages = [c.page_number for c in chunks]
+            expected = q.get("expected_page")
 
-            def hit(k: int) -> int:
-                return int(bool(expected & set(pages[:k])))
-
-            rr = next((1.0 / (i + 1) for i, p in enumerate(pages) if p in expected), 0.0)
-
-            rows.append({"id": q["id"], "hits": {k: hit(k) for k in (1, 3, 5)}, "rr": rr})
-            print(f"{q['id']} hit@5={hit(5)} rr={rr:.3f}")
+            hits = {k: recall_at_k(pages, expected, k) for k in (1, 3, 5)}
+            rr = reciprocal_rank(pages, expected)
+            rows.append({"id": q["id"], "hits": hits, "rr": rr})
+            print(f"{q['id']} hit@5={hits[5]} rr={rr:.3f}")
 
         elapsed = time.time() - t0
         agg = {f"recall@{k}": round(float(np.mean([r["hits"][k] for r in rows])), 3) for k in (1, 3, 5)}

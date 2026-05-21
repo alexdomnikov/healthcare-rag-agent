@@ -12,42 +12,38 @@ load_dotenv()
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# Runs every question in ground_truth.json through the three-tool agent,
-#   records which tool was called, and computes tool-selection accuracy.
-# NOTE: Misrouted questions are saved to eval/misrouted.json as the concrete
-#   iteration target for prompt tuning work.
+# Runs every question in ground_truth.json through the agent and records which
+# tool was called. Misrouted questions land in eval/misrouted.json as the
+# iteration target for prompt tuning.
+#
+# Usage:
+#   uv run python eval/routing_eval.py
+#   uv run python eval/routing_eval.py --gt eval/ground_truth.json --verbose
 
-# To use:
-# - uv run python eval/routing_eval.py
-# - uv run python eval/routing_eval.py --gt eval/ground_truth.json --verbose
 
 def extract_first_tool_called(messages: list[Any]) -> str:
-    # Walk the LangGraph message list and return the name of the first tool
-    #   the agent actually invoked.
-
-    # AIMessage = model decides to call a tool (has .tool_calls).
+    # AIMessage.tool_calls is the model's declared tool call; ToolMessage.name
+    # is the fallback for the rare case where tool_calls isn't populated.
     for msg in messages:
         if isinstance(msg, AIMessage) and msg.tool_calls:
             return msg.tool_calls[0]["name"]
-    # Fallback: ToolMessage is guaranteed to carry the actual tool name
-    #   in the edge case where tool_calls isn't populated on the AIMessage.
     for msg in messages:
         if isinstance(msg, ToolMessage) and getattr(msg, "name", None):
             return msg.name
-    # Returns "none" if the agent answered without calling any tool (which
-    #   should only happen for out-of-scope questions).
     return "none"
+
 
 def run_routing_eval(
     ground_truth_path: str = str(ROOT / "eval" / "ground_truth.json"),
     output_path: str = str(ROOT / "eval" / "misrouted.json"),
     verbose: bool = True,
+    workers: int = 1,
 ) -> tuple[float, list[dict]]:
     from concurrent.futures import ThreadPoolExecutor, as_completed
     from healthcare_rag.core import get_agent, get_embed_model, get_reranker  # type: ignore[import]
 
-    # Pre-warm singletons before parallelising, as lru_cache isn't thread safe
-    #   on first call, so without this all threads race to load the models.
+    # Pre-warm singletons; lru_cache isn't thread-safe on first call, and without
+    # this the worker threads race to load the same models.
     agent = get_agent()
     get_embed_model()
     get_reranker()
@@ -91,9 +87,9 @@ def run_routing_eval(
     misrouted: list[dict] = []
     correct = 0
 
-    # max_workers=1: Groq free tier is 6,000 TPM; even 2 concurrent requests
-    #   exceed it given retrieval context size. Upgrade to Dev tier to parallelize.
-    with ThreadPoolExecutor(max_workers=1) as executor:
+    # Groq free tier (6k TPM on qwen3-32b with retrieval context) overruns above
+    # 1-2 concurrent requests. Set --workers higher once on a paid tier.
+    with ThreadPoolExecutor(max_workers=workers) as executor:
         futures = {executor.submit(_eval_one, item): item for item in ground_truth}
         for future in as_completed(futures):
             r = future.result()
@@ -119,7 +115,7 @@ def run_routing_eval(
                     f"{r['called_tool']:<{col_w}} {r['latency_ms']:>7}ms {symbol}"
                 )
 
-    # Have to exclude errors from Groq free tier API call limits.
+    # Exclude rate-limit errors from accuracy so a 429 storm doesn't tank the score.
     errors = [r for r in all_results if r["called_tool"] == "error"]
     valid = [r for r in all_results if r["called_tool"] != "error"]
     accuracy = sum(r["correct"] for r in valid) / len(valid) if valid else 0.0
@@ -156,7 +152,6 @@ def run_routing_eval(
 
     return accuracy, misrouted
 
-# CLI entry point
 def _parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
         description="Run the tool-routing evaluation for the healthcare RAG agent."
@@ -181,6 +176,14 @@ def _parse_args() -> argparse.Namespace:
         help="Accuracy threshold for exit code 0  (default: 0.85)",
     )
     p.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        metavar="N",
+        help="Concurrent agent invocations. Free Groq tier handles ~1; "
+             "bump on paid tiers (default: 1)",
+    )
+    p.add_argument(
         "--quiet",
         action="store_true",
         help="Suppress per-question output",
@@ -193,11 +196,9 @@ if __name__ == "__main__":
         ground_truth_path=args.gt,
         output_path=args.output,
         verbose=not args.quiet,
+        workers=args.workers,
     )
 
-    # Exit codes:
-    # - 0: accuracy >= 85% target
-    # - 1: accuracy < 85% (need to tune further)
     threshold = args.threshold
     if accuracy >= threshold:
         print(f"Success! {accuracy:.1%} >= {threshold:.0%} target. Agent ready for finishing touches.")

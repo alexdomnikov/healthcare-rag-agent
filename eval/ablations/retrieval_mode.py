@@ -5,55 +5,23 @@ from pathlib import Path
 import numpy as np
 from dotenv import load_dotenv
 
+from healthcare_rag.eval_metrics import recall_at_k, reciprocal_rank
 from healthcare_rag.retrieval import retrieve
 
 load_dotenv()
 
-# project root
 ROOT = Path(__file__).resolve().parents[2]
 
-# Ablation 1: Does hybrid retrieval actually outperform dense-only or lexical-only
-#   on the CMS corpus?
+# Ablation 1: does hybrid retrieval beat dense-only or lexical-only on the CMS
+# corpus? Run eval/ablations/run_all.py to build docs/ablations.md.
 
-# Run: root/eval/ablations/run_all.py to build docs/ablations.md.
-
-# Helpers: mirrors eval/metrics.py so I don't need a cross import of metrics.py,
-#   which was meant to be a standalone script instead of a module.
-def _to_page_set(expected_page) -> set[int]:
-    # Normalize expected_page to a set (handles int, list[int], or None).
-    if expected_page is None:
-        return set()
-    if isinstance(expected_page, list):
-        return set(expected_page)
-    return {int(expected_page)}
-
-def recall_at_k(retrieved_pages: list[int], expected_page, k: int) -> int:
-    # 1 if any of expected_page appears in retrieved_pages[:k], else 0.
-    pages = _to_page_set(expected_page)
-    if not pages:
-        return 0
-    return int(bool(pages & set(retrieved_pages[:k])))
-
-def reciprocal_rank(retrieved_pages: list[int], expected_page) -> float:
-    # 1 / rank-of-first-hit, or 0 if no hit.
-    pages = _to_page_set(expected_page)
-    if not pages:
-        return 0.0
-    for i, page in enumerate(retrieved_pages):
-        if page in pages:
-            return 1.0 / (i + 1)
-    return 0.0
-
-# Core ablation
 MODES = ["hybrid", "vector", "lexical"]
-# enough for Recall@10; reranker is OFF so this is the final list
-FIRST_PASS_K = 10
-def run_ablation(ground_truth: list[dict]) -> dict:
-    # Run all three retrieval modes on the doc questions.
-    # NOTE: reranker disabled so delta between modes reflects retrieval method,
-    #   not downstream reranking.
+FIRST_PASS_K = 10  # enough for Recall@10; reranker off so this is the final list
 
-    # Filter to scoreable document questions
+
+def run_ablation(ground_truth: list[dict]) -> dict:
+    # Reranker is off — the delta between modes should reflect first-pass
+    # retrieval quality only, not the cross-encoder.
     doc_qs = [
         q for q in ground_truth
         if q.get("is_in_corpus")
@@ -87,7 +55,6 @@ def run_ablation(ground_truth: list[dict]) -> dict:
             )
             pages = [c.page_number for c in chunks]
 
-            # NOTE: metrics computed per mode = Recall@1, Recall@3, Recall@5, Recall@10, MRR
             row = {
                 "id": q["id"],
                 "question": q["question"],
@@ -100,8 +67,7 @@ def run_ablation(ground_truth: list[dict]) -> dict:
                 "rr": reciprocal_rank(pages, q["expected_page"]),
             }
             rows.append(row)
-            # Brief progress indicator (retrieval is fast but lexical can stall
-            # on the first call due to tsvector index warm-up)
+            # Lexical can stall on the first call while the tsvector index warms.
             print(f"{q['id']} hit@5={row['recall@5']} rr={row['rr']:.3f}")
 
         elapsed = time.time() - t_start
@@ -127,9 +93,7 @@ def run_ablation(ground_truth: list[dict]) -> dict:
 
     return results
 
-# Markdown table builder
 def build_markdown_table(results: dict) -> str:
-    # Return a markdown table comparing all three modes.
     header = "| Mode    | Recall@1 | Recall@3 | Recall@5 | Recall@10 | MRR   |"
     sep = "|---------|----------|----------|----------|-----------|-------|"
     rows = []
@@ -147,8 +111,6 @@ def build_markdown_table(results: dict) -> str:
 
 
 def section_md(results: dict) -> str:
-    # Returns the Ablation 1 section for inclusion in docs/ablations.md.
-    # run_all.py calls this; don't call it from main().
     table = build_markdown_table(results)
 
     h_r5 = results["hybrid"]["aggregates"]["recall@5"]
@@ -186,7 +148,6 @@ Reranker disabled so the delta reflects only first-pass retrieval quality.
 **Interpretation:** {interpretation}
 """
 
-# Run run_all.py to build docs/ablations.md.
 def main() -> None:
     print("Error: run root/eval/ablations/run_all.py to build docs/ablations.md")
 

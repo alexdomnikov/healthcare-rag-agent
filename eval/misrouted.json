@@ -4,20 +4,12 @@
   "total": 29,
   "misrouted": [
     {
-      "id": "q007",
-      "question": "How much public feedback did CMS get on the proposed rule?",
-      "expected_tool": "vector_search",
-      "called_tool": "error",
-      "is_in_corpus": true,
-      "final_answer_preview": "Exception: Error code: 429 - {'error': {'message': 'Rate limit reached for model `qwen/qwen3-32b` in organization `org_0"
-    },
-    {
       "id": "q013",
       "question": "Is Medicare cutting back on how many things it uses to grade health plans?",
       "expected_tool": "vector_search",
       "called_tool": "sql_query",
       "is_in_corpus": true,
-      "final_answer_preview": "Medicare is not cutting back on the number of things it uses to grade health plans. The 2026 Star Ratings system continu"
+      "final_answer_preview": "Medicare has not cut back on the number of things it uses to grade health plans for the 2026 Star Ratings. The 2026 Star"
     },
     {
       "id": "q014",

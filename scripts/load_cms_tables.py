@@ -1,12 +1,11 @@
-# Loads the two 2026 CMS Star Ratings CSVs into Neon Postgres.
+# Loads the two 2026 CMS Star Ratings CSVs into Neon Postgres. Run once:
+#   uv run python scripts/load_cms_tables.py
 
-# Only need to run once: uv run python src/ingest/load_cms_tables.py
-
-import os, re
-import pandas as pd
-from dotenv import load_dotenv
+import re
 from pathlib import Path
 
+import pandas as pd
+from dotenv import load_dotenv
 from sqlalchemy import text
 
 from healthcare_rag.core import get_engine
@@ -14,17 +13,18 @@ from healthcare_rag.core import get_engine
 load_dotenv()
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA_PATH = ROOT / 'data'
+DATA_PATH = ROOT / "data"
 SUMMARY_PATH = DATA_PATH / "2026_Star_Ratings_Data_Table_Summary_Ratings_Oct_8_2025.csv"
 DOMAIN_PATH  = DATA_PATH / "2026_Star_Ratings_Data_Table_Domain_Stars_Oct_8_2025.csv"
 
-# Helpers
+
 def normalize_col(name: str) -> str:
-    # '2026 Part C Summary' to 'part_c_summary_2026'(leading digits moved to end)
+    # '2026 Part C Summary' → 'part_c_summary_2026'. A leading year would make
+    # an invalid SQL identifier, so we move it to the end.
     s = re.sub(r"[^a-z0-9]+", "_", name.strip().lower()).strip("_")
-    # Move a leading year/number to the end so columns are valid SQL identifiers
     s = re.sub(r"^(\d+)_(.+)$", r"\2_\1", s)
     return s
+
 
 RATING_SENTINELS = {
     "not applicable",
@@ -34,15 +34,15 @@ RATING_SENTINELS = {
     "",
 }
 
+
 def to_numeric_or_null(series: pd.Series) -> pd.Series:
-    # Replace CMS sentinel strings with NaN and coerce the rest to float.
     cleaned = series.astype(str).str.strip().str.lower()
     return pd.to_numeric(
         series.where(~cleaned.isin(RATING_SENTINELS), other=pd.NA),
         errors="coerce",
     )
 
-# Table 1: cms_summary_ratings
+
 def load_summary_ratings() -> None:
     print("Loading Summary Ratings")
     df = pd.read_csv(SUMMARY_PATH, header=1, encoding="latin-1")
@@ -68,7 +68,6 @@ def load_summary_ratings() -> None:
     print(f"done: cms_summary_ratings ({len(df):,} rows)")
     print(f"columns: {list(df.columns)}")
 
-# Table 2: cms_domain_stars
 def load_domain_stars() -> None:
     print("Loading Domain Stars")
     df = pd.read_csv(DOMAIN_PATH, header=1, encoding="latin-1")
@@ -89,7 +88,6 @@ def load_domain_stars() -> None:
     print(f"done: cms_domain_stars ({len(df):,} rows)")
     print(f"columns: {list(df.columns)}")
 
-# Sanity check
 def sanity_check() -> None:
     print("\nSanity checks")
     with get_engine().connect() as conn:
