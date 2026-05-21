@@ -50,13 +50,19 @@ def main() -> None:
             sys.exit(2)
 
     # Imports are deferred so --help works without DB / model deps installed.
+    import os
+
     from healthcare_rag.core import get_agent, get_embed_model, get_reranker
     from healthcare_rag.eval_metrics import recall_at_k
     from healthcare_rag.retrieval import retrieve
 
     agent = get_agent()
     get_embed_model()
-    get_reranker()
+    # Skip reranker warmup when bypassed (DISABLE_RERANKER=1 in CI). The
+    # cross-encoder weights are ~570MB and the model is CPU-bound, so skipping
+    # the download saves several minutes on a cold CI runner.
+    if os.getenv("DISABLE_RERANKER") != "1":
+        get_reranker()
 
     doc_qs = [
         q for q in gt

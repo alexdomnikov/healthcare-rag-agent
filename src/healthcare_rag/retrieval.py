@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 
 from sqlalchemy import text
@@ -219,6 +220,12 @@ def retrieve(
     mode: str = "hybrid",
     strategy: str = DEFAULT_STRATEGY,
 ) -> list[RetrievedChunk]:
+    # CI runs on CPU runners where the cross-encoder is the bottleneck. Set
+    # DISABLE_RERANKER=1 to short-circuit reranking globally (eval + agent tool
+    # path both go through this function). Local/prod still rerank by default.
+    if os.getenv("DISABLE_RERANKER") == "1":
+        do_rerank = False
+
     first_pass_k = FIRST_PASS_K if do_rerank else top_k
 
     if mode == "hybrid":
