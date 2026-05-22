@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Send } from "lucide-react";
+import { CheckCircle, Loader2, Send, WifiOff, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MessageBubble } from "@/components/message-bubble";
@@ -44,18 +44,39 @@ const EXAMPLES = [
   },
 ];
 
+type ServerStatus = "waking" | "ready" | "error";
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSlow, setIsSlow] = useState(false);
+  const [serverStatus, setServerStatus] = useState<ServerStatus>("waking");
   const slowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isSlow]);
+
+  async function wakeUp() {
+    setServerStatus("waking");
+    try {
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/health`);
+      if (resp.ok) {
+        setServerStatus("ready");
+      } else {
+        setServerStatus("error");
+      }
+    } catch {
+      setServerStatus("error");
+    }
+  }
+
+  useEffect(() => {
+    wakeUp();
+  }, []);
 
   function clearSlowTimer() {
     if (slowTimerRef.current) {
@@ -193,6 +214,41 @@ export default function ChatPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 space-y-4">
           {messages.length === 0 && (
             <div className="py-12 space-y-6">
+              {serverStatus === "waking" && (
+                <div className="flex flex-col items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+                  <div className="flex items-center gap-2 font-medium">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Waking up the server&hellip;
+                  </div>
+                  <p className="text-xs text-blue-600 text-center">
+                    Hosted on Render&apos;s free tier &mdash; first load may take up to a minute. Hang tight!
+                  </p>
+                </div>
+              )}
+              {serverStatus === "ready" && (
+                <div className="flex items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 font-medium">
+                  <CheckCircle className="h-4 w-4" />
+                  Server is ready!
+                </div>
+              )}
+              {serverStatus === "error" && (
+                <div className="flex flex-col items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                  <div className="flex items-center gap-2 font-medium">
+                    <WifiOff className="h-4 w-4" />
+                    Server is taking a while to wake up.
+                  </div>
+                  <p className="text-xs text-amber-700 text-center">
+                    Hosted on Render&apos;s free tier &mdash; it spins down after inactivity. Your first query may still work.
+                  </p>
+                  <button
+                    onClick={wakeUp}
+                    className="mt-1 inline-flex items-center gap-1.5 rounded-md bg-amber-100 px-3 py-1.5 text-xs font-medium text-amber-900 hover:bg-amber-200 transition-colors"
+                  >
+                    <Zap className="h-3 w-3" />
+                    Try again
+                  </button>
+                </div>
+              )}
               <p className="text-center text-neutral-400 text-sm">
                 Try one of these, or ask your own question.{" "}
                 <button

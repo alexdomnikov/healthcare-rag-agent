@@ -17,6 +17,7 @@ from groq import RateLimitError  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 from slowapi import Limiter  # noqa: E402
 from slowapi.errors import RateLimitExceeded  # noqa: E402
+from slowapi.middleware import SlowAPIMiddleware  # noqa: E402
 from slowapi.util import get_remote_address  # noqa: E402
 from sqlalchemy import text  # noqa: E402
 
@@ -76,7 +77,6 @@ async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
     )
 
 # Traffic can only come through my vercel or personal domain
-_cors_env = os.environ.get("CORS_ORIGINS", "").strip()
 ALLOWED_ORIGINS = (
     "https://healthcare-rag.alexdomnikov.com",
     "https://healthcare-rag-agent-frontend.vercel.app",
@@ -84,6 +84,7 @@ ALLOWED_ORIGINS = (
     "http://127.0.0.1:3000"
 )
 
+app.add_middleware(SlowAPIMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
