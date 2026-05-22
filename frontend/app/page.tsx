@@ -242,7 +242,7 @@ export default function ChatPage() {
                     Waking up the server&hellip;
                   </div>
                   <p className="text-xs text-blue-600 text-center">
-                    Hosted on Render&apos;s free tier &mdash; first load may take up to a minute. Hang tight!
+                    Hosted on Hugging Face Spaces&apos; free tier &mdash; first load may take up to a minute. Hang tight!
                   </p>
                 </div>
               )}
@@ -259,7 +259,7 @@ export default function ChatPage() {
                     Server is taking a while to wake up.
                   </div>
                   <p className="text-xs text-amber-700 text-center">
-                    Hosted on Render&apos;s free tier &mdash; it spins down after inactivity. Your first query may still work.
+                    Hosted on Hugging Face Spaces&apos; free tier &mdash; it spins down after inactivity. Your first query may still work.
                   </p>
                   <button
                     onClick={wakeUp}

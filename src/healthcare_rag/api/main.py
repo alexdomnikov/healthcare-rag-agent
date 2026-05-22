@@ -25,7 +25,7 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 limiter = Limiter(key_func=get_remote_address)
 
-QUERY_TIMEOUT_SECONDS = 90
+QUERY_TIMEOUT_SECONDS = 150
 # Groq's retry-after for TPM resets is typically <60s; TPD resets are hours.
 # 5 minutes is a comfortable boundary: anything above it is a daily-scale wait.
 RATE_LIMIT_LONG_THRESHOLD_SECONDS = 300

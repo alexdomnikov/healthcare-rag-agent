@@ -47,7 +47,7 @@ flowchart LR
 
 [healthcare-rag.alexdomnikov.com](https://healthcare-rag.alexdomnikov.com)
   
-The first query may take up to a minute while the backend wakes up; Render's free tier spins down after inactivity. Subsequent queries are fast under normal load, though Groq's free tier deprioritizes requests during peak times and caps throughput at 6,000 TPM and 500,000 TPD for `qwen/qwen3-32b`. If responses slow down or stall, that's likely why.
+The first query may take up to a minute while the backend wakes up; Hugging Face Spaces' free tier spins down after inactivity. Subsequent queries are fast under normal load, though Groq's free tier deprioritizes requests during peak times and caps throughput at 6,000 TPM and 500,000 TPD for `qwen/qwen3-32b`. If responses slow down or stall, that's likely why.
 
 ## Metrics
 
@@ -124,7 +124,7 @@ Fixed size wins raw Recall@5 by +0.056 and MRR by +0.055. The likely reason is t
 - **API**: FastAPI + SlowAPI rate limiting + SSE streaming + locked down CORS allowlist.
 - **Frontend**: Next.js 16 / React 19 on Vercel, with a disclaimer gate and streaming message bubble.
 - **MCP server**: FastMCP over stdio — exposes the same three tools to any MCP client (Claude Desktop, Claude Code, etc.) without the FastAPI layer.
-- **Deployment**: Dockerfile + docker compose for the API hosted on Render; Vercel for the frontend.
+- **Deployment**: Dockerfile + docker compose for the API hosted on Hugging Face Spaces (auto-deployed from `main` via GitHub Actions after CI passes); Vercel for the frontend.
 
 ## Design decisions
 
