@@ -111,6 +111,7 @@ Fixed size wins raw Recall@5 by +0.056 and MRR by +0.055. The likely reason is t
 - **LLM judge**: `meta-llama/llama-4-scout-17b-16e-instruct` on Groq with a custom sliding window async rate limiter.
 - **API**: FastAPI + SlowAPI rate limiting + SSE streaming + locked down CORS allowlist.
 - **Frontend**: Next.js 16 / React 19 on Vercel, with a disclaimer gate and streaming message bubble.
+- **MCP server**: FastMCP over stdio — exposes the same three tools to any MCP client (Claude Desktop, Claude Code, etc.) without the FastAPI layer.
 - **Deployment**: Dockerfile + docker compose for the API hosted on Render; Vercel for the frontend.
 
 ## Design decisions
@@ -192,6 +193,11 @@ What an enterprise version would add:
   # or via Docker:
   docker compose up --build
 
+  # 6b. (Optional) Run the MCP server for use with Claude Desktop / Claude Code
+  uv run python src/healthcare_rag/mcp_server.py
+  # To test interactively with the MCP Inspector UI:
+  uv run fastmcp dev inspector src/healthcare_rag/mcp_server.py
+
   # 7. Run the frontend (in another shell)
   cd frontend && pnpm install && pnpm dev
   ```
@@ -226,6 +232,7 @@ uv run python eval/run_eval.py --subset smoke
 │   ├── api/main.py          # FastAPI app: /health, /query (SSE), rate limiting, CORS
 │   ├── core.py              # Lazy singletons: embedder, reranker, engines, agent, LLM
 │   ├── retrieval.py         # Dense / lexical / hybrid (RRF) + cross-encoder rerank
+│   ├── mcp_server.py        # FastMCP server: exposes all three tools over stdio
 │   ├── eval_metrics.py      # recall_at_k, reciprocal_rank. Shared by all eval scripts
 │   └── tools/               # vector_search, sql_query (guarded), openfda_search
 ├── eval/
