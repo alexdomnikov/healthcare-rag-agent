@@ -1,0 +1,28 @@
+name: Deploy to HF Space
+
+# Fires after CI passes on main. HF rebuilds the Docker image and redeploys
+# the Space automatically once we push to its main branch.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  sync-to-hf:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so HF can fast-forward; shallow clones cause non-FF rejects.
+          fetch-depth: 0
+          lfs: true
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_DEPLOY_TOKEN }}
+        run: |
+          git push https://alexdomnikov:${HF_TOKEN}@huggingface.co/spaces/alexdomnikov/healthcare-rag-agent HEAD:main
