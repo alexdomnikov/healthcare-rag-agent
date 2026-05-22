@@ -6,12 +6,6 @@ import os
 from functools import lru_cache
 from typing import Any
 
-import torch
-from docling.document_converter import DocumentConverter
-from docling.chunking import HybridChunker
-from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
-from transformers import AutoTokenizer
-from sentence_transformers import SentenceTransformer, CrossEncoder
 from sqlalchemy import create_engine, Engine, Integer, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from pgvector.sqlalchemy import Vector
@@ -42,13 +36,16 @@ class ChunkModel(Base):
 
 
 @lru_cache(maxsize=1)
-def get_embed_model() -> SentenceTransformer:
+def get_embed_model():
+    from sentence_transformers import SentenceTransformer
     print(f"Loading embedding model: {EMBED_MODEL_NAME}")
     return SentenceTransformer(EMBED_MODEL_NAME)
 
 
 @lru_cache(maxsize=1)
-def get_reranker() -> CrossEncoder:
+def get_reranker():
+    import torch
+    from sentence_transformers import CrossEncoder
     # BGE over Cohere/etc. to avoid rate limits. On CPU this is ~3s/query vs ~300ms
     # on GPU — fine for dev, would matter in prod.
     if torch.cuda.is_available():
@@ -83,7 +80,9 @@ def get_readonly_engine() -> Engine:
 
 
 @lru_cache(maxsize=1)
-def get_tokenizer() -> HuggingFaceTokenizer:
+def get_tokenizer():
+    from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
+    from transformers import AutoTokenizer
     print(f"Loading tokenizer: {EMBED_MODEL_NAME}")
     return HuggingFaceTokenizer(
         tokenizer=AutoTokenizer.from_pretrained(EMBED_MODEL_NAME),
@@ -92,12 +91,14 @@ def get_tokenizer() -> HuggingFaceTokenizer:
 
 
 @lru_cache(maxsize=1)
-def get_chunker() -> HybridChunker:
+def get_chunker():
+    from docling.chunking import HybridChunker
     return HybridChunker(tokenizer=get_tokenizer(), merge_peers=True)
 
 
 @lru_cache(maxsize=1)
-def get_converter() -> DocumentConverter:
+def get_converter():
+    from docling.document_converter import DocumentConverter
     # First call downloads ~1-2 GB of layout models and can take 5-15 minutes.
     print("Initializing DocumentConverter (first run downloads layout models, ~5-15 min).")
     return DocumentConverter()
