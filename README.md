@@ -1,3 +1,15 @@
+---
+title: Healthcare RAG Agent
+emoji: 🏥
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 8000
+pinned: false
+license: mit
+short_description: Multi-tool RAG agent over CMS healthcare regulations.
+---
+  
 # Healthcare RAG Agent
 
 [![CI](https://github.com/alexdomnikov/healthcare-rag-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/alexdomnikov/healthcare-rag-agent/actions/workflows/ci.yml)
