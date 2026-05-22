@@ -1,10 +1,10 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from fastmcp import FastMCP
-from healthcare_rag.tools.vector_search import vector_search as _vector_search
-from healthcare_rag.tools.sql_query import sql_query as _sql_query
-from healthcare_rag.tools.openfda_search import openfda_search as _openfda_search
+from fastmcp import FastMCP  # noqa: E402
+from healthcare_rag.tools.vector_search import vector_search as _vector_search  # noqa: E402
+from healthcare_rag.tools.sql_query import sql_query as _sql_query  # noqa: E402
+from healthcare_rag.tools.openfda_search import openfda_search as _openfda_search  # noqa: E402
 
 mcp = FastMCP("Healthcare RAG")
 
