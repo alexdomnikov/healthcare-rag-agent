@@ -117,9 +117,7 @@ def root():
 
 @app.get("/health")
 def health():
-    from healthcare_rag.core import get_llm
-    model_name = get_llm().model_name
-    return {"status": "ok", "model": model_name, "db": _check_db()}
+    return {"status": "ok", "model": "qwen/qwen3-32b", "db": _check_db()}
 
 
 @app.post("/query")

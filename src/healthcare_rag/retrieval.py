@@ -5,7 +5,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 from langsmith import traceable
 
-from healthcare_rag.core import get_embed_model, get_engine, get_reranker
+from healthcare_rag.core import get_embed_model, get_engine
 
 DEFAULT_STRATEGY = "hybrid_chunker"  # "fixed" for ablation studies
 RRF_K = 60
@@ -194,7 +194,8 @@ def rerank(
     # ~1-3s instead of scaling with table size.
     if not candidates:
         return []
-
+    from healthcare_rag.core import get_reranker
+    
     model = get_reranker()
     pairs = [(query, chunk.text) for chunk in candidates]
     scores: list[float] = model.predict(pairs, show_progress_bar=False).tolist()
