@@ -67,6 +67,12 @@ app = FastAPI(title="Healthcare RAG Agent")
 app.state.limiter = limiter
 
 
+@app.on_event("startup")
+async def startup():
+    from healthcare_rag.core import get_embed_model
+    get_embed_model()
+
+
 @app.exception_handler(RateLimitExceeded)
 async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
     from fastapi.responses import JSONResponse
