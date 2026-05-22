@@ -69,8 +69,9 @@ app.state.limiter = limiter
 
 @app.on_event("startup")
 async def startup():
-    from healthcare_rag.core import get_embed_model
+    from healthcare_rag.core import get_embed_model, get_reranker
     get_embed_model()
+    get_reranker()
 
 
 @app.exception_handler(RateLimitExceeded)
