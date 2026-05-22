@@ -110,6 +110,11 @@ class QueryRequest(BaseModel):
     question: str = Field(min_length=1, max_length=2000)
 
 
+@app.get("/")
+def root():
+    return {"status": "ok"}
+
+
 @app.get("/health")
 def health():
     from healthcare_rag.core import get_llm

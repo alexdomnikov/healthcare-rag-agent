@@ -55,27 +55,48 @@ export default function ChatPage() {
   const [serverStatus, setServerStatus] = useState<ServerStatus>("waking");
   const slowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const wakeAbortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isSlow]);
 
   async function wakeUp() {
+    wakeAbortRef.current?.abort();
+    const controller = new AbortController();
+    wakeAbortRef.current = controller;
+
     setServerStatus("waking");
-    try {
-      const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/health`);
-      if (resp.ok) {
-        setServerStatus("ready");
-      } else {
-        setServerStatus("error");
+    const MAX_ATTEMPTS = 30; // ~150s total
+
+    for (let i = 0; i < MAX_ATTEMPTS; i++) {
+      if (controller.signal.aborted) return;
+      try {
+        const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/health`, {
+          signal: controller.signal,
+        });
+        if (resp.ok) {
+          setServerStatus("ready");
+          return;
+        }
+      } catch (err) {
+        if ((err as Error).name === "AbortError") return;
       }
-    } catch {
-      setServerStatus("error");
+      if (i < MAX_ATTEMPTS - 1) {
+        await new Promise<void>((resolve) => {
+          const t = setTimeout(resolve, 5000);
+          controller.signal.addEventListener("abort", () => { clearTimeout(t); resolve(); });
+        });
+      }
     }
+
+    if (!controller.signal.aborted) setServerStatus("error");
   }
 
   useEffect(() => {
     wakeUp();
+    return () => wakeAbortRef.current?.abort();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function clearSlowTimer() {
