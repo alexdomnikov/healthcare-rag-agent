@@ -14,7 +14,7 @@ load_dotenv()
 ROOT = Path(__file__).resolve().parents[2]
 CONDITIONS = [("structure", "hybrid_chunker"), ("fixed", "fixed")]
 
-# Ablation 3: does structure-aware chunking beat fixed-size 512-token chunking?
+# Ablation 3: does structure-aware chunking beat fixed-size 400-token chunking?
 # Prereq: uv run scripts/ingest.py --strategy fixed
 # Run eval/ablations/run_all.py to build docs/ablations.md.
 
@@ -89,35 +89,37 @@ def section_md(results: dict) -> str:
         "| Strategy        | Recall@1 | Recall@3 | Recall@5 | Recall@10 | MRR   |\n"
         "|-----------------|----------|----------|----------|-----------|-------|\n"
         f"| structure-aware | {s['recall@1']:.3f}    | {s['recall@3']:.3f}    | {s['recall@5']:.3f}    | {s['recall@10']:.3f}     | {s['mrr']:.3f} |\n"
-        f"| fixed-size 512  | {fx['recall@1']:.3f}    | {fx['recall@3']:.3f}    | {fx['recall@5']:.3f}    | {fx['recall@10']:.3f}     | {fx['mrr']:.3f} |"
+        f"| fixed-size 400  | {fx['recall@1']:.3f}    | {fx['recall@3']:.3f}    | {fx['recall@5']:.3f}    | {fx['recall@10']:.3f}     | {fx['mrr']:.3f} |"
     )
 
     if dr5 > 0:
         interp = (
             f"Structure-aware chunking outperforms fixed-size on Recall@5 by {dr5:+.3f} "
-            f"and MRR by {dmrr:+.3f}. The CMS Final Rule has deep section nesting — "
-            f"regulatory subsections are coherent units of meaning, and the Docling "
-            f"HybridChunker preserves those boundaries. Fixed-size 512-token chunks cut "
-            f"across section boundaries, fragmenting regulatory requirements and diluting "
+            f"and MRR by {dmrr:+.3f}. The CMS Final Rule has deep section nesting, and "
+            f"regulatory subsections are coherent units of meaning. The Docling "
+            f"HybridChunker preserves those boundaries, whereas fixed-size 400-token chunks "
+            f"cut across section boundaries, fragmenting regulatory requirements and diluting "
             f"the information density per chunk."
         )
     else:
         interp = (
             f"Fixed-size chunking outperforms structure-aware on Recall@5 by "
-            f"{abs(dr5):+.3f} and MRR by {abs(dmrr):+.3f}. The structure-aware chunks "
-            f"were built with CHUNK_MAX_TOKENS=400, producing smaller chunks than the "
-            f"512-token fixed windows. On this corpus the larger windows capture more "
-            f"relevant context per chunk. Structure-aware is still used in production "
-            f"for its section_path metadata and cleaner citations."
+            f"{abs(dr5):.3f} and MRR by {abs(dmrr):.3f}. Both strategies use a "
+            f"400-token budget, but the HybridChunker's soft limit and merge_peers=True "
+            f"behavior produce many sub-budget chunks, while fixed windows always fill the "
+            f"budget and capture more context per chunk. Structure-aware is still used in "
+            f"production for its section_path metadata and cleaner citations."
         )
 
     return f"""\
 ## Ablation 3 — Chunking strategy: structure-aware vs fixed-size
 
 **Question:** Does structure-aware (Docling HybridChunker) chunking outperform naive
-fixed-size 512-token chunking with 50-token overlap?
+fixed-size 400-token chunking with 50-token overlap?
 
 **Setup:** hybrid mode, `do_rerank=False`, `top_k=10` in both conditions.
+Structure-aware uses Docling HybridChunker (max 400 tokens, `merge_peers=True`); fixed-size
+uses 400-token windows with 50-token overlap.
 
 {table}
 

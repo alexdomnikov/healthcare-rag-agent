@@ -15,8 +15,9 @@ from langchain_groq import ChatGroq
 RERANKER_MODEL_NAME: str = "BAAI/bge-reranker-v2-m3"
 EMBED_MODEL_NAME: str = "BAAI/bge-small-en-v1.5"
 EMBED_DIM: int = 384
-# 500 produced chunks of 600-700 tokens because Docling treats this as a soft cap;
-# 400 keeps everything under the 512-token truncation limit.
+# Docling treats this as a soft cap and routinely overshoots on section boundaries.
+# At 512 the overshoot pushed many chunks past the bge-small encoder's 512-token
+# hard limit, truncating the tail of each oversize chunk. 400 leaves headroom.
 CHUNK_MAX_TOKENS: int = 400
 
 
