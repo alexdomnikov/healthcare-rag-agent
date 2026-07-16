@@ -87,8 +87,8 @@ def run_routing_eval(
     misrouted: list[dict] = []
     correct = 0
 
-    # Groq free tier (6k TPM on qwen3-32b with retrieval context) overruns above
-    # 1-2 concurrent requests. Set --workers higher once on a paid tier.
+    # Groq free tier (8K TPM on gpt-oss-120b with retrieval context) overruns
+    # above 1-2 concurrent requests. Set --workers higher once on a paid tier.
     with ThreadPoolExecutor(max_workers=workers) as executor:
         futures = {executor.submit(_eval_one, item): item for item in ground_truth}
         for future in as_completed(futures):

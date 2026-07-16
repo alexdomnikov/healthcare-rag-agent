@@ -8,7 +8,8 @@
       6,
       7,
       14,
-      32
+      32,
+      42
     ],
     "expected_section": [
       "1. Background",
@@ -130,7 +131,8 @@
     "expected_page": [
       71,
       72,
-      75
+      75,
+      76
     ],
     "expected_section": [
       "D. Updating Third-Party Marketing Organizations (TPMO) Disclaimer Requirements (\u00a7\u00a7 422.2267 and 423.2267)"
@@ -160,7 +162,10 @@
     "id": "q010",
     "question": "What replaced the gap discount program?",
     "expected_answer": "The Coverage Gap Discount Program sunsetted on January 1, 2025. It was replaced by the Manufacturer Discount Program, established in section 1860D-14C of the Act (as added by section 11201 of the IRA).",
-    "expected_page": 1,
+    "expected_page": [
+      1,
+      41
+    ],
     "expected_section": "A. Purpose",
     "expected_tool": "vector_search",
     "is_in_corpus": true
@@ -194,6 +199,7 @@
     "expected_page": [
       2,
       97,
+      99,
       100
     ],
     "expected_section": [
@@ -300,8 +306,8 @@
   },
   {
     "id": "q020",
-    "question": "How many Medicare Advantage contracts have an overall Star Rating of 4 stars or higher in 2024?",
-    "expected_answer": "This requires querying the CMS MA Star Ratings structured data (not in the regulatory PDF).",
+    "question": "How many Medicare Advantage contracts have an overall Star Rating of 4 stars or higher in 2026?",
+    "expected_answer": "207 contracts have a 2026 overall Star Rating of 4 or higher. Requires querying cms_summary_ratings (not in the regulatory PDF).",
     "expected_page": null,
     "expected_section": null,
     "expected_tool": "sql_query",

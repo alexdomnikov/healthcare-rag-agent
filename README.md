@@ -22,7 +22,7 @@ A multi-tool RAG agent over CMS healthcare data. The agent routes each question 
 flowchart LR
     U[User] --> FE[Next.js frontend<br/>SSE streaming]
     FE --> API[FastAPI /query<br/>rate-limited, CORS-locked]
-    API --> AG[LangGraph agent<br/>qwen3-32b via Groq]
+    API --> AG[LangGraph agent<br/>gpt-oss-120b via Groq]
 
     AG -->|regulatory Qs| VS[vector_search]
     AG -->|quantitative Qs| SQ[sql_query]
@@ -47,30 +47,30 @@ flowchart LR
 
 [healthcare-rag.alexdomnikov.com](https://healthcare-rag.alexdomnikov.com)
   
-The first query may take up to a minute while the backend wakes up; Hugging Face Spaces' free tier spins down after inactivity. Subsequent queries are fast under normal load, though Groq's free tier deprioritizes requests during peak times and caps throughput at 6,000 TPM and 500,000 TPD for `qwen/qwen3-32b`. If responses slow down or stall, that's likely why.
+The first query may take up to a minute while the backend wakes up; Hugging Face Spaces' free tier spins down after inactivity. Subsequent queries are fast under normal load, though Groq's free tier deprioritizes requests during peak times and caps throughput at 8,000 TPM and 200,000 TPD for `openai/gpt-oss-120b`. If responses slow down or stall, that's likely why.
 
 ## Metrics
 
-Pre-deployment numbers for the locked-in config. `n` is the slice each metric runs over (29 = all ground-truth questions, 18 = in-corpus document questions, 3 = out-of-corpus refusal questions). Sources: `docs/eval_final.md`, `docs/baseline.md`, `docs/eval_baseline_meta-llama-llama-4-scout-17b-16e-instruct.md`.
+Pre-deployment numbers for the locked-in config. `n` is the slice each metric runs over (29 = all ground-truth questions, 18 = in-corpus document questions, 3 = out-of-corpus refusal questions). Sources: `docs/eval_final.md`, `docs/baseline.md`, `docs/eval_baseline_qwen-qwen3.6-27b.md`.
 
 | Metric | Value | n |
 |--------|------:|--:|
-| Tool routing accuracy           | 0.931    | 27/29 |
+| Tool routing accuracy           | 1.000     | 29/29 |
 | Retrieval Recall@5              | 1.000     | 18 |
 | Retrieval Recall@3              | 1.000     | 18 |
 | Retrieval Recall@1              | 0.611     | 18 |
 | Retrieval MRR                   | 0.787     | 18 |
-| Faithfulness (LLM judge)        | 0.944     | 18 |
-| Context precision (LLM judge)   | 0.667     | 18 |
-| Context recall (LLM judge)      | 0.611     | 18 |
-| Citation precision              | 0.653     | 18 |
+| Faithfulness (LLM judge)        | 0.750     | 18 |
+| Context precision (LLM judge)   | 0.861     | 18 |
+| Context recall (LLM judge)      | 0.639     | 18 |
+| Citation precision              | 0.668     | 18 |
 | Hallucination rate (OOS)        | 0.000     | 3 |
 
 NOTE: the hallucination rate is meant to be representative rather than comprehensive given the small n.
 
-The LLM-as-judge metrics (faithfulness, context precision, context recall) are computed by a custom async judge built around `meta-llama/llama-4-scout-17b-16e-instruct` on Groq: see `eval/llm_eval.py`. Citation precision and hallucination rate are derived from regex extraction over the agent's final answers (no judge), so they're fully reproducible from the saved responses.
+The LLM-as-judge metrics (faithfulness, context precision, context recall) are computed by a custom async judge built around `qwen/qwen3.6-27b` on Groq in reasoning mode — deliberately a different model family from the `gpt-oss-120b` agent to avoid same-family self-preference bias. Faithfulness grades each answer against the agent's *actual* top-5 retrieved context (not a truncated slice), so a claim grounded in a lower-ranked chunk isn't wrongly marked unsupported. See `eval/llm_eval.py`. Citation precision and hallucination rate are pure regex extraction over the agent's final answers (no judge), fully reproducible from the saved responses. Gold pages and answers were hand-audited against the source rule, and citation precision is scored against that audited gold.
 
-Two routing misses (q013, q014) are genuinely ambiguous, in that q013 reads like a count question and got routed to `sql_query`; q014 reads conversational and got `none`. I started with ground truth questions that were completely unambiguous at first (e.g., "What is the annual out-of-pocket (OOP) threshold for Medicare Part D in Contract Year 2026?"). These had 100% successful routing, but I rewrote questions to be more vague in an effort to be representative of real human use cases. At this point, faithfulness sitting well above context recall is a telling finding: the agent's failure mode is "doesn't answer fully," not "makes things up."
+Two design choices worth noting. Questions are phrased the way a real user would ask — colloquial and sometimes vague ("Is there a limit on how much I pay for insulin?") rather than echoing the regulation's language — so routing and retrieval are tested against realistic inputs, not softballs. And faithfulness (0.750) sitting above context recall (0.639) is a telling finding: the agent stays grounded in what it retrieves even when the context is incomplete, so its failure mode is "doesn't answer fully," not "makes things up."
 
 ## Ablation studies
 
@@ -113,14 +113,14 @@ Fixed size wins raw Recall@5 by +0.056 and MRR by +0.011. The likely reason is t
 ## Tech stack
 
 - **Agent runtime**: LangGraph via `langchain.agents.create_agent` — graph-based tool routing with clean per-event streaming hooks.
-- **LLM**: `qwen/qwen3-32b` on Groq — fast tool-call latency, `reasoning_effort="none"` to skip Qwen3's thinking tokens.
+- **LLM**: `openai/gpt-oss-120b` on Groq — fast tool-call latency, `reasoning_effort="low"` to keep thinking tokens minimal while streaming.
 - **Embedder**: `BAAI/bge-small-en-v1.5` (384-dim) — strong quality-per-byte; cheap to host alongside pgvector.
 - **Reranker**: `BAAI/bge-reranker-v2-m3` cross encoder — open weights to dodge rate-limited reranker APIs.
 - **Vector store**: pgvector on Neon Postgres — single database for vectors, tsvector lexical index, and the Star Ratings tables.
 - **Hybrid retrieval**: BM25 (`ts_rank_cd`) + dense (cosine via `<=>`) fused with Reciprocal Rank Fusion in a single SQL round-trip (`src/healthcare_rag/retrieval.py`).
 - **Chunker**: Docling `HybridChunker` (max 400 tokens, `merge_peers=True`) for structure-aware chunks with `section_path` metadata.
 - **PDF parser**: Docling `DocumentConverter` — layout-aware extraction with page-level provenance.
-- **LLM judge**: `meta-llama/llama-4-scout-17b-16e-instruct` on Groq with a custom sliding window async rate limiter.
+- **LLM judge**: `qwen/qwen3.6-27b` on Groq in reasoning mode — grades faithfulness against the agent's actual top-5 retrieved context, with a custom async rate limiter for the free-tier token budget. Deliberately a different model family from the agent to avoid same-family self-preference bias.
 - **API**: FastAPI + SlowAPI rate limiting + SSE streaming + locked down CORS allowlist.
 - **Frontend**: Next.js 16 / React 19 on Vercel, with a disclaimer gate and streaming message bubble.
 - **MCP server**: FastMCP over stdio — exposes the same three tools to any MCP client (Claude Desktop, Claude Code, etc.) without the FastAPI layer.
@@ -131,11 +131,11 @@ Fixed size wins raw Recall@5 by +0.056 and MRR by +0.011. The likely reason is t
 - **Hybrid + rerank, not fine tuning.** Ablation 2 shows the cross encoder buying +0.222 Recall@5 with no model training. Fine-tuning a domain embedder on 18 hand-written questions might have been overfit for this corpus size; the cross encoder generalizes for free.
 - **pgvector on Neon over Pinecone/Weaviate.** One Postgres deployment hosts the dense index, the BM25 `tsvector` index, and the relational Star Ratings tables, so the hybrid SQL query in `retrieve_hybrid` is one round trip instead of two service calls plus an application-side fuse.
 - **LangGraph agent loop instead of a hand-rolled router.** The `astream_events` API gives clean `on_tool_start` / `on_chat_model_stream` events that map directly to SSE tokens, with no glue code between the LLM and the front end.
-- **Three tools, no more.** Each tool maps to a distinct data shape (unstructured doc / structured rows / external API), which is what makes the routing problem learnable from the system prompt alone. Routing accuracy is 0.931 with zero few-shot fine tuning on the router.
+- **Three tools, no more.** Each tool maps to a distinct data shape (unstructured doc / structured rows / external API), which is what makes the routing problem learnable from the system prompt alone. Routing accuracy is 1.000 (29/29) with zero few-shot fine tuning on the router.
 - **Guarded text-to-SQL, not freeform.** `sql_query` uses structured output (Pydantic schema), a SELECT-only regex validator, a forbidden keyword check, and a read only Postgres role. Three independent layers, because one is not enough.
 - **Citations are graded.** `[p. N]` markers are required by the system prompt and graded by `citation_precision` over the gold pages. The model is rewarded for grounding, not just for being right.
 - **No auth, by design.** This is a public demo. Defense-in-depth is the read-only DB role, the SlowAPI per-IP rate limit, a 90s query timeout, and a hardcoded CORS allowlist. A production version would add JWT auth, rate limiting per user, audit logging.
-- **Groq as the LLM provider.** Tool calling latency is the bottleneck in agent loops; Groq's TPS on `qwen3-32b` keeps the agent responsive enough to stream interactively.
+- **Groq as the LLM provider.** Tool calling latency is the bottleneck in agent loops; Groq's TPS on `gpt-oss-120b` keeps the agent responsive enough to stream interactively.
 
 ## Future work
 
@@ -146,7 +146,7 @@ What an enterprise version would add:
 - **Multi-document ingestion.** Today the corpus is one PDF. The schema already carries `document_source`; the missing piece is a corpus manager that handles versioned re-ingestion when CMS publishes updates.
 - **Autonomous monitoring agent.** A scheduled agent that re-runs the eval suite against the latest models, watches for drift in faithfulness or citation precision, and opens a tracking issue when a metric drops below threshold.
 - **Per-document access controls and audit logs.** A real deployment needs row-level security on the SQL tool and a query-log table for compliance review.
-- **Retry-on-429 with exponential backoff in the LLM judge.** `eval/llm_eval.py` has a `TODO` for this. Today it leans on the Groq SDK's default `max_retries=2`, which swallows sustained 429 bursts and corrupts scores.
+- **Self-hosted inference to escape free-tier limits.** Groq's free tier constrains both paths: the live agent hits per-minute and per-day token caps and gets deprioritized at peak (the latency the Live demo section notes), while the eval judge is throttled to ~2 calls/minute (~25-minute runs). Serving the models on dedicated infrastructure (e.g. Modal or vLLM) would remove those ceilings — steadier, faster demo responses and much shorter eval runs — at the cost of paid GPU time, worth it once traffic or eval frequency justifies the spend.
 
 ## Local development
 
@@ -217,13 +217,13 @@ What an enterprise version would add:
 **Evaluation**
 
 ```bash
-# Generate agent responses (~10 min, ~29 agent calls)
+# Generate agent responses (~15 min, ~29 agent calls)
 uv run python eval/generate_responses.py
 
 # Retrieval metrics (Recall@k, MRR): ~30 s, no LLM calls
 uv run python eval/metrics.py
 
-# LLM-judge metrics (faithfulness, context precision/recall): ~2 min
+# LLM-judge metrics (faithfulness, context precision/recall): ~30 min, sequential + de-bursted
 uv run python eval/llm_eval.py
 
 # Tool-routing eval (full)
@@ -235,6 +235,8 @@ uv run python eval/ablations/run_all.py
 # CI smoke subset (what GitHub Actions runs on every push)
 uv run python eval/run_eval.py --subset smoke
 ```
+
+Most of that runtime is the judge step: 54 calls (three metrics across the 18 document questions). The calls are issued concurrently, but the free-tier Qwen judge is throttled to ~2 calls/minute to stay under Groq's per-minute token cap, so the wall-clock is bounded by the rate limit rather than by concurrency.
 
 ## Repository structure
 

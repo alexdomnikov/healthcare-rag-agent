@@ -1,23 +1,6 @@
 {
-  "accuracy": 0.9285714285714286,
-  "correct": 26,
+  "accuracy": 1.0,
+  "correct": 29,
   "total": 29,
-  "misrouted": [
-    {
-      "id": "q013",
-      "question": "Is Medicare cutting back on how many things it uses to grade health plans?",
-      "expected_tool": "vector_search",
-      "called_tool": "sql_query",
-      "is_in_corpus": true,
-      "final_answer_preview": "Medicare has not cut back on the number of things it uses to grade health plans for the 2026 Star Ratings. The 2026 Star"
-    },
-    {
-      "id": "q014",
-      "question": "How often do Medicare insurance brokers actually show beneficiaries all the plan options available to them?",
-      "expected_tool": "vector_search",
-      "called_tool": "none",
-      "is_in_corpus": true,
-      "final_answer_preview": "I don't have that information."
-    }
-  ]
+  "misrouted": []
 }

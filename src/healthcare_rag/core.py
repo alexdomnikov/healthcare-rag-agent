@@ -107,16 +107,17 @@ def get_converter():
 
 @lru_cache(maxsize=1)
 def get_llm() -> BaseChatModel:
-    # reasoning_effort="none" disables Qwen3 thinking — extra latency and known
-    # tool-call parsing issues when streaming.
+    # gpt-oss-120b always reasons; reasoning_effort="low" keeps thinking tokens
+    # minimal for responsive tool-call streaming and to stay within Groq's
+    # free-tier TPM budget.
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
         raise ValueError("GROQ_API_KEY environment variable is not set.")
     return ChatGroq(
-        model="qwen/qwen3-32b",
+        model="openai/gpt-oss-120b",
         temperature=0,
         api_key=api_key,
-        reasoning_effort="none",
+        reasoning_effort="low",
     )
 
 @lru_cache(maxsize=1)
