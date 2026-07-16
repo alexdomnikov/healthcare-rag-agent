@@ -5,9 +5,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 6469,
+    "latency_ms": 7459,
     "is_in_corpus": true,
-    "final_answer_preview": "The out-of-pocket threshold for Medicare Part D enrollees in 2026 is $2,100. Once this amount is reached, enrollees ente"
+    "final_answer_preview": "Medicare Part\u202fD enrollees will reach the catastrophic phase once their true out\u2011of\u2011pocket costs exceed the annual out\u2011of"
   },
   {
     "id": "q002",
@@ -15,9 +15,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 53259,
+    "latency_ms": 25284,
     "is_in_corpus": true,
-    "final_answer_preview": "The new Medicare rules are effective as of June 1, 2026, and applicable to coverage beginning January 1, 2027 [p. 1]."
+    "final_answer_preview": "The final rule that implements the new Medicare Advantage and Part\u202fD requirements is effective for the contract year tha"
   },
   {
     "id": "q003",
@@ -25,9 +25,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 55708,
+    "latency_ms": 14909,
     "is_in_corpus": true,
-    "final_answer_preview": "The coverage gap in Medicare Part D was eliminated beginning in Calendar Year (CY) 2025 due to changes enacted under the"
+    "final_answer_preview": "The Medicare Part\u202fD \u201ccoverage gap\u201d (often called the \u201cdonut hole\u201d) was eliminated by the Inflation Reduction Act.  Secti"
   },
   {
     "id": "q004",
@@ -35,9 +35,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 60515,
+    "latency_ms": 13071,
     "is_in_corpus": true,
-    "final_answer_preview": "Yes, Medicare Part D enrollees have an annual out-of-pocket cap. Starting in 2025, this cap was set at $2,000 per enroll"
+    "final_answer_preview": "Yes. Under the final rule, Medicare Part\u202fD enrollees are protected by an annual out\u2011of\u2011pocket (OOP) maximum. Once an enr"
   },
   {
     "id": "q005",
@@ -45,9 +45,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 60482,
+    "latency_ms": 16760,
     "is_in_corpus": true,
-    "final_answer_preview": "Yes, there is a limit on how much you pay for insulin under Medicare Part D. For calendar years 2023, 2024, and 2025, th"
+    "final_answer_preview": "Yes. The rule caps cost\u2011sharing for insulin at $35 per month for a month\u2019s supply of each covered insulin product. For c"
   },
   {
     "id": "q006",
@@ -55,9 +55,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 60175,
+    "latency_ms": 14573,
     "is_in_corpus": true,
-    "final_answer_preview": "Medicare Part D members do not have to pay the deductible for ACIP-recommended adult vaccines. The Inflation Reduction A"
+    "final_answer_preview": "Medicare Part\u202fD beneficiaries are not required to pay the deductible for any adult vaccine that is recommended by the Ad"
   },
   {
     "id": "q007",
@@ -65,9 +65,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 60282,
+    "latency_ms": 13930,
     "is_in_corpus": true,
-    "final_answer_preview": "CMS received approximately 42,632 timely pieces of correspondence in response to the Contract Year 2027 proposed rule. T"
+    "final_answer_preview": "CMS received approximately\u202f42,632\u202ftimely pieces of correspondence containing comments on the proposed rule and the relat"
   },
   {
     "id": "q008",
@@ -75,9 +75,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 56833,
+    "latency_ms": 27850,
     "is_in_corpus": true,
-    "final_answer_preview": "No, a Medicare insurance agent does not need to wait 48 hours after obtaining a Scope of Appointment (SOA) before meetin"
+    "final_answer_preview": "CMS is eliminating the 48\u2011hour \u201ccooling\u2011off\u201d period that previously required agents or brokers to wait after a scope of "
   },
   {
     "id": "q009",
@@ -85,9 +85,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 57262,
+    "latency_ms": 27387,
     "is_in_corpus": true,
-    "final_answer_preview": "Yes, even if a Medicare beneficiary walks into an insurance office without an appointment, the agent is still required t"
+    "final_answer_preview": "Yes. The rule requires agents and brokers to complete a Scope of Appointment (SOA) for all personal marketing appointmen"
   },
   {
     "id": "q010",
@@ -95,9 +95,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 56535,
+    "latency_ms": 25337,
     "is_in_corpus": true,
-    "final_answer_preview": "The Coverage Gap Discount Program was replaced by the Medicare Part D Manufacturer Discount Program, effective January 1"
+    "final_answer_preview": "The Coverage Gap Discount Program was sunset and replaced by the Medicare Part\u202fD Manufacturer Discount Program, which be"
   },
   {
     "id": "q011",
@@ -105,9 +105,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 61307,
+    "latency_ms": 30188,
     "is_in_corpus": true,
-    "final_answer_preview": "No, CMS is not moving forward with the Health Equity Index (HEI) bonus in Star Ratings. In the final rule, CMS proposed "
+    "final_answer_preview": "CMS will not move forward with the Health Equity Index (HEI) reward. The final rule states that the HEI reward will not "
   },
   {
     "id": "q012",
@@ -115,27 +115,27 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 60724,
+    "latency_ms": 14776,
     "is_in_corpus": true,
-    "final_answer_preview": "Yes, Medicare Advantage plans are required to publicly post their objective criteria for determining eligibility for the"
+    "final_answer_preview": "Yes. The final rule requires Medicare Advantage plans to publicly post the objective criteria they use to determine both"
   },
   {
     "id": "q013",
     "question": "Is Medicare cutting back on how many things it uses to grade health plans?",
     "expected_tool": "vector_search",
-    "called_tool": "sql_query",
-    "correct": false,
-    "latency_ms": 55503,
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 13719,
     "is_in_corpus": true,
-    "final_answer_preview": "Medicare has not cut back on the number of things it uses to grade health plans for the 2026 Star Ratings. The 2026 Star"
+    "final_answer_preview": "Yes. In the 2026 final rule CMS proposes to remove a number of Star Ratings measures, thereby reducing the total set of "
   },
   {
     "id": "q014",
     "question": "How often do Medicare insurance brokers actually show beneficiaries all the plan options available to them?",
     "expected_tool": "vector_search",
-    "called_tool": "none",
-    "correct": false,
-    "latency_ms": 23327,
+    "called_tool": "vector_search",
+    "correct": true,
+    "latency_ms": 30954,
     "is_in_corpus": true,
     "final_answer_preview": "I don't have that information."
   },
@@ -145,9 +145,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 56799,
+    "latency_ms": 5598,
     "is_in_corpus": true,
-    "final_answer_preview": "Drug company discounts under the Medicare Part D Manufacturer Discount Program do not count toward what Medicare pays ba"
+    "final_answer_preview": "Manufacturer discounts are not counted as part of the amounts that Medicare reimburses to a plan. Under the Manufacturer"
   },
   {
     "id": "q016",
@@ -155,9 +155,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 61905,
+    "latency_ms": 24682,
     "is_in_corpus": true,
-    "final_answer_preview": "For a retiree drug plan to count under Medicare rules, it must meet the following requirements:\n\n1. **Reasonable Access "
+    "final_answer_preview": "A retiree prescription\u2011drug plan must be \u201cqualified\u201d under the Medicare rules, which means it has to be actuarially equi"
   },
   {
     "id": "q017",
@@ -165,9 +165,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 60213,
+    "latency_ms": 18290,
     "is_in_corpus": true,
-    "final_answer_preview": "Before the Inflation Reduction Act (IRA) changes, Medicare Part D covered catastrophic drug costs with nominal cost shar"
+    "final_answer_preview": "Before the Inflation Reduction Act (IRA) changes, Medicare Part\u202fD covered catastrophic drug costs by applying a cost\u2011sha"
   },
   {
     "id": "q018",
@@ -175,9 +175,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 62791,
+    "latency_ms": 17141,
     "is_in_corpus": true,
-    "final_answer_preview": "The Inflation Reduction Act (IRA) has indeed changed how Medicare reimburses plans for high-cost drug spending, and thes"
+    "final_answer_preview": "The IRA added new payment provisions that alter how Medicare reimburses plans for high\u2011cost drugs.  For Part\u202fD, the law "
   },
   {
     "id": "q019",
@@ -185,29 +185,29 @@
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 50168,
+    "latency_ms": 25394,
     "is_in_corpus": false,
     "final_answer_preview": "The average overall Star Rating across all Medicare Advantage contracts is approximately 3.65."
   },
   {
     "id": "q020",
-    "question": "How many Medicare Advantage contracts have an overall Star Rating of 4 stars or higher in 2024?",
+    "question": "How many Medicare Advantage contracts have an overall Star Rating of 4 stars or higher in 2026?",
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 54571,
+    "latency_ms": 9623,
     "is_in_corpus": false,
-    "final_answer_preview": "The data provided is for 2026, not 2024. In 2026, there are 207 Medicare Advantage contracts with an overall Star Rating"
+    "final_answer_preview": "207 contracts have an overall Star Rating of 4 stars or higher in 2026."
   },
   {
     "id": "q021",
     "question": "Which parent organization has the most Medicare Advantage contracts?",
     "expected_tool": "sql_query",
-    "called_tool": "error",
-    "correct": false,
-    "latency_ms": 49418,
+    "called_tool": "sql_query",
+    "correct": true,
+    "latency_ms": 8705,
     "is_in_corpus": false,
-    "final_answer_preview": "Exception: Error code: 429 - {'error': {'message': 'Rate limit reached for model `qwen/qwen3-32b` in organization `org_0"
+    "final_answer_preview": "Centene Corporation and UnitedHealth Group, Inc. each have the highest number of Medicare Advantage contracts, with 68 c"
   },
   {
     "id": "q022",
@@ -215,9 +215,9 @@
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 32195,
+    "latency_ms": 18437,
     "is_in_corpus": false,
-    "final_answer_preview": "The parent organization with the most contracts rated 4 stars or above is UnitedHealth Group, Inc., with 25 such contrac"
+    "final_answer_preview": "UnitedHealth Group, Inc. has the most contracts rated 4\u202fstars or above, with 25 such contracts."
   },
   {
     "id": "q023",
@@ -225,9 +225,9 @@
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 50361,
+    "latency_ms": 10646,
     "is_in_corpus": false,
-    "final_answer_preview": "There are 232 contracts with a Part D summary star rating of 4 or higher."
+    "final_answer_preview": "232 contracts have a Part\u202fD summary star rating of 4 or higher."
   },
   {
     "id": "q024",
@@ -235,9 +235,9 @@
     "expected_tool": "openfda_search",
     "called_tool": "openfda_search",
     "correct": true,
-    "latency_ms": 44460,
+    "latency_ms": 42188,
     "is_in_corpus": false,
-    "final_answer_preview": "The contraindications listed for Eliquis (apixaban) on its FDA label include:\n\n- Active pathological bleeding\n- Severe h"
+    "final_answer_preview": "I don't have that information."
   },
   {
     "id": "q025",
@@ -245,9 +245,9 @@
     "expected_tool": "openfda_search",
     "called_tool": "openfda_search",
     "correct": true,
-    "latency_ms": 46799,
+    "latency_ms": 23479,
     "is_in_corpus": false,
-    "final_answer_preview": "Yes, there have been FDA recalls for metformin hydrochloride. Here are three notable recalls:\n\n1. **Class III Recall** ("
+    "final_answer_preview": "Yes. The FDA has issued several recalls for metformin hydrochloride:\n\n* A Class\u202fIII recall (now terminated) was issued o"
   },
   {
     "id": "q026",
@@ -255,9 +255,9 @@
     "expected_tool": "openfda_search",
     "called_tool": "openfda_search",
     "correct": true,
-    "latency_ms": 38702,
+    "latency_ms": 4436,
     "is_in_corpus": false,
-    "final_answer_preview": "Three examples of serious adverse events reported to the FDA for rivaroxaban (Xarelto) include:\n\n1. Cerebrovascular acci"
+    "final_answer_preview": "Serious adverse events reported to the FDA for rivaroxaban (Xarelto) include cerebrovascular accidents (stroke), migrain"
   },
   {
     "id": "q027",
@@ -265,7 +265,7 @@
     "expected_tool": "none",
     "called_tool": "none",
     "correct": true,
-    "latency_ms": 20355,
+    "latency_ms": 339,
     "is_in_corpus": false,
     "final_answer_preview": "I don't have that information."
   },
@@ -275,7 +275,7 @@
     "expected_tool": "none",
     "called_tool": "none",
     "correct": true,
-    "latency_ms": 18349,
+    "latency_ms": 419,
     "is_in_corpus": false,
     "final_answer_preview": "I don't have that information."
   },
@@ -285,7 +285,7 @@
     "expected_tool": "none",
     "called_tool": "none",
     "correct": true,
-    "latency_ms": 21325,
+    "latency_ms": 416,
     "is_in_corpus": false,
     "final_answer_preview": "I don't have that information."
   }

@@ -1,0 +1,160 @@
+{
+  "routing_accuracy": 1.0,
+  "hallucination_rate": 0.0,
+  "citation_precision_avg": 0.668,
+  "faithfulness": 0.75,
+  "context_precision": 0.861,
+  "context_recall": 0.639,
+  "routing_detail": {
+    "accuracy": 1.0,
+    "correct": 29,
+    "total": 29,
+    "misrouted": []
+  },
+  "per_question": [
+    {
+      "id": "q001",
+      "faithfulness": 1.0,
+      "context_precision": 0.5,
+      "context_recall": 0.0,
+      "citation_precision": 1.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q002",
+      "faithfulness": 0.0,
+      "context_precision": 0.5,
+      "context_recall": 0.0,
+      "citation_precision": 0.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q003",
+      "faithfulness": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "citation_precision": 1.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q004",
+      "faithfulness": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "citation_precision": 1.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q005",
+      "faithfulness": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "citation_precision": 1.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q006",
+      "faithfulness": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "citation_precision": 1.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q007",
+      "faithfulness": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "citation_precision": 1.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q008",
+      "faithfulness": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "citation_precision": 1.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q009",
+      "faithfulness": 0.0,
+      "context_precision": 1.0,
+      "context_recall": 0.5,
+      "citation_precision": 1.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q010",
+      "faithfulness": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "citation_precision": 1.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q011",
+      "faithfulness": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "citation_precision": 1.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q012",
+      "faithfulness": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "citation_precision": 1.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q013",
+      "faithfulness": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "citation_precision": 0.5,
+      "routing_correct": true
+    },
+    {
+      "id": "q014",
+      "faithfulness": 1.0,
+      "context_precision": 0.0,
+      "context_recall": 0.0,
+      "citation_precision": 0.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q015",
+      "faithfulness": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 0.0,
+      "citation_precision": 0.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q016",
+      "faithfulness": 0.5,
+      "context_precision": 1.0,
+      "context_recall": 0.0,
+      "citation_precision": 0.333,
+      "routing_correct": true
+    },
+    {
+      "id": "q017",
+      "faithfulness": 0.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "citation_precision": 0.0,
+      "routing_correct": true
+    },
+    {
+      "id": "q018",
+      "faithfulness": 0.0,
+      "context_precision": 0.5,
+      "context_recall": 0.0,
+      "citation_precision": 0.2,
+      "routing_correct": true
+    }
+  ]
+}

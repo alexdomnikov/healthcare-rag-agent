@@ -123,7 +123,7 @@ def root():
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "model": "qwen/qwen3-32b", "db": _check_db()}
+    return {"status": "ok", "model": "openai/gpt-oss-120b", "db": _check_db()}
 
 
 @app.post("/query")

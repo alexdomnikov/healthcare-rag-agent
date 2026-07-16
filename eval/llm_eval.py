@@ -15,13 +15,17 @@ load_dotenv()
 ROOT = Path(__file__).resolve().parents[1]
 DOCS_PATH = ROOT / "docs"
 
-JUDGE_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct"
+JUDGE_MODEL = "qwen/qwen3.6-27b"
 RESPONSES_PATH = ROOT / "eval" / "ground_truth_responses.json"
 PLACEHOLDER = "[No chunks retrieved — misrouted or tool error.]"
 
-# Conservative defaults for Groq's free tier on llama-4-scout. Bump on paid
-# tiers — the limiter is what keeps us from getting 429'd, not throughput.
-JUDGE_RPM = 30
+# qwen3.6-27b runs in thinking mode (see _ask) and the faithfulness prompt sends
+# the full top-5 context, so a call can spend ~4-5K tokens. Against the free-tier
+# 8K TPM cap, two such calls in one window trip a 429. We pace ONE call every 40s
+# (de-bursted, not 2/min) so a single large call stays comfortably under the cap;
+# spreading calls out avoids the 429 storms that otherwise tank throughput.
+# Lower on paid tiers.
+JUDGE_CALL_INTERVAL = 40.0
 
 # Custom llm-as-judge metric calculations. Ragas quickly burned through Groq's limits.
 # Usage: uv run eval/llm_eval.py
@@ -49,46 +53,83 @@ class AsyncRateLimiter:
             await asyncio.sleep(wait)
 
 
-client = AsyncGroq()
-_limiter = AsyncRateLimiter(max_calls=JUDGE_RPM)
+# max_retries=0 disables the SDK's silent retry-with-backoff: on a 429 it would
+# re-send in the background, inflating token usage and hiding the failure behind
+# a long stall. We surface and retry visibly in _ask instead. timeout caps a
+# single call so a stuck response read can't hang the whole run.
+client = AsyncGroq(max_retries=0, timeout=90.0)
+
+# The limiter caps the token *rate* (TPM); the semaphore caps in-flight
+# *concurrency* to one. Firing calls concurrently against the free tier stalled
+# on the response read, so we serialize the actual requests while the limiter
+# still paces them.
+_limiter = AsyncRateLimiter(max_calls=1, period_seconds=JUDGE_CALL_INTERVAL)
+_inflight = asyncio.Semaphore(1)
 
 
-async def _ask(prompt: str) -> float | None:
-    # TODO: explicit retry-on-429 with exponential backoff. Today we rely on the
-    # groq SDK's default max_retries=2, which is usually enough but swallows the
-    # signal — a sustained 429 burst returns None and corrupts the score.
-    await _limiter.acquire()
-    try:
-        r = await client.chat.completions.create(
-            model=JUDGE_MODEL,
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=5,
-            temperature=0,
-        )
-        text = r.choices[0].message.content.strip()
-        match = re.search(r"[01](?:\.5)?", text)
-        return float(match.group()) if match else None
-    except Exception as e:
-        print(f"judge failed: {e}")
-        return None
+async def _ask(prompt: str, attempts: int = 3) -> float | None:
+    # qwen3.6-27b is a reasoning model, and in non-thinking mode it miscalibrates
+    # the faithfulness judgment badly (scores well-grounded answers 0). So we keep
+    # thinking on and read the verdict from reasoning_format="parsed", which puts
+    # the chain-of-thought in a separate field and leaves only the final 0/0.5/1
+    # in content. max_tokens is generous so the reasoning finishes before the
+    # verdict is emitted — too small a budget truncates content to empty. Retry
+    # with backoff on transient errors so a 429 burst doesn't silently score None.
+    for attempt in range(attempts):
+        await _limiter.acquire()
+        start = asyncio.get_event_loop().time()
+        try:
+            async with _inflight:
+                r = await client.chat.completions.create(
+                    model=JUDGE_MODEL,
+                    messages=[{"role": "user", "content": prompt}],
+                    max_tokens=4096,
+                    temperature=0,
+                    reasoning_effort="default",
+                    reasoning_format="parsed",
+                )
+            elapsed = asyncio.get_event_loop().time() - start
+            text = (r.choices[0].message.content or "").strip()
+            match = re.search(r"[01](?:\.5)?", text)
+            if match:
+                if elapsed > 20:
+                    print(f"  slow judge call: {elapsed:.0f}s")
+                return float(match.group())
+            print(f"judge returned no verdict (attempt {attempt + 1}): {text!r}")
+        except Exception as e:
+            # Log the exception type + HTTP status only — never the response body,
+            # which can echo identifiers (e.g. org id) and adds nothing here.
+            status = getattr(e, "status_code", "?")
+            elapsed = asyncio.get_event_loop().time() - start
+            print(f"judge call failed (attempt {attempt + 1}): "
+                  f"{type(e).__name__} {status} after {elapsed:.0f}s")
+            await asyncio.sleep(2 ** attempt)
+    return None
 
 
 async def score_question(r: dict) -> dict:
-    chunks = "\n".join((r.get("retrieved_chunks") or [PLACEHOLDER])[:3])
+    retrieved = r.get("retrieved_chunks") or [PLACEHOLDER]
+    # Faithfulness grades the answer against the context the agent actually
+    # conditioned on, so it sees all retrieved chunks (top-5) — otherwise a claim
+    # grounded in a rank-4/5 chunk is wrongly marked unsupported. context
+    # precision/recall grade retrieval quality, for which the top-3 highest-ranked
+    # chunks suffice, and keeping them at 3 holds the run under the free-tier TPD.
+    chunks_all = "\n".join(retrieved[:5])
+    chunks_top = "\n".join(retrieved[:3])
     q, a, ref = r["question"], r["final_answer"], r["expected_answer"]
 
     faith, ctx_p, ctx_r = await asyncio.gather(
         _ask(
             f"Does the answer make only claims supported by the context? "
-            f"Answer with ONLY 0, 0.5, or 1. No other text.\n\nContext:\n{chunks}\n\nAnswer:\n{a}"
+            f"Answer with ONLY 0, 0.5, or 1. No other text.\n\nContext:\n{chunks_all}\n\nAnswer:\n{a}"
         ),
         _ask(
             f"Is the context relevant and sufficient to answer the question? "
-            f"Answer with ONLY 0, 0.5, or 1. No other text.\n\nQuestion:\n{q}\n\nContext:\n{chunks}"
+            f"Answer with ONLY 0, 0.5, or 1. No other text.\n\nQuestion:\n{q}\n\nContext:\n{chunks_top}"
         ),
         _ask(
             f"Does the context contain the information needed to produce this reference answer? "
-            f"Answer with ONLY 0, 0.5, or 1. No other text.\n\nContext:\n{chunks}\n\nReference answer:\n{ref}"
+            f"Answer with ONLY 0, 0.5, or 1. No other text.\n\nContext:\n{chunks_top}\n\nReference answer:\n{ref}"
         ),
     )
     print(f"  {r['id']:<6} faith={faith} ctx_p={ctx_p} ctx_r={ctx_r}")
@@ -96,16 +137,21 @@ async def score_question(r: dict) -> dict:
 
 
 async def run_judge(doc_qs: list[dict]) -> list[dict]:
-    # Questions run concurrently; the rate limiter paces individual calls so we
-    # stay under the per-minute cap without burning wall-clock on sleeps.
-    return await asyncio.gather(*(score_question(r) for r in doc_qs))
+    # Score one question at a time. The limiter + semaphore already serialize the
+    # actual API calls, so gathering all 18 questions at once wouldn't add
+    # throughput — it would only scramble completion order, so no single question
+    # finishes for a long time. Sequential keeps each question's 3 calls grouped
+    # and lands verdicts incrementally (observable progress, resumable-in-spirit).
+    return [await score_question(r) for r in doc_qs]
 
 
-# Matches a citation bracket beginning with "p." or "pp." and captures the
-# entire body so we can pull every page number out of multi-page brackets
-# like "[p. 88, p. 91]" or "[pp. 142-144]". The naive r"\[p\.\s*(\d+)\]"
-# silently dropped any bracket that didn't contain exactly one page number.
-_CITE_BLOCK = re.compile(r"\[(?:p\.?|pp\.?)\s*([^\]]+)\]", re.IGNORECASE)
+# Matches a citation bracket beginning with "p." or "pp." and captures the entire
+# body so we can pull every page number out of multi-page brackets like
+# "[p. 88, p. 91]" or "[pp. 142-144]". Accepts both ASCII "[...]" and the fullwidth
+# "【...】" brackets gpt-oss-120b emits, and a possible space after the opening
+# bracket ("[ p. 47 ]"); a stricter pattern silently dropped those and understated
+# citation precision.
+_CITE_BLOCK = re.compile(r"[\[【]\s*pp?\.?\s*([^\]】]+)[\]】]", re.IGNORECASE)
 
 
 def _extract_cited_pages(answer: str) -> set[int]:
@@ -236,7 +282,6 @@ def main():
             print(f"{k:<28} {v}")
 
     model_slug = JUDGE_MODEL.replace("/", "-")
-    
     DOCS_PATH.mkdir(exist_ok=True)
     (ROOT / "eval" / f"eval_baseline_{model_slug}.json").write_text(json.dumps(summary, indent=2))
     (DOCS_PATH / f"eval_baseline_{model_slug}.md").write_text(build_markdown(summary, per_q, routing))
