@@ -30,6 +30,15 @@ def _first_tool(messages: list) -> str:
     return "none"
 
 
+def _retry_after_seconds(exc: Exception) -> float | None:
+    response = getattr(exc, "response", None)
+    raw = response.headers.get("retry-after") if response is not None else None
+    try:
+        return float(raw) if raw else None
+    except ValueError:
+        return None
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(
         description="CI eval orchestrator. Runs retrieval Recall@5 and tool-routing "
@@ -39,6 +48,16 @@ def main() -> None:
     ap.add_argument("--subset", choices=["smoke", "full"], default="smoke")
     ap.add_argument("--threshold-recall5", type=float, default=0.7)
     ap.add_argument("--threshold-routing", type=float, default=0.8)
+    ap.add_argument(
+        "--routing-delay",
+        type=float,
+        default=30.0,
+        metavar="SECONDS",
+        help="Pause between agent invocations. A doc question costs roughly 4-5K "
+             "tokens once retrieval context is in the prompt, so back-to-back "
+             "calls blow through Groq's free-tier 8K TPM and come back 429. "
+             "Set to 0 on a paid tier (default: 30)",
+    )
     args = ap.parse_args()
 
     gt: list[dict] = json.loads(GROUND_TRUTH.read_text())
@@ -52,6 +71,7 @@ def main() -> None:
     # Imports are deferred so --help works without DB / model deps installed.
     import os
 
+    from groq import RateLimitError
     from healthcare_rag.core import get_agent, get_embed_model, get_reranker
     from healthcare_rag.eval_metrics import recall_at_k
     from healthcare_rag.retrieval import retrieve
@@ -80,13 +100,30 @@ def main() -> None:
         print(f"  {q['id']}  r@5={r5}  retrieved={pages}  expected={q['expected_page']}")
     recall_5 = float(np.mean(recalls)) if recalls else 0.0
 
-    print(f"\nTool routing on {len(gt)} question(s):")
+    def _route_once(question: str) -> str:
+        res = agent.invoke({"messages": [HumanMessage(content=question)]})
+        return _first_tool(res["messages"])
+
+    print(f"\nTool routing on {len(gt)} question(s), {args.routing_delay:.0f}s apart:")
     routing_correct = 0
-    for q in gt:
+    for i, q in enumerate(gt):
+        # Space the calls out rather than firing them back to back. A 429 counts
+        # as a routing failure, which used to fail CI on quota rather than on
+        # any real regression.
+        if i and args.routing_delay:
+            time.sleep(args.routing_delay)
         t0 = time.perf_counter()
         try:
-            res = agent.invoke({"messages": [HumanMessage(content=q["question"])]})
-            called = _first_tool(res["messages"])
+            called = _route_once(q["question"])
+        except RateLimitError as exc:
+            # Groq's retry-after is authoritative; the delay is only a fallback.
+            wait = _retry_after_seconds(exc) or args.routing_delay
+            print(f"  {q['id']}  rate limited, retrying once in {wait:.0f}s")
+            time.sleep(wait)
+            try:
+                called = _route_once(q["question"])
+            except Exception as exc:
+                called = f"error:{type(exc).__name__}"
         except Exception as exc:
             called = f"error:{type(exc).__name__}"
         ms = int((time.perf_counter() - t0) * 1000)
