@@ -2,15 +2,21 @@ name: Deploy to HF Space
 
 # Fires after CI passes on main. HF rebuilds the Docker image and redeploys
 # the Space automatically once we push to its main branch.
+#
+# workflow_dispatch is the manual escape hatch: re-running this workflow after a
+# CI failure replays the original event payload, so the conclusion check below
+# stays false forever and the job is skipped. Dispatch deploys the chosen ref
+# directly instead.
 on:
   workflow_run:
     workflows: ["CI"]
     types: [completed]
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   sync-to-hf:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -19,7 +25,9 @@ jobs:
           # Full history so HF can fast-forward; shallow clones cause non-FF rejects.
           fetch-depth: 0
           lfs: true
-          ref: ${{ github.event.workflow_run.head_sha }}
+          # workflow_run.head_sha is empty on a manual dispatch; fall back to the
+          # ref the run was launched against.
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Push to Hugging Face Space
         env:
