@@ -1,8 +1,8 @@
 import time
 from pathlib import Path
+
 import numpy as np
 from dotenv import load_dotenv
-
 from sqlalchemy import text
 
 from healthcare_rag.core import get_engine

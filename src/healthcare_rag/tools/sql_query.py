@@ -1,7 +1,8 @@
 import re
-from sqlalchemy import text
+
 from langchain_core.tools import tool
 from pydantic import BaseModel, Field
+from sqlalchemy import text
 
 from healthcare_rag.core import get_llm, get_readonly_engine
 
@@ -102,7 +103,7 @@ def sql_query(question: str) -> str:
             {"role": "system", "content": SQL_SYSTEM_PROMPT},
             {"role": "user",   "content": question},
         ])
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return f"Failed to generate SQL: {e}"
 
     # Validate
@@ -116,7 +117,7 @@ def sql_query(question: str) -> str:
             result = conn.execute(text(query_obj.sql))
             rows = result.fetchall()
             col_names = list(result.keys())
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return (
             f"Query execution failed: {e}\n"
             f"SQL: {query_obj.sql}\n"

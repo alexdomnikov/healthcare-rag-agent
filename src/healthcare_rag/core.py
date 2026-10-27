@@ -6,11 +6,11 @@ import os
 from functools import lru_cache
 from typing import Any
 
-from sqlalchemy import create_engine, Engine, Integer, Text
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from pgvector.sqlalchemy import Vector
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_groq import ChatGroq
+from pgvector.sqlalchemy import Vector
+from sqlalchemy import Engine, Integer, Text, create_engine
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 RERANKER_MODEL_NAME: str = "BAAI/bge-reranker-v2-m3"
 EMBED_MODEL_NAME: str = "BAAI/bge-small-en-v1.5"
@@ -82,7 +82,9 @@ def get_readonly_engine() -> Engine:
 
 @lru_cache(maxsize=1)
 def get_tokenizer():
-    from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
+    from docling_core.transforms.chunker.tokenizer.huggingface import (
+        HuggingFaceTokenizer,
+    )
     from transformers import AutoTokenizer
     print(f"Loading tokenizer: {EMBED_MODEL_NAME}")
     return HuggingFaceTokenizer(
@@ -123,9 +125,10 @@ def get_llm() -> BaseChatModel:
 @lru_cache(maxsize=1)
 def get_agent() -> Any:
     from langchain.agents import create_agent
-    from healthcare_rag.tools.vector_search import vector_search
-    from healthcare_rag.tools.sql_query import sql_query
+
     from healthcare_rag.tools.openfda_search import openfda_search
+    from healthcare_rag.tools.sql_query import sql_query
+    from healthcare_rag.tools.vector_search import vector_search
 
     SYSTEM_PROMPT = """You are a healthcare regulatory assistant with access to
     three specialised tools. Use the most relevant tool to answer every question,

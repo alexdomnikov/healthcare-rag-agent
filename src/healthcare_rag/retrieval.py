@@ -1,9 +1,9 @@
 import os
 from dataclasses import dataclass
 
+from langsmith import traceable
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-from langsmith import traceable
 
 from healthcare_rag.core import get_embed_model, get_engine
 

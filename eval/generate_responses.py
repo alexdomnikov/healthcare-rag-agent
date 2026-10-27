@@ -61,7 +61,7 @@ def main() -> None:
             final_answer = result["messages"][-1].content
             called_tool = _first_tool_called(result["messages"])
             retrieved_chunks = _first_tool_output(result["messages"])
-        except Exception as exc:
+        except Exception as exc:    # noqa: BLE001
             final_answer = f"Exception: {type(exc).__name__}: {exc}"
             called_tool = "error"
             retrieved_chunks = []

@@ -72,6 +72,7 @@ def main() -> None:
     import os
 
     from groq import RateLimitError
+
     from healthcare_rag.core import get_agent, get_embed_model, get_reranker
     from healthcare_rag.eval_metrics import recall_at_k
     from healthcare_rag.retrieval import retrieve
@@ -122,9 +123,9 @@ def main() -> None:
             time.sleep(wait)
             try:
                 called = _route_once(q["question"])
-            except Exception as exc:
+            except Exception as exc:    # noqa: BLE001
                 called = f"error:{type(exc).__name__}"
-        except Exception as exc:
+        except Exception as exc:    # noqa: BLE001
             called = f"error:{type(exc).__name__}"
         ms = int((time.perf_counter() - t0) * 1000)
         ok = called == q.get("expected_tool", "none")

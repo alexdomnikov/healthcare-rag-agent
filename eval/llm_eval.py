@@ -96,7 +96,7 @@ async def _ask(prompt: str, attempts: int = 3) -> float | None:
                     print(f"  slow judge call: {elapsed:.0f}s")
                 return float(match.group())
             print(f"judge returned no verdict (attempt {attempt + 1}): {text!r}")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             # Log the exception type + HTTP status only — never the response body,
             # which can echo identifiers (e.g. org id) and adds nothing here.
             status = getattr(e, "status_code", "?")

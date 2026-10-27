@@ -2,11 +2,10 @@ import json
 import sys
 from pathlib import Path
 
-from dotenv import load_dotenv
-
-import retrieval_mode as abl1
-import reranker as abl2
 import chunking_strategy as abl3
+import reranker as abl2
+import retrieval_mode as abl1
+from dotenv import load_dotenv
 
 load_dotenv()
 

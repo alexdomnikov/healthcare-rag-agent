@@ -10,15 +10,15 @@ from fastapi import FastAPI, Request
 load_dotenv()
 # Imports below must run after load_dotenv() so modules that read env vars at
 # import time (groq, sqlalchemy URL, etc.) see the .env values.
-from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
-from fastapi.responses import StreamingResponse  # noqa: E402
-from groq import RateLimitError  # noqa: E402
-from pydantic import BaseModel, Field  # noqa: E402
-from slowapi import Limiter  # noqa: E402
-from slowapi.errors import RateLimitExceeded  # noqa: E402
-from slowapi.middleware import SlowAPIMiddleware  # noqa: E402
-from slowapi.util import get_remote_address  # noqa: E402
-from sqlalchemy import text  # noqa: E402
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from groq import RateLimitError
+from pydantic import BaseModel, Field
+from slowapi import Limiter
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+from slowapi.util import get_remote_address
+from sqlalchemy import text
 
 logger = logging.getLogger("healthcare_rag")
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -58,8 +58,8 @@ def _check_db() -> str:
         with get_engine().connect() as conn:
             conn.execute(text("SELECT 1"))
         return "ok"
-    except Exception as exc:
-        logger.exception("Database health check failed: %s", exc)
+    except Exception:
+        logger.exception("Database health check failed.")
         return "error"
 
 
@@ -151,15 +151,15 @@ async def query(request: Request, req: QueryRequest):
                     elif kind == "on_chain_end" and event["name"] == "LangGraph":
                         yield f"data: {json.dumps({'type': 'done', 'tool_used': tool_used})}\n\n"
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             logger.warning("Query exceeded %ss timeout", QUERY_TIMEOUT_SECONDS)
             yield f"data: {json.dumps({'type': 'error', 'message': 'The request took too long and was cancelled. Please try a simpler question or try again.'})}\n\n"
         except RateLimitError as exc:
             retry_after = getattr(exc, "response", None) and exc.response.headers.get("retry-after")
             logger.warning("Groq rate limit hit on /query (retry-after=%s)", retry_after)
             yield f"data: {json.dumps({'type': 'error', 'message': _rate_limit_message(exc)})}\n\n"
-        except Exception as exc:
-            logger.exception("Unhandled error in event stream: %s", exc)
+        except Exception:
+            logger.exception("Unhandled error in event stream.")
             yield f"data: {json.dumps({'type': 'error', 'message': 'An internal error occurred.'})}\n\n"
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")

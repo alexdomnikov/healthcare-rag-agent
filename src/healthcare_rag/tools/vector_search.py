@@ -2,6 +2,7 @@ from langchain_core.tools import tool
 
 from healthcare_rag.retrieval import retrieve
 
+
 @tool()
 def vector_search(query: str) -> str:
     """Search the CMS Medicare Advantage and Part D Final Rule for regulatory information.

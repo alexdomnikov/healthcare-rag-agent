@@ -4,9 +4,9 @@ import sys
 import time
 from pathlib import Path
 from typing import Any
-from dotenv import load_dotenv
 
-from langchain_core.messages import AIMessage, ToolMessage, HumanMessage
+from dotenv import load_dotenv
+from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 
 load_dotenv()
 
@@ -40,6 +40,7 @@ def run_routing_eval(
     workers: int = 1,
 ) -> tuple[float, list[dict]]:
     from concurrent.futures import ThreadPoolExecutor, as_completed
+
     from healthcare_rag.core import get_agent, get_embed_model, get_reranker  # type: ignore[import]
 
     # Pre-warm singletons; lru_cache isn't thread-safe on first call, and without
@@ -69,7 +70,7 @@ def run_routing_eval(
             result = agent.invoke({"messages": [HumanMessage(content=item["question"])]})
             called = extract_first_tool_called(result["messages"])
             final_answer = result["messages"][-1].content
-        except Exception as exc:
+        except Exception as exc:    # noqa: BLE001
             called = "error"
             final_answer = f"Exception: {exc}"
         return {
@@ -111,7 +112,7 @@ def run_routing_eval(
                 })
             if verbose:
                 print(
-                    f"{str(r['id']):<8} {r['expected_tool']:<{col_w}} "
+                    f"{r['id']!s:<8} {r['expected_tool']:<{col_w}} "
                     f"{r['called_tool']:<{col_w}} {r['latency_ms']:>7}ms {symbol}"
                 )
 

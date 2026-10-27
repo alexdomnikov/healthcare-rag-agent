@@ -1,8 +1,9 @@
 import os
-import pytest
-import httpx
-from dotenv import load_dotenv
 from unittest.mock import MagicMock, patch
+
+import httpx
+import pytest
+from dotenv import load_dotenv
 
 from healthcare_rag.tools.openfda_search import fetch_openfda, openfda_search
 
@@ -23,12 +24,12 @@ LABEL_RESPONSE = {
                 "generic_name": ["apixaban"],
             },
             "indications_and_usage": [
-                "Eliquis is indicated to reduce the risk of stroke and systemic "
-                "embolism in patients with nonvalvular atrial fibrillation."
+                ("Eliquis is indicated to reduce the risk of stroke and systemic "
+                "embolism in patients with nonvalvular atrial fibrillation.")
             ],
             "warnings": [
-                "PREMATURE DISCONTINUATION OF ELIQUIS INCREASES THE RISK OF "
-                "ISCHEMIC EVENTS."
+                ("PREMATURE DISCONTINUATION OF ELIQUIS INCREASES THE RISK OF "
+                "ISCHEMIC EVENTS.")
             ],
             "dosage_and_administration": ["2.5 mg or 5 mg twice daily."],
             "contraindications": ["Active pathological bleeding."],

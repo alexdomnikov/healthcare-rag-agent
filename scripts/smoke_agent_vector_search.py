@@ -1,6 +1,7 @@
 import json
-from dotenv import load_dotenv
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 from healthcare_rag.core import get_agent
 from healthcare_rag.retrieval import retrieve
