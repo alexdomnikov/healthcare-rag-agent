@@ -12,7 +12,9 @@ env:
 jobs:
   test-and-eval:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Headroom for the smoke eval, which now paces its agent calls to stay
+    # under Groq's free-tier per-minute token cap.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
