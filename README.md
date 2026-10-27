@@ -51,7 +51,7 @@ The first query may take up to a minute while the backend wakes up; Hugging Face
 
 ## Metrics
 
-Pre-deployment numbers for the locked-in config. `n` is the slice each metric runs over (29 = all ground-truth questions, 18 = in-corpus document questions, 3 = out-of-corpus refusal questions). Sources: `docs/eval_final.md`, `docs/baseline.md`, `docs/eval_baseline_qwen-qwen3.6-27b.md`.
+Pre-deployment numbers for the locked-in config. `n` is the slice each metric runs over (29 = all ground-truth questions, 18 = in-corpus document questions, 3 = out-of-corpus refusal questions). Sources: `docs/eval_final.md`, `docs/baseline.md`, `docs/eval_baseline_qwen-qwen3.8-27b.md`.
 
 | Metric | Value | n |
 |--------|------:|--:|
@@ -60,15 +60,15 @@ Pre-deployment numbers for the locked-in config. `n` is the slice each metric ru
 | Retrieval Recall@3              | 1.000     | 18 |
 | Retrieval Recall@1              | 0.611     | 18 |
 | Retrieval MRR                   | 0.787     | 18 |
-| Faithfulness (LLM judge)        | 0.750     | 18 |
+| Faithfulness (LLM judge)        | 0.806     | 18 |
 | Context precision (LLM judge)   | 0.861     | 18 |
 | Context recall (LLM judge)      | 0.639     | 18 |
-| Citation precision              | 0.668     | 18 |
+| Citation precision              | 0.502     | 18 |
 | Hallucination rate (OOS)        | 0.000     | 3 |
 
 NOTE: the hallucination rate is meant to be representative rather than comprehensive given the small n.
 
-The LLM-as-judge metrics (faithfulness, context precision, context recall) are computed by a custom async judge built around `qwen/qwen3.6-27b` on Groq in reasoning mode — deliberately a different model family from the `gpt-oss-120b` agent to avoid same-family self-preference bias. Faithfulness grades each answer against the agent's *actual* top-5 retrieved context (not a truncated slice), so a claim grounded in a lower-ranked chunk isn't wrongly marked unsupported. See `eval/llm_eval.py`. Citation precision and hallucination rate are pure regex extraction over the agent's final answers (no judge), fully reproducible from the saved responses. Gold pages and answers were hand-audited against the source rule, and citation precision is scored against that audited gold.
+The LLM-as-judge metrics (faithfulness, context precision, context recall) are computed by a custom async judge built around `qwen/qwen3.8-27b` on Groq in reasoning mode — deliberately a different model family from the `gpt-oss-120b` agent to avoid same-family self-preference bias. Faithfulness grades each answer against the agent's *actual* top-5 retrieved context (not a truncated slice), so a claim grounded in a lower-ranked chunk isn't wrongly marked unsupported. See `eval/llm_eval.py`. Citation precision and hallucination rate are pure regex extraction over the agent's final answers (no judge), fully reproducible from the saved responses. Gold pages and answers were hand-audited against the source rule, and citation precision is scored against that audited gold.
 
 Two design choices worth noting. Questions are phrased the way a real user would ask — colloquial and sometimes vague ("Is there a limit on how much I pay for insulin?") rather than echoing the regulation's language — so routing and retrieval are tested against realistic inputs, not softballs. And faithfulness (0.750) sitting above context recall (0.639) is a telling finding: the agent stays grounded in what it retrieves even when the context is incomplete, so its failure mode is "doesn't answer fully," not "makes things up."
 
@@ -81,34 +81,34 @@ All ablations run over the 18 vector search document questions in `eval/ground_t
 Reranker disabled so the delta reflects only first pass retrieval quality. `top_k=10`.
 
 | Mode    | Recall@1 | Recall@3 | Recall@5 | Recall@10 | MRR   |
-|---------|---------:|---------:|---------:|----------:|------:|
-| hybrid  | 0.389    | 0.778    | 0.778    | 0.778     | 0.565 |
-| vector  | 0.389    | 0.722    | 0.722    | 0.722     | 0.537 |
+|---------|----------|----------|----------|-----------|-------|
+| hybrid  | 0.389    | 0.833    | 0.833    | 0.833     | 0.583 |
+| vector  | 0.389    | 0.778    | 0.778    | 0.778     | 0.556 |
 | lexical | 0.056    | 0.056    | 0.056    | 0.056     | 0.056 |
 
-Hybrid wins on Recall@5 by +0.056 over dense-only and +0.722 over lexical-only. The gap over dense reflects exact-match signals in the CMS corpus (CFR section codes like §422.138, specific dollar figures) that BM25 catches and the embedding model misses; the gap over lexical reflects paraphrase-resistant questions that need semantic matching to surface.
+Hybrid wins on Recall@5 by +0.055 over dense-only and +0.777 over lexical-only. The gap over dense reflects exact-match signals in the CMS corpus (CFR section codes like §422.138, specific dollar figures) that BM25 catches and the embedding model misses; the gap over lexical reflects paraphrase-resistant questions that need semantic matching to surface.
 
 ### 2. Reranker: on vs off
 
 Hybrid mode, `top_k=5`. Reranker-on pulls 50 first-pass candidates and rescores; reranker-off returns the raw hybrid top 5.
 
 | Condition    | Recall@1 | Recall@3 | Recall@5 | MRR   |
-|--------------|---------:|---------:|---------:|------:|
-| reranker off | 0.389    | 0.778    | 0.778    | 0.565 |
+|--------------|----------|----------|----------|-------|
+| reranker off | 0.389    | 0.833    | 0.833    | 0.583 |
 | reranker on  | 0.611    | 1.000    | 1.000    | 0.787 |
 
-Reranking lifts Recall@5 by +0.222 and MRR by +0.222. The cross encoder rescores 50 candidates rather than just the top 5, surfacing chunks that hybrid ranks between 6th and 50th. The hybrid stage is strong on recall but mediocre on precision; the cross encoder corrects that.
+Reranking lifts Recall@5 by +0.167 and MRR by +0.204. The cross encoder rescores 50 candidates rather than just the top 5, surfacing chunks that hybrid ranks between 6th and 50th. The hybrid stage is strong on recall but mediocre on precision; the cross encoder corrects that.
 
 ### 3. Chunking strategy: structure aware vs fixed size
 
 Hybrid mode, reranker off, `top_k=10`. Structure aware = Docling HybridChunker @ 400 tokens. Fixed size = 400 token windows with 50-token overlap.
 
 | Strategy        | Recall@1 | Recall@3 | Recall@5 | Recall@10 | MRR   |
-|-----------------|---------:|---------:|---------:|----------:|------:|
-| structure-aware | 0.389    | 0.778    | 0.778    | 0.778     | 0.565 |
-| fixed-size 400  | 0.389    | 0.778    | 0.833    | 0.889     | 0.576 |
+|-----------------|----------|----------|----------|-----------|-------|
+| structure-aware | 0.389    | 0.833    | 0.833    | 0.833     | 0.583 |
+| fixed-size 400  | 0.389    | 0.778    | 0.889    | 0.889     | 0.583 |
 
-Fixed size wins raw Recall@5 by +0.056 and MRR by +0.011. The likely reason is that many structure-aware chunks end up smaller than their 400-token cap due to the HybridChunker's soft limit and merge_peers=True behavior, while fixed windows always fill their budget and capture more context per chunk. This was unavoidable, as raising HybridChunker's cap to 512 led to many chunks with 600-700+ tokens, which led to excessive truncation. Structure aware is kept in production anyway because it preserves section_path metadata that produces cleaner citations, which is a judgment the retrieval metrics don't capture. This is the one ablation where the numerical winner wasn't shipped.
+Fixed size wins raw Recall@5 by +0.056. The likely reason is that many structure-aware chunks end up smaller than their 400-token cap due to the HybridChunker's soft limit and merge_peers=True behavior, while fixed windows always fill their budget and capture more context per chunk. This was unavoidable, as raising HybridChunker's cap to 512 led to many chunks with 600-700+ tokens, which led to excessive truncation. Structure aware is kept in production anyway because it preserves section_path metadata that produces cleaner citations, which is a judgment the retrieval metrics don't capture. This is the one ablation where the numerical winner wasn't shipped.
 
 ## Tech stack
 
@@ -120,7 +120,7 @@ Fixed size wins raw Recall@5 by +0.056 and MRR by +0.011. The likely reason is t
 - **Hybrid retrieval**: BM25 (`ts_rank_cd`) + dense (cosine via `<=>`) fused with Reciprocal Rank Fusion in a single SQL round-trip (`src/healthcare_rag/retrieval.py`).
 - **Chunker**: Docling `HybridChunker` (max 400 tokens, `merge_peers=True`) for structure-aware chunks with `section_path` metadata.
 - **PDF parser**: Docling `DocumentConverter` — layout-aware extraction with page-level provenance.
-- **LLM judge**: `qwen/qwen3.6-27b` on Groq in reasoning mode — grades faithfulness against the agent's actual top-5 retrieved context, with a custom async rate limiter for the free-tier token budget. Deliberately a different model family from the agent to avoid same-family self-preference bias.
+- **LLM judge**: `qwen/qwen3.8-27b` on Groq in reasoning mode — grades faithfulness against the agent's actual top-5 retrieved context, with a custom async rate limiter for the free-tier token budget. Deliberately a different model family from the agent to avoid same-family self-preference bias.
 - **API**: FastAPI + SlowAPI rate limiting + SSE streaming + locked down CORS allowlist.
 - **Frontend**: Next.js 16 / React 19 on Vercel, with a disclaimer gate and streaming message bubble.
 - **MCP server**: FastMCP over stdio — exposes the same three tools to any MCP client (Claude Desktop, Claude Code, etc.) without the FastAPI layer.
@@ -131,7 +131,7 @@ Fixed size wins raw Recall@5 by +0.056 and MRR by +0.011. The likely reason is t
 - **Hybrid + rerank, not fine tuning.** Ablation 2 shows the cross encoder buying +0.222 Recall@5 with no model training. Fine-tuning a domain embedder on 18 hand-written questions might have been overfit for this corpus size; the cross encoder generalizes for free.
 - **pgvector on Neon over Pinecone/Weaviate.** One Postgres deployment hosts the dense index, the BM25 `tsvector` index, and the relational Star Ratings tables, so the hybrid SQL query in `retrieve_hybrid` is one round trip instead of two service calls plus an application-side fuse.
 - **LangGraph agent loop instead of a hand-rolled router.** The `astream_events` API gives clean `on_tool_start` / `on_chat_model_stream` events that map directly to SSE tokens, with no glue code between the LLM and the front end.
-- **Three tools, no more.** Each tool maps to a distinct data shape (unstructured doc / structured rows / external API), which is what makes the routing problem learnable from the system prompt alone. Routing accuracy is 1.000 (29/29) with zero few-shot fine tuning on the router.
+- **Three tools, no more.** Each tool maps to a distinct data shape (unstructured doc / structured rows / external API), which is what makes the routing problem learnable from the system prompt alone. Routing accuracy is 1.000 (29/29) with no router fine-tuning or separate classifier model.
 - **Guarded text-to-SQL, not freeform.** `sql_query` uses structured output (Pydantic schema), a SELECT-only regex validator, a forbidden keyword check, and a read only Postgres role. Three independent layers, because one is not enough.
 - **Citations are graded.** `[p. N]` markers are required by the system prompt and graded by `citation_precision` over the gold pages. The model is rewarded for grounding, not just for being right.
 - **No auth, by design.** This is a public demo. Defense-in-depth is the read-only DB role, the SlowAPI per-IP rate limit, a 90s query timeout, and a hardcoded CORS allowlist. A production version would add JWT auth, rate limiting per user, audit logging.

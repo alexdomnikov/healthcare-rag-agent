@@ -15,11 +15,11 @@ load_dotenv()
 ROOT = Path(__file__).resolve().parents[1]
 DOCS_PATH = ROOT / "docs"
 
-JUDGE_MODEL = "qwen/qwen3.6-27b"
+JUDGE_MODEL = "qwen/qwen3.8-27b"
 RESPONSES_PATH = ROOT / "eval" / "ground_truth_responses.json"
 PLACEHOLDER = "[No chunks retrieved — misrouted or tool error.]"
 
-# qwen3.6-27b runs in thinking mode (see _ask) and the faithfulness prompt sends
+# qwen3.8-27b runs in thinking mode (see _ask) and the faithfulness prompt sends
 # the full top-5 context, so a call can spend ~4-5K tokens. Against the free-tier
 # 8K TPM cap, two such calls in one window trip a 429. We pace ONE call every 40s
 # (de-bursted, not 2/min) so a single large call stays comfortably under the cap;
@@ -68,7 +68,7 @@ _inflight = asyncio.Semaphore(1)
 
 
 async def _ask(prompt: str, attempts: int = 3) -> float | None:
-    # qwen3.6-27b is a reasoning model, and in non-thinking mode it miscalibrates
+    # qwen3.8-27b is a reasoning model, and in non-thinking mode it miscalibrates
     # the faithfulness judgment badly (scores well-grounded answers 0). So we keep
     # thinking on and read the verdict from reasoning_format="parsed", which puts
     # the chain-of-thought in a separate field and leaves only the final 0/0.5/1
@@ -85,7 +85,7 @@ async def _ask(prompt: str, attempts: int = 3) -> float | None:
                     messages=[{"role": "user", "content": prompt}],
                     max_tokens=4096,
                     temperature=0,
-                    reasoning_effort="default",
+                    reasoning_effort="medium",
                     reasoning_format="parsed",
                 )
             elapsed = asyncio.get_event_loop().time() - start

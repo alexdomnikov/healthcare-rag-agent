@@ -13,11 +13,11 @@ Reranker disabled so the delta reflects only first-pass retrieval quality.
 
 | Mode    | Recall@1 | Recall@3 | Recall@5 | Recall@10 | MRR   |
 |---------|----------|----------|----------|-----------|-------|
-| hybrid  | 0.389    | 0.778    | 0.778    | 0.778     | 0.565 |
-| vector  | 0.389    | 0.722    | 0.722    | 0.722     | 0.537 |
+| hybrid  | 0.389    | 0.833    | 0.833    | 0.833     | 0.583 |
+| vector  | 0.389    | 0.778    | 0.778    | 0.778     | 0.556 |
 | lexical | 0.056    | 0.056    | 0.056    | 0.056     | 0.056 |
 
-**Interpretation:** Hybrid wins on Recall@5 (0.778), ahead of dense-only by +0.056 points and lexical-only by +0.722 points. MRR winner is hybrid (0.565). The gap between hybrid and dense-only shows that the CMS corpus contains exact-match signals (CFR section codes, specific dollar figures) that BM25 captures and the embedding model misses. The gap between hybrid and lexical-only shows that paraphrase-resistant questions require semantic retrieval to surface.
+**Interpretation:** Hybrid wins on Recall@5 (0.833), ahead of dense-only by +0.056 points and lexical-only by +0.778 points. MRR winner is hybrid (0.583). The gap between hybrid and dense-only shows that the CMS corpus contains exact-match signals (CFR section codes, specific dollar figures) that BM25 captures and the embedding model misses. The gap between hybrid and lexical-only shows that paraphrase-resistant questions require semantic retrieval to surface.
 
 ---
 
@@ -30,10 +30,10 @@ Reranker disabled so the delta reflects only first-pass retrieval quality.
 
 | Condition    | Recall@1 | Recall@3 | Recall@5 | MRR   |
 |--------------|----------|----------|----------|-------|
-| reranker off | 0.389    | 0.778    | 0.778    | 0.565 |
+| reranker off | 0.389    | 0.833    | 0.833    | 0.583 |
 | reranker on  | 0.611    | 1.000    | 1.000    | 0.787 |
 
-**Interpretation:** Reranking improves Recall@5 by +0.222 and MRR by +0.222. The cross-encoder rescores 50 first-pass candidates rather than just the top-5, surfacing chunks that hybrid ranked between 6th and 50th. The hybrid stage is strong at recall but mediocre at precision; the cross-encoder corrects that.
+**Interpretation:** Reranking improves Recall@5 by +0.167 and MRR by +0.204. The cross-encoder rescores 50 first-pass candidates rather than just the top-5, surfacing chunks that hybrid ranked between 6th and 50th. The hybrid stage is strong at recall but mediocre at precision; the cross-encoder corrects that.
 
 ---
 
@@ -48,10 +48,10 @@ uses 400-token windows with 50-token overlap.
 
 | Strategy        | Recall@1 | Recall@3 | Recall@5 | Recall@10 | MRR   |
 |-----------------|----------|----------|----------|-----------|-------|
-| structure-aware | 0.389    | 0.778    | 0.778    | 0.778     | 0.565 |
-| fixed-size 400  | 0.389    | 0.778    | 0.833    | 0.889     | 0.576 |
+| structure-aware | 0.389    | 0.833    | 0.833    | 0.833     | 0.583 |
+| fixed-size 400  | 0.389    | 0.778    | 0.889    | 0.889     | 0.583 |
 
-**Interpretation:** Fixed-size chunking outperforms structure-aware on Recall@5 by 0.055 and MRR by 0.011. Both strategies use a 400-token budget, but the HybridChunker's soft limit and merge_peers=True behavior produce many sub-budget chunks, while fixed windows always fill the budget and capture more context per chunk. Structure-aware is still used in production for its section_path metadata and cleaner citations.
+**Interpretation:** Fixed-size chunking outperforms structure-aware on Recall@5 by 0.056 and MRR by 0.000. Both strategies use a 400-token budget, but the HybridChunker's soft limit and merge_peers=True behavior produce many sub-budget chunks, while fixed windows always fill the budget and capture more context per chunk. Structure-aware is still used in production for its section_path metadata and cleaner citations.
 
 ---
 

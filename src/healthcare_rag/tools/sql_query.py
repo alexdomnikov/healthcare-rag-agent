@@ -50,9 +50,9 @@ Rules:
      Always filter with WHERE <col> IS NOT NULL before aggregating.
   5. contract_number uses CMS H-numbers like 'H1234'. Never filter by integer.
   6. The two tables join on contract_number.
-  7. When filtering for "4 stars or above", "4 or higher", "at least 4", etc.,
+  7. When filtering for "# or above", "# or higher", "at least #", etc.,
      always use >= not =. Always combine with IS NOT NULL: e.g.,
-     WHERE overall_2026 >= 4 AND overall_2026 IS NOT NULL
+     WHERE overall_2026 >= # AND overall_2026 IS NOT NULL
 """.strip()
 
 _FORBIDDEN = [
@@ -68,7 +68,10 @@ class SQLQuery(BaseModel):
 # Safety guard
 def _validate(sql: str) -> str | None:
     # Returns an error string if unsafe, None if clean.
-    lowered = sql.strip().lower()
+    stripped = sql.strip().rstrip(";")
+    if ";" in stripped:
+        return "Multiple SQL statements are not allowed."
+    lowered = stripped.lower()
     if not lowered.startswith("select"):
         return "Query does not start with SELECT."
     for kw in _FORBIDDEN:
@@ -82,10 +85,10 @@ def sql_query(question: str) -> str:
     questions about plan performance and domain scores.
 
     Use this tool for questions like:
-    - 'How many contracts received a 5-star overall rating?'
+    - 'Which Local CCP contracts scored lowest on drug safety?'
     - 'Which contracts have the highest Part C summary rating?'
     - 'What is the average member experience score across all plans?'
-    - 'Which parent organizations have the most 4-star-or-above contracts?'
+    - 'How many SNP vs non-SNP contracts exist?'
     - 'How do Part C and Part D summary ratings compare on average?'
 
     Do NOT use this tool for:

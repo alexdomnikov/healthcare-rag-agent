@@ -8,11 +8,11 @@ def vector_search(query: str) -> str:
 
     Use this tool for questions about:
     - Specific regulatory requirements (e.g., network adequacy, MOOP limits, formulary rules)
-    - CFR section content (e.g. §422.100, §423.120)
+    - CFR section content (e.g. §422.100, §423.505)
     - Compliance, enrollment, marketing, or grievance procedures
 
     Do NOT use this tool for:
-    - Quantitative questions about specific plans or states (use sql_query instead)
+    - Quantitative questions about specific plans, contracts, or parent organizations (use sql_query instead)
     - Questions about specific drug labels or recalls (use openfda_search instead)
     """
     

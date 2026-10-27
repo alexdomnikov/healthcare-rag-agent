@@ -5,9 +5,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 7459,
+    "latency_ms": 14732,
     "is_in_corpus": true,
-    "final_answer_preview": "Medicare Part\u202fD enrollees will reach the catastrophic phase once their true out\u2011of\u2011pocket costs exceed the annual out\u2011of"
+    "final_answer_preview": "Medicare Part\u202fD enrollees will reach the catastrophic phase once their true out\u2011of\u2011pocket costs exceed the annual OOP th"
   },
   {
     "id": "q002",
@@ -15,9 +15,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 25284,
+    "latency_ms": 10940,
     "is_in_corpus": true,
-    "final_answer_preview": "The final rule that implements the new Medicare Advantage and Part\u202fD requirements is effective for the contract year tha"
+    "final_answer_preview": "The final rule that implements the new Medicare Advantage and Part\u202fD requirements is effective for contract year\u202f2025, m"
   },
   {
     "id": "q003",
@@ -25,9 +25,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 14909,
+    "latency_ms": 56520,
     "is_in_corpus": true,
-    "final_answer_preview": "The Medicare Part\u202fD \u201ccoverage gap\u201d (often called the \u201cdonut hole\u201d) was eliminated by the Inflation Reduction Act.  Secti"
+    "final_answer_preview": "The Inflation Reduction Act eliminated the \u201ccoverage gap\u201d (or \u201cdonut hole\u201d) for Medicare Part\u202fD.  Section\u202f11201 of the I"
   },
   {
     "id": "q004",
@@ -35,9 +35,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 13071,
+    "latency_ms": 41204,
     "is_in_corpus": true,
-    "final_answer_preview": "Yes. Under the final rule, Medicare Part\u202fD enrollees are protected by an annual out\u2011of\u2011pocket (OOP) maximum. Once an enr"
+    "final_answer_preview": "Medicare Part\u202fD enrollees are protected from unlimited out\u2011of\u2011pocket spending.  Under the Inflation Reduction Act redesi"
   },
   {
     "id": "q005",
@@ -45,9 +45,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 16760,
+    "latency_ms": 28542,
     "is_in_corpus": true,
-    "final_answer_preview": "Yes. The rule caps cost\u2011sharing for insulin at $35 per month for a month\u2019s supply of each covered insulin product. For c"
+    "final_answer_preview": "Yes. The rule caps the amount you can be required to pay for a month\u2019s supply of each covered insulin product at $35 per"
   },
   {
     "id": "q006",
@@ -55,9 +55,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 14573,
+    "latency_ms": 30916,
     "is_in_corpus": true,
-    "final_answer_preview": "Medicare Part\u202fD beneficiaries are not required to pay the deductible for any adult vaccine that is recommended by the Ad"
+    "final_answer_preview": "Medicare Part\u202fD plans may not apply the annual deductible to adult vaccines that are recommended by the Advisory Committ"
   },
   {
     "id": "q007",
@@ -65,9 +65,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 13930,
+    "latency_ms": 25622,
     "is_in_corpus": true,
-    "final_answer_preview": "CMS received approximately\u202f42,632\u202ftimely pieces of correspondence containing comments on the proposed rule and the relat"
+    "final_answer_preview": "CMS received approximately\u202f42,632\u202ftimely pieces of correspondence containing comments on the proposed rule and the assoc"
   },
   {
     "id": "q008",
@@ -75,9 +75,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 27850,
+    "latency_ms": 42421,
     "is_in_corpus": true,
-    "final_answer_preview": "CMS is eliminating the 48\u2011hour \u201ccooling\u2011off\u201d period that previously required agents or brokers to wait after a scope of "
+    "final_answer_preview": "No. Under the current Medicare marketing rules, an agent or broker must still wait at least 48\u202fhours after a beneficiary"
   },
   {
     "id": "q009",
@@ -85,9 +85,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 27387,
+    "latency_ms": 38079,
     "is_in_corpus": true,
-    "final_answer_preview": "Yes. The rule requires agents and brokers to complete a Scope of Appointment (SOA) for all personal marketing appointmen"
+    "final_answer_preview": "Yes. The rule requires agents and brokers to complete a Scope of Appointment (SOA) for every personal marketing appointm"
   },
   {
     "id": "q010",
@@ -95,7 +95,7 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 25337,
+    "latency_ms": 12823,
     "is_in_corpus": true,
     "final_answer_preview": "The Coverage Gap Discount Program was sunset and replaced by the Medicare Part\u202fD Manufacturer Discount Program, which be"
   },
@@ -105,9 +105,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 30188,
+    "latency_ms": 42176,
     "is_in_corpus": true,
-    "final_answer_preview": "CMS will not move forward with the Health Equity Index (HEI) reward. The final rule states that the HEI reward will not "
+    "final_answer_preview": "CMS is not moving forward with the Health Equity Index (HEI) reward. The final rule states that CMS is finalizing its pr"
   },
   {
     "id": "q012",
@@ -115,7 +115,7 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 14776,
+    "latency_ms": 41455,
     "is_in_corpus": true,
     "final_answer_preview": "Yes. The final rule requires Medicare Advantage plans to publicly post the objective criteria they use to determine both"
   },
@@ -125,9 +125,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 13719,
+    "latency_ms": 16129,
     "is_in_corpus": true,
-    "final_answer_preview": "Yes. In the 2026 final rule CMS proposes to remove a number of Star Ratings measures, thereby reducing the total set of "
+    "final_answer_preview": "CMS is proposing to reduce the number of Star\u2011Ratings measures used to evaluate Medicare Advantage and Part\u202fD contracts."
   },
   {
     "id": "q014",
@@ -135,9 +135,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 30954,
+    "latency_ms": 30061,
     "is_in_corpus": true,
-    "final_answer_preview": "I don't have that information."
+    "final_answer_preview": "The rule does not set a specific frequency for brokers to present all plan options. Instead, it requires that brokers co"
   },
   {
     "id": "q015",
@@ -145,9 +145,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 5598,
+    "latency_ms": 27049,
     "is_in_corpus": true,
-    "final_answer_preview": "Manufacturer discounts are not counted as part of the amounts that Medicare reimburses to a plan. Under the Manufacturer"
+    "final_answer_preview": "Drug\u2011company discounts are **not** counted as part of the amount Medicare reimburses to a plan. The final rule states th"
   },
   {
     "id": "q016",
@@ -155,9 +155,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 24682,
+    "latency_ms": 41752,
     "is_in_corpus": true,
-    "final_answer_preview": "A retiree prescription\u2011drug plan must be \u201cqualified\u201d under the Medicare rules, which means it has to be actuarially equi"
+    "final_answer_preview": "A retiree prescription\u2011drug plan can count as a qualified \u201cretiree drug plan\u201d for the Medicare Retiree Drug Subsidy only"
   },
   {
     "id": "q017",
@@ -165,7 +165,7 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 18290,
+    "latency_ms": 17209,
     "is_in_corpus": true,
     "final_answer_preview": "Before the Inflation Reduction Act (IRA) changes, Medicare Part\u202fD covered catastrophic drug costs by applying a cost\u2011sha"
   },
@@ -175,9 +175,9 @@
     "expected_tool": "vector_search",
     "called_tool": "vector_search",
     "correct": true,
-    "latency_ms": 17141,
+    "latency_ms": 31469,
     "is_in_corpus": true,
-    "final_answer_preview": "The IRA added new payment provisions that alter how Medicare reimburses plans for high\u2011cost drugs.  For Part\u202fD, the law "
+    "final_answer_preview": "The Inflation Reduction Act added new payment provisions that alter how Medicare reimburses plans for high\u2011cost drugs.  "
   },
   {
     "id": "q019",
@@ -185,7 +185,7 @@
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 25394,
+    "latency_ms": 25463,
     "is_in_corpus": false,
     "final_answer_preview": "The average overall Star Rating across all Medicare Advantage contracts is approximately 3.65."
   },
@@ -195,7 +195,7 @@
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 9623,
+    "latency_ms": 21707,
     "is_in_corpus": false,
     "final_answer_preview": "207 contracts have an overall Star Rating of 4 stars or higher in 2026."
   },
@@ -205,9 +205,9 @@
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 8705,
+    "latency_ms": 23133,
     "is_in_corpus": false,
-    "final_answer_preview": "Centene Corporation and UnitedHealth Group, Inc. each have the highest number of Medicare Advantage contracts, with 68 c"
+    "final_answer_preview": "Centene Corporation and UnitedHealth Group, Inc. are tied for the most Medicare Advantage contracts, each with 68 contra"
   },
   {
     "id": "q022",
@@ -215,9 +215,9 @@
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 18437,
+    "latency_ms": 10450,
     "is_in_corpus": false,
-    "final_answer_preview": "UnitedHealth Group, Inc. has the most contracts rated 4\u202fstars or above, with 25 such contracts."
+    "final_answer_preview": "UnitedHealth Group, Inc. has the most contracts rated 4 stars or above, with 25 such contracts."
   },
   {
     "id": "q023",
@@ -225,9 +225,9 @@
     "expected_tool": "sql_query",
     "called_tool": "sql_query",
     "correct": true,
-    "latency_ms": 10646,
+    "latency_ms": 38686,
     "is_in_corpus": false,
-    "final_answer_preview": "232 contracts have a Part\u202fD summary star rating of 4 or higher."
+    "final_answer_preview": "232 contracts have a Part D summary star rating of 4 or higher."
   },
   {
     "id": "q024",
@@ -235,9 +235,9 @@
     "expected_tool": "openfda_search",
     "called_tool": "openfda_search",
     "correct": true,
-    "latency_ms": 42188,
+    "latency_ms": 4615,
     "is_in_corpus": false,
-    "final_answer_preview": "I don't have that information."
+    "final_answer_preview": "Eliquis (apixaban) is contraindicated in patients with active pathological bleeding and in patients who have a severe hy"
   },
   {
     "id": "q025",
@@ -245,9 +245,9 @@
     "expected_tool": "openfda_search",
     "called_tool": "openfda_search",
     "correct": true,
-    "latency_ms": 23479,
+    "latency_ms": 20799,
     "is_in_corpus": false,
-    "final_answer_preview": "Yes. The FDA has issued several recalls for metformin hydrochloride:\n\n* A Class\u202fIII recall (now terminated) was issued o"
+    "final_answer_preview": "Yes. Recent FDA enforcement actions have listed several recalls for metformin hydrochloride:\n\n* A Class\u202fII recall (ongoi"
   },
   {
     "id": "q026",
@@ -255,7 +255,7 @@
     "expected_tool": "openfda_search",
     "called_tool": "openfda_search",
     "correct": true,
-    "latency_ms": 4436,
+    "latency_ms": 28811,
     "is_in_corpus": false,
     "final_answer_preview": "Serious adverse events reported to the FDA for rivaroxaban (Xarelto) include cerebrovascular accidents (stroke), migrain"
   },
@@ -265,7 +265,7 @@
     "expected_tool": "none",
     "called_tool": "none",
     "correct": true,
-    "latency_ms": 339,
+    "latency_ms": 1344,
     "is_in_corpus": false,
     "final_answer_preview": "I don't have that information."
   },
@@ -275,7 +275,7 @@
     "expected_tool": "none",
     "called_tool": "none",
     "correct": true,
-    "latency_ms": 419,
+    "latency_ms": 379,
     "is_in_corpus": false,
     "final_answer_preview": "I don't have that information."
   },
@@ -285,7 +285,7 @@
     "expected_tool": "none",
     "called_tool": "none",
     "correct": true,
-    "latency_ms": 416,
+    "latency_ms": 15549,
     "is_in_corpus": false,
     "final_answer_preview": "I don't have that information."
   }

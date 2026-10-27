@@ -146,7 +146,7 @@ def get_agent() -> Any:
         - Compliance timelines, definitions of regulatory terms, appeals procedures
         - Questions about what "the rule says" or "the regulation requires"
     DO NOT USE for:
-        - Quantitative questions about specific plans, states, or aggregate stats
+        - Quantitative questions about specific plans, contracts, or aggregate stats
         (counts, averages, rankings). Use sql_query instead
         - Questions naming a specific drug and asking about its label, side
         effects, adverse events, or FDA actions. Use openfda_search instead
@@ -156,8 +156,8 @@ def get_agent() -> Any:
     cms_domain_stars). Use for data-shaped questions where the answer is a count,
     average, ranking, or comparison across contracts or parent organizations.
     USE for:
-        - 'How many contracts received a 5-star overall rating?'
-        - 'Which parent organizations have the most 4-star-or-above contracts?'
+        - 'How many Local CCP contracts are in the 2026 dataset?'
+        - 'Which contracts received the lowest customer service domain score?'
         - 'What is the average Part C summary rating across all Local CCP plans?'
         - 'Which contracts scored highest on drug safety (DD4)?'
         - 'How many SNP vs non-SNP plans are there?'
@@ -186,7 +186,7 @@ def get_agent() -> Any:
     required, what are the compliance standards): vector_search.
     
     If the question asks for numbers, counts, averages, rankings, or comparisons
-    across plans or states: sql_query.
+    across plans, contracts, or parent organizations: sql_query.
     
     If the question names a specific drug AND asks about its FDA label, side
     effects, adverse events, or recall status → openfda_search.
@@ -210,13 +210,13 @@ def get_agent() -> Any:
     Q: "How many contracts received a 5-star overall rating?"
     Tool: sql_query
 
-    Q: "Which parent organizations have the most high-rated contracts?"
+    Q: "Which contracts received the lowest Part C summary rating?"
     Tool: sql_query
     
-    Q: "What are the contraindications for Eliquis?"
+    Q: "What boxed warnings are on the FDA label for Ozempic?"
     Tool: openfda_search  (specific drug, FDA label question)
     
-    Q: "Has Metformin been recalled recently?"
+    Q: "Has Lisonopril been recalled recently?"
     Tool: openfda_search  (specific drug, FDA enforcement action)
 
     Q: "What is the weather in Seattle?"

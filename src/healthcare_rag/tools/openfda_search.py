@@ -182,8 +182,8 @@ def openfda_search(drug_name: str, query_type: str = "label") -> str:
     - FDA recalls or enforcement actions for a specific drug product
 
     Parameters:
-        drug_name:  The brand or generic name of the drug. Examples: 'Eliquis',
-                    'apixaban', 'Ozempic', 'semaglutide', 'Lipitor', 'atorvastatin'.
+        drug_name:  The brand or generic name of the drug. Examples: 'Ozempic',
+                    'semaglutide', 'Lisinopril', 'Lipitor', 'atorvastatin'.
         query_type: One of:
                     'label' — prescribing information (default)
                     'event' — adverse event reports
